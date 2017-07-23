@@ -9,3 +9,5 @@
 * http://programmerguru.com/android-tutorial/how-to-pick-image-from-gallery/
 * https://stackoverflow.com/questions/18590514/loading-all-the-images-from-gallery-into-the-application-in-android
 * http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample
+* https://github.com/PhilJay/MPAndroidChart
+* https://www.youtube.com/watch?v=VfLop_oLYU0
