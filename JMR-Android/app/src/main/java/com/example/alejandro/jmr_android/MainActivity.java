@@ -12,9 +12,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,15 +27,17 @@ import android.widget.ImageView;
 public class MainActivity extends Activity {
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    private Button btnSelect;
+    private Button btnSelect, btnGaleria;
     private ImageView ivImage;
     private String userChoosenTask;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnSelect = (Button) findViewById(R.id.btnSelectPhoto);
+        btnGaleria = (Button) findViewById(R.id.botonGaleria);
         btnSelect.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -42,6 +46,10 @@ public class MainActivity extends Activity {
             }
         });
         ivImage = (ImageView) findViewById(R.id.ivImage);
+
+        System.out.printf("OEOE");
+
+
     }
 
     @Override
@@ -53,6 +61,9 @@ public class MainActivity extends Activity {
                         cameraIntent();
                     else if(userChoosenTask.equals("Choose from Library"))
                         galleryIntent();
+                    else if(userChoosenTask.equals("List")){
+                        galeriaIntent();
+                    }
                 } else {
                     //code for deny
                 }
@@ -61,7 +72,7 @@ public class MainActivity extends Activity {
     }
 
     private void selectImage() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
+        final CharSequence[] items = { "Take Photo", "Choose from Library","List",
                 "Cancel" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -77,9 +88,14 @@ public class MainActivity extends Activity {
                         cameraIntent();
 
                 } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask ="Choose from Library";
-                    if(result)
+                    userChoosenTask = "Choose from Library";
+                    if (result)
                         galleryIntent();
+                }
+                else if (items[item].equals("List")) {
+                    userChoosenTask ="List";
+                    if(result)
+                        galeriaIntent();
 
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -103,6 +119,9 @@ public class MainActivity extends Activity {
         startActivityForResult(intent, REQUEST_CAMERA);
     }
 
+    private void galeriaIntent(){
+        startActivity(new Intent(MainActivity.this, Galeria.class));
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -143,6 +162,8 @@ public class MainActivity extends Activity {
 
         Bitmap bm=null;
         if (data != null) {
+            Log.i("DATA",data.getData().toString());
+
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
             } catch (IOException e) {
