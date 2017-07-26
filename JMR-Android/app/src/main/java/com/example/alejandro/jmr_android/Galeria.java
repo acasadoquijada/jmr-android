@@ -60,8 +60,6 @@ public class Galeria extends AppCompatActivity {
             ImageView imageG = new ImageView (this);
             imageG.setImageBitmap(bm2);
             imageLayout.addView(imageG);
-            DrawableMarginSpan divider = new DrawableMarginSpan();
-
         }
 
 
