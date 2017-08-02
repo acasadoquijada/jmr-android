@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -30,7 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private Button btnSelect, btnGaleria;
@@ -40,11 +42,15 @@ public class MainActivity extends Activity {
     private LinearLayout consultLayout;
     private LinearLayout imagenesConsultaScrollLayout;
     private HorizontalScrollView horizontalScrollView;
+    private GridLayout gridLayoutResultado;
+    private Galeria galeria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        galeria = new Galeria(this);
 
         botonAñadirImagenConsulta = (ImageButton)findViewById
                 (R.id.botonAñadirImagenConsulta);
@@ -58,6 +64,8 @@ public class MainActivity extends Activity {
         imagenesConsultaScrollLayout = (LinearLayout)findViewById
                 (R.id.ImagenesConsultaScrollLayout);
 
+        gridLayoutResultado = (GridLayout) findViewById
+                (R.id.gridLayoutResultado);
 
         botonAñadirImagenConsulta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,10 +73,64 @@ public class MainActivity extends Activity {
                 añadirImagenConsulta();
             }
         });
+
+        ArrayList<String> imagenes = galeria.getImagenes();
+        for(int i = 0; i < galeria.getTamanioGaleria(); i++){
+            Log.i("Imagen " + i + " : ",imagenes.get(i));
+        }
+
+
+    }
+/*
+    public void añadirImagenResultado(){
+
+        imageViewConsulta = new ImageView(this);
+
+        Bitmap bm = Bitmap.createScaledBitmap(b, 300,300, true);
+        //  parms.gravity = Gravity.CENTER;
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+                444,
+                444);
+        parms.setMargins(20, 20, 20, 20);
+        imageViewConsulta.setLayoutParams(parms);
+        imageViewConsulta.getLayoutParams().height = 500;
+        imageViewConsulta.getLayoutParams().width = 500;
+        imageViewConsulta.setImageBitmap(bm);
+
+        imagenesConsultaScrollLayout.addView(imageViewConsulta);
+    }
+*/
+    public void añadirImagenConsulta(){
+
+        // Obtenemos la imagen y la añadimos.
+        obtenerImagen();
+
+        // Recorremos la galeria y calculamos.
+
+        // Colocamos las imagenes acorde a dicho calculo.
+        colocarImagenesResultado();
     }
 
-    public void añadirImagenConsulta(){
-        obtenerImagen();
+    public void colocarImagenesResultado(){
+
+
+        for(int i = 0; i < 10; i++) {
+
+            imageViewConsulta = new ImageView(this);
+
+            Bitmap bm = Bitmap.createScaledBitmap(galeria.getImagen(0), 200, 200, true);
+            //  parms.gravity = Gravity.CENTER;
+            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+                    444,
+                    444);
+            parms.setMargins(20, 20, 20, 20);
+            imageViewConsulta.setLayoutParams(parms);
+            imageViewConsulta.getLayoutParams().height = 200;
+            imageViewConsulta.getLayoutParams().width = 200;
+            imageViewConsulta.setImageBitmap(bm);
+
+            gridLayoutResultado.addView(imageViewConsulta);
+        }
     }
 
 

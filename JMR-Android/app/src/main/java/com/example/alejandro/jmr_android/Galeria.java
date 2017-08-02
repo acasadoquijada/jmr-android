@@ -17,14 +17,43 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Galeria extends AppCompatActivity {
+public class Galeria /*extends AppCompatActivity*/ {
 
     /** The images. */
-    private ArrayList<String> images;
+    private ArrayList<String> imagenes;
     private ImageView imageView;
     private LinearLayout imageLayout;
-    String a;
+    private Activity activity;
+    private int tamanio;
 
+    public Galeria(Activity activity){
+        this.imagenes = getAllShownImagesPath(activity);
+        this.tamanio = this.imagenes.size();
+        this.activity = activity;
+    }
+
+    public ArrayList<String> getImagenes(){
+        return imagenes;
+    }
+
+    public int getTamanioGaleria(){
+        return tamanio;
+    }
+
+    public Bitmap getImagen(int index){
+        Bitmap imagen=null;
+        try {
+            imagen = MediaStore.Images.Media.getBitmap(
+                    this.activity.getApplicationContext().getContentResolver(),
+                    Uri.parse("file:///" + imagenes.get(index)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return imagen;
+    }
+
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +95,9 @@ public class Galeria extends AppCompatActivity {
        // imageLayout.addView(imageView);
 
 
-
-
-
-
     }
+
+*/
 
     private ArrayList<String> getAllShownImagesPath(Activity activity) {
         Uri uri;
