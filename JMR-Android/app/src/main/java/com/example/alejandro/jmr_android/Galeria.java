@@ -30,8 +30,8 @@ public class Galeria extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galeria);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
-        imageLayout = (LinearLayout) findViewById(R.id.imageLayout);
+       // imageView = (ImageView) findViewById(R.id.imageView);
+       // imageLayout = (LinearLayout) findViewById(R.id.imageLayout);
         images = getAllShownImagesPath(this);
         Log.i("PepitoPerez", Integer.toString(images.size()));
 

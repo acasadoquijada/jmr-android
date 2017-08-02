@@ -12,45 +12,65 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-
-//import com.example.takeimage.R;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends Activity {
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private Button btnSelect, btnGaleria;
-    private ImageView ivImage;
+    private ImageButton botonAñadirImagenConsulta;
+    private ImageView imageViewConsulta;
     private String userChoosenTask;
-
+    private LinearLayout consultLayout;
+    private LinearLayout imagenesConsultaScrollLayout;
+    private HorizontalScrollView horizontalScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnSelect = (Button) findViewById(R.id.btnSelectPhoto);
-        btnGaleria = (Button) findViewById(R.id.botonGaleria);
-        btnSelect.setOnClickListener(new View.OnClickListener() {
 
+        botonAñadirImagenConsulta = (ImageButton)findViewById
+                (R.id.botonAñadirImagenConsulta);
+
+        consultLayout = (LinearLayout)findViewById
+                (R.id.ConsultLayout);
+
+        horizontalScrollView = (HorizontalScrollView)findViewById
+                (R.id.ScrollHorizontalConsulta);
+
+        imagenesConsultaScrollLayout = (LinearLayout)findViewById
+                (R.id.ImagenesConsultaScrollLayout);
+
+
+        botonAñadirImagenConsulta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
+                añadirImagenConsulta();
             }
         });
-        ivImage = (ImageView) findViewById(R.id.ivImage);
-
-        System.out.printf("OEOE");
-
-
     }
+
+    public void añadirImagenConsulta(){
+        obtenerImagen();
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -61,9 +81,6 @@ public class MainActivity extends Activity {
                         cameraIntent();
                     else if(userChoosenTask.equals("Choose from Library"))
                         galleryIntent();
-                    else if(userChoosenTask.equals("List")){
-                        galeriaIntent();
-                    }
                 } else {
                     //code for deny
                 }
@@ -71,33 +88,28 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void selectImage() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library","List",
-                "Cancel" };
+    private void obtenerImagen() {
+        final CharSequence[] items = {
+                "Obtener desde la cámara",
+                "Obtener desde la galería",
+                "Cancelar" };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Add Photo!");
+        builder.setTitle("Obtener imagen consulta");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 boolean result=Utility.checkPermission(MainActivity.this);
 
-                if (items[item].equals("Take Photo")) {
-                    userChoosenTask ="Take Photo";
+                if (items[item].equals("Obtener desde la cámara")) {
+                    userChoosenTask ="Obtener desde la cámara";
                     if(result)
                         cameraIntent();
-
-                } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask = "Choose from Library";
+                } else if (items[item].equals("Obtener desde la galería")) {
+                    userChoosenTask = "Obtener desde la galería";
                     if (result)
                         galleryIntent();
-                }
-                else if (items[item].equals("List")) {
-                    userChoosenTask ="List";
-                    if(result)
-                        galeriaIntent();
-
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals("Cancelar")) {
                     dialog.dismiss();
                 }
             }
@@ -109,7 +121,7 @@ public class MainActivity extends Activity {
     {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
     }
 
@@ -119,9 +131,6 @@ public class MainActivity extends Activity {
         startActivityForResult(intent, REQUEST_CAMERA);
     }
 
-    private void galeriaIntent(){
-        startActivity(new Intent(MainActivity.this, Galeria.class));
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -154,24 +163,41 @@ public class MainActivity extends Activity {
             e.printStackTrace();
         }
 
-        ivImage.setImageBitmap(thumbnail);
+        addImagenScrollConsulta(thumbnail);
     }
+
 
     @SuppressWarnings("deprecation")
     private void onSelectFromGalleryResult(Intent data) {
 
         Bitmap bm=null;
         if (data != null) {
-            Log.i("DATA",data.getData().toString());
-
             try {
-                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                bm = MediaStore.Images.Media.
+                        getBitmap(getApplicationContext()
+                                .getContentResolver(), data.getData());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        ivImage.setImageBitmap(bm);
+        addImagenScrollConsulta(bm);
     }
 
+    public void addImagenScrollConsulta(Bitmap b){
+        imageViewConsulta = new ImageView(this);
+
+        Bitmap bm = Bitmap.createScaledBitmap(b, 300,300, true);
+        //  parms.gravity = Gravity.CENTER;
+        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
+                444,
+                444);
+        parms.setMargins(20, 20, 20, 20);
+        imageViewConsulta.setLayoutParams(parms);
+        imageViewConsulta.getLayoutParams().height = 500;
+        imageViewConsulta.getLayoutParams().width = 500;
+        imageViewConsulta.setImageBitmap(bm);
+
+        imagenesConsultaScrollLayout.addView(imageViewConsulta);
+    }
 }
