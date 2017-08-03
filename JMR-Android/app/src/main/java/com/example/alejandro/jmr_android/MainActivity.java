@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -113,20 +114,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void colocarImagenesResultado(){
 
-
         for(int i = 0; i < 10; i++) {
 
             imageViewConsulta = new ImageView(this);
 
             Bitmap bm = Bitmap.createScaledBitmap(galeria.getImagen(0), 200, 200, true);
-            //  parms.gravity = Gravity.CENTER;
-            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
-                    444,
-                    444);
-            parms.setMargins(20, 20, 20, 20);
-            imageViewConsulta.setLayoutParams(parms);
-            imageViewConsulta.getLayoutParams().height = 200;
-            imageViewConsulta.getLayoutParams().width = 200;
+
             imageViewConsulta.setImageBitmap(bm);
 
             gridLayoutResultado.addView(imageViewConsulta);
@@ -249,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
     public void addImagenScrollConsulta(Bitmap b){
         imageViewConsulta = new ImageView(this);
 
+        RelativeLayout rl = new RelativeLayout(this);
         Bitmap bm = Bitmap.createScaledBitmap(b, 300,300, true);
         //  parms.gravity = Gravity.CENTER;
         LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
@@ -259,7 +253,8 @@ public class MainActivity extends AppCompatActivity {
         imageViewConsulta.getLayoutParams().height = 500;
         imageViewConsulta.getLayoutParams().width = 500;
         imageViewConsulta.setImageBitmap(bm);
+        rl.addView(imageViewConsulta);
 
-        imagenesConsultaScrollLayout.addView(imageViewConsulta);
+        imagenesConsultaScrollLayout.addView(rl);
     }
 }
