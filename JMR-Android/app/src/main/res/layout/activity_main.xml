@@ -37,17 +37,30 @@
             </HorizontalScrollView>
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
 
             <ImageButton
                 android:id="@+id/botonAñadirImagenConsulta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+
                 app:srcCompat="@drawable/ic_launcher" />
-        </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/botonCacular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:gravity="center"
+                app:srcCompat="@mipmap/ic_launcher" />
+
+        </LinearLayout>
 
 
     </LinearLayout>

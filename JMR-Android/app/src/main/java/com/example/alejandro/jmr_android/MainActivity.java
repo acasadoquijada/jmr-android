@@ -14,11 +14,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,11 +35,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private Button btnSelect, btnGaleria;
-    private ImageButton botonAñadirImagenConsulta;
+    private ImageButton botonAñadirImagenConsulta, botonCalcular;
     private ImageView imageViewConsulta;
     private String userChoosenTask;
     private LinearLayout consultLayout;
@@ -45,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
     private HorizontalScrollView horizontalScrollView;
     private GridLayout gridLayoutResultado;
     private Galeria galeria;
+    private Bitmap imagenConsulta;
+    private Color colorImagenConsulta;
+    private ArrayList<Resultado> resultados;
+    private Semaphore semaforo;
+    private Lock l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +69,23 @@ public class MainActivity extends AppCompatActivity {
 
         galeria = new Galeria(this);
 
-        botonAñadirImagenConsulta = (ImageButton)findViewById
+        resultados = new ArrayList<>();
+
+        botonAñadirImagenConsulta = (ImageButton) findViewById
                 (R.id.botonAñadirImagenConsulta);
 
-        consultLayout = (LinearLayout)findViewById
+        botonCalcular = (ImageButton) findViewById
+                (R.id.botonCacular);
+
+        botonCalcular.setVisibility(View.INVISIBLE);
+
+        consultLayout = (LinearLayout) findViewById
                 (R.id.ConsultLayout);
 
-        horizontalScrollView = (HorizontalScrollView)findViewById
+        horizontalScrollView = (HorizontalScrollView) findViewById
                 (R.id.ScrollHorizontalConsulta);
 
-        imagenesConsultaScrollLayout = (LinearLayout)findViewById
+        imagenesConsultaScrollLayout = (LinearLayout) findViewById
                 (R.id.ImagenesConsultaScrollLayout);
 
         gridLayoutResultado = (GridLayout) findViewById
@@ -75,52 +98,98 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<String> imagenes = galeria.getImagenes();
-        for(int i = 0; i < galeria.getTamanioGaleria(); i++){
-            Log.i("Imagen " + i + " : ",imagenes.get(i));
-        }
+        botonCalcular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-
+                if(imagenConsulta != null){
+                    calcularDescriptor();
+                }
+                else{
+                    Log.e("Error:", "Imagen no cargada, capullo");
+                }
+                //añadirImagenConsulta();
+            }
+        });
     }
-/*
-    public void añadirImagenResultado(){
 
-        imageViewConsulta = new ImageView(this);
-
-        Bitmap bm = Bitmap.createScaledBitmap(b, 300,300, true);
-        //  parms.gravity = Gravity.CENTER;
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
-                444,
-                444);
-        parms.setMargins(20, 20, 20, 20);
-        imageViewConsulta.setLayoutParams(parms);
-        imageViewConsulta.getLayoutParams().height = 500;
-        imageViewConsulta.getLayoutParams().width = 500;
-        imageViewConsulta.setImageBitmap(bm);
-
-        imagenesConsultaScrollLayout.addView(imageViewConsulta);
-    }
-*/
     public void añadirImagenConsulta(){
 
         // Obtenemos la imagen y la añadimos.
+        Log.d("Estoy en: ", "aniadir imagen");
+
         obtenerImagen();
 
+        botonCalcular.setVisibility(View.VISIBLE);
+
+
         // Recorremos la galeria y calculamos.
+        // calcularDescriptor();
 
         // Colocamos las imagenes acorde a dicho calculo.
+        //colocarImagenesResultado();
+
+    }
+
+    public void calcularDescriptor(){
+
+        int tamanioGaleria = galeria.getTamanioGaleria();
+
+        /* Cojo la imagen consulta y la meto en el array
+         de resultados, para poder compararla con las de
+         la galeria
+        */
+
+        double distancia = 0.00;
+
+        DescriptorColorMedia descriptorImagenConsulta
+                = new DescriptorColorMedia(imagenConsulta);
+
+        Resultado r = new Resultado(imagenConsulta, 0.0);
+
+        resultados.add(r);
+
+        for(int i = 1; i < 11; i++){
+            Bitmap img = galeria.getImagen(i);
+
+            DescriptorColorMedia descriptorGaleria
+                    = new DescriptorColorMedia(img);
+            distancia = DescriptorColorMedia.calcularDistancia(
+                    descriptorImagenConsulta,
+                    descriptorGaleria);
+            Resultado r2 = new Resultado(img,distancia);
+
+            resultados.add(r2);
+        }
+
+        Collections.sort(resultados, new Comparator<Resultado>(){
+            public int compare(Resultado r1, Resultado r2) {
+                return r1.compareTo(r2);
+            }
+        });
+
         colocarImagenesResultado();
     }
 
     public void colocarImagenesResultado(){
 
-        for(int i = 0; i < 10; i++) {
+        for(int i = 1; i < resultados.size(); i++) {
 
             imageViewConsulta = new ImageView(this);
 
-            Bitmap bm = Bitmap.createScaledBitmap(galeria.getImagen(0), 200, 200, true);
+            Bitmap imagenGaleria = resultados.get(i).getImagen();
 
-            imageViewConsulta.setImageBitmap(bm);
+            final String nombre = imagenGaleria.toString();
+
+            imageViewConsulta.setImageBitmap(imagenGaleria);
+
+            imageViewConsulta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Log.d("Soy la imagen: ", nombre);
+                }
+            });
 
             gridLayoutResultado.addView(imageViewConsulta);
         }
@@ -199,9 +268,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onCaptureImageResult(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        Bitmap imagenConsulta = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        imagenConsulta.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
 
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
@@ -218,17 +287,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        addImagenScrollConsulta(thumbnail);
+        addImagenScrollConsulta(imagenConsulta);
     }
 
 
     @SuppressWarnings("deprecation")
     private void onSelectFromGalleryResult(Intent data) {
 
-        Bitmap bm=null;
+        imagenConsulta=null;
         if (data != null) {
             try {
-                bm = MediaStore.Images.Media.
+                imagenConsulta = MediaStore.Images.Media.
                         getBitmap(getApplicationContext()
                                 .getContentResolver(), data.getData());
             } catch (IOException e) {
@@ -236,10 +305,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        addImagenScrollConsulta(bm);
+        addImagenScrollConsulta(imagenConsulta);
     }
 
     public void addImagenScrollConsulta(Bitmap b){
+
         imageViewConsulta = new ImageView(this);
 
         RelativeLayout rl = new RelativeLayout(this);
@@ -254,7 +324,8 @@ public class MainActivity extends AppCompatActivity {
         imageViewConsulta.getLayoutParams().width = 500;
         imageViewConsulta.setImageBitmap(bm);
         rl.addView(imageViewConsulta);
-
         imagenesConsultaScrollLayout.addView(rl);
+
+
     }
 }
