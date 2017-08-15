@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.example.alejandro.jmr_android.jmr.MiColor;
+
 /**
  * Created by alejandro on 07/08/2017.
  */
@@ -46,7 +48,7 @@ public class DescriptorColorMedia {
         long green = (greenColors/pixelCount);
         long blue = (blueColors/pixelCount);
 
-        color = new MiColor(red,green,blue);
+        color = new MiColor((int)red,(int)green,(int)blue);
 
     }
 

@@ -179,14 +179,13 @@ public class MainActivity extends AppCompatActivity {
 
             Bitmap imagenGaleria = resultados.get(i).getImagen();
 
-            final String nombre = imagenGaleria.toString();
+            final String nombre = Double.toString(resultados.get(i).getDistancia());
 
             imageViewConsulta.setImageBitmap(imagenGaleria);
 
             imageViewConsulta.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Log.d("Soy la imagen: ", nombre);
                 }
             });
