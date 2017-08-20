@@ -35,6 +35,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 
+import com.example.alejandro.jmr_android.jmr.ResultList;
+import com.example.alejandro.jmr_android.jmr.ResultMetadata;
+import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,8 +63,10 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap imagenConsulta;
     private Color colorImagenConsulta;
     private ArrayList<Resultado> resultados;
+    private ResultList <ResultMetadata> resultMetadatas;
     private Semaphore semaforo;
     private Lock l;
+    private TouchImageView tImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         galeria = new Galeria(this);
 
         resultados = new ArrayList<>();
+
+        resultMetadatas = new ResultList<>();
 
         botonAñadirImagenConsulta = (ImageButton) findViewById
                 (R.id.botonAñadirImagenConsulta);
@@ -142,55 +150,72 @@ public class MainActivity extends AppCompatActivity {
 
         double distancia = 0.00;
 
-        DescriptorColorMedia descriptorImagenConsulta
-                = new DescriptorColorMedia(imagenConsulta);
+        ResultMetadata<Double, Bitmap> resultMetada =
+                new ResultMetadata(0.0,imagenConsulta);
 
-        Resultado r = new Resultado(imagenConsulta, 0.0);
+        SingleColorDescription descriptorImagenConsulta =
+                new SingleColorDescription(imagenConsulta);
 
-        resultados.add(r);
+        resultMetadatas.add(resultMetada);
 
+        Log.d("Estoy en: ", "principio calcular galeria");
         for(int i = 1; i < 11; i++){
+            Log.d("Estoy en: ", "Cojo imagen galeria");
             Bitmap img = galeria.getImagen(i);
 
-            DescriptorColorMedia descriptorGaleria
-                    = new DescriptorColorMedia(img);
-            distancia = DescriptorColorMedia.calcularDistancia(
-                    descriptorImagenConsulta,
-                    descriptorGaleria);
-            Resultado r2 = new Resultado(img,distancia);
+            Log.d("Estoy en: ", "Calculo descriptor");
+            SingleColorDescription descriptor = new SingleColorDescription(img);
 
-            resultados.add(r2);
+            Log.d("Estoy en: ", "Calculo distancia");
+
+            distancia = SingleColorDescription.DefaultComparator
+                    (descriptorImagenConsulta, descriptor);
+
+            ResultMetadata<Double, Bitmap> resultMetadaGaleria
+                    = new ResultMetadata(distancia, img);
+
+            resultMetadatas.add(resultMetadaGaleria);
+       }
+
+        for(int i = 0; i < 11; i++){
+            double aux = (Double)resultMetadatas.get(i).getResult();
+            Log.d("Imagen " + i," " + Double.toString(aux));
         }
 
-        Collections.sort(resultados, new Comparator<Resultado>(){
-            public int compare(Resultado r1, Resultado r2) {
-                return r1.compareTo(r2);
-            }
-        });
+        normalize();
+
+        for(int i = 0; i < 11; i++){
+            double aux = (Double)resultMetadatas.get(i).getResult();
+            Log.d("Imagen " + i," " + Double.toString(aux));        }
 
         colocarImagenesResultado();
     }
 
     public void colocarImagenesResultado(){
 
-        for(int i = 1; i < resultados.size(); i++) {
+        for(int i = 1; i < 10; i++) {
 
             imageViewConsulta = new ImageView(this);
 
-            Bitmap imagenGaleria = resultados.get(i).getImagen();
+            Bitmap imagenGaleria = (Bitmap)resultMetadatas.get(i).getMetadata();
 
-            final String nombre = Double.toString(resultados.get(i).getDistancia());
+            final String nombre = Double.toString((Double)resultMetadatas.get(i).getResult());
 
             imageViewConsulta.setImageBitmap(imagenGaleria);
 
-            imageViewConsulta.setOnClickListener(new View.OnClickListener() {
+            tImg = new TouchImageView(this);
+
+            tImg.setImageBitmap(imagenGaleria);
+
+            tImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("Soy la imagen: ", nombre);
+                    tImg.setZoom((float) 2.5);
                 }
             });
 
-            gridLayoutResultado.addView(imageViewConsulta);
+            gridLayoutResultado.addView(tImg);
         }
     }
 
@@ -325,6 +350,28 @@ public class MainActivity extends AppCompatActivity {
         rl.addView(imageViewConsulta);
         imagenesConsultaScrollLayout.addView(rl);
 
+    }
+
+    public void normalize(){
+
+        Collections.sort(resultMetadatas, new Comparator<ResultMetadata>(){
+            public int compare(ResultMetadata r1, ResultMetadata r2) {
+                return r1.compareTo(r2);
+            }
+        });
+
+        double min = (Double)resultMetadatas.get(0).getResult();
+        double max = (Double)resultMetadatas.getLast().getResult();
+
+        for(int i = 1; i < 11; i++){
+            double newResult;
+            double xi = (Double)resultMetadatas.get(i).getResult();
+
+            newResult  = (xi - min)/(max-min);
+
+            resultMetadatas.get(i).setResult(newResult);
+
+        }
 
     }
 }

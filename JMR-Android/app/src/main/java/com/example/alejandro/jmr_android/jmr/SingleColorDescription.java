@@ -11,9 +11,9 @@ import android.graphics.Color;
 
 public class SingleColorDescription {
 
-    private MiColor color;
+    private JMRColor color;
 
-    public SingleColorDescription(MiColor color){
+    public SingleColorDescription(JMRColor color){
         this.color = color;
     }
 
@@ -21,8 +21,8 @@ public class SingleColorDescription {
         this.color = mean(image);
     }
 
-    private MiColor mean(Bitmap image) {
-        MiColor pixelColor;
+    private JMRColor mean(Bitmap image) {
+        JMRColor pixelColor;
         float mean[] = {0.0f, 0.0f, 0.0f}; //RGB
         double imageSize = image.getWidth() * image.getHeight();
 
@@ -39,7 +39,7 @@ public class SingleColorDescription {
         mean[1] /= imageSize;
         mean[2] /= imageSize;
 
-        return new MiColor((int) mean[0], (int) mean[1], (int) mean[2]);
+        return new JMRColor((int) mean[0], (int) mean[1], (int) mean[2]);
     }
 
     @Override
@@ -47,8 +47,16 @@ public class SingleColorDescription {
         return "SingleColorDescriptor: [" + color.getRojo()
                 + "," + color.getVerde() + "," + color.getAzul()+"]";
     }
-    public MiColor getColor(){
+    public JMRColor getColor(){
         return color;
     }
 
-}
+    static public double DefaultComparator(SingleColorDescription t, SingleColorDescription u){
+        JMRColor c1 = t.color, c2 = u.color;
+        double rDif = Math.pow(c1.getRojo()-c2.getRojo(),2);
+        double gDif = Math.pow(c1.getVerde()-c2.getVerde(),2);
+        double bDif = Math.pow(c1.getAzul()-c2.getAzul(),2);
+        return Math.sqrt(rDif+gDif+bDif);
+        }
+    }
+

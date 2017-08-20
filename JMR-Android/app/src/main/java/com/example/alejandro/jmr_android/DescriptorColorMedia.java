@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 
-import com.example.alejandro.jmr_android.jmr.MiColor;
+import com.example.alejandro.jmr_android.jmr.JMRColor;
 
 /**
  * Created by alejandro on 07/08/2017.
@@ -13,7 +13,7 @@ import com.example.alejandro.jmr_android.jmr.MiColor;
 public class DescriptorColorMedia {
 
     private Bitmap imagen;
-    private MiColor color;
+    private JMRColor color;
 
     private double distancia;
 
@@ -48,12 +48,12 @@ public class DescriptorColorMedia {
         long green = (greenColors/pixelCount);
         long blue = (blueColors/pixelCount);
 
-        color = new MiColor((int)red,(int)green,(int)blue);
+        color = new JMRColor((int)red,(int)green,(int)blue);
 
     }
 
     static public double calcularDistancia(DescriptorColorMedia d1, DescriptorColorMedia d2){
-        MiColor c1 = d1.color, c2 = d2.color;
+        JMRColor c1 = d1.color, c2 = d2.color;
         double rDif = Math.pow(c1.getRojo()-c2.getRojo(),2);
         double gDif = Math.pow(c1.getVerde()-c2.getVerde(),2);
         double bDif = Math.pow(c1.getAzul()-c2.getAzul(),2);

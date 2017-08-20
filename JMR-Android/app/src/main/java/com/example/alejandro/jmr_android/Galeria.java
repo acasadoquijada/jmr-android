@@ -50,7 +50,7 @@ public class Galeria /*extends AppCompatActivity*/ {
             e.printStackTrace();
         }
 
-        Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,256,256,true);
+        Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,200,200,true);
 
         return imagenReescalada;
     }

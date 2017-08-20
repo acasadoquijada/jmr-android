@@ -4,19 +4,19 @@ package com.example.alejandro.jmr_android.jmr;
  * Created by alejandro on 07/08/2017.
  */
 
-public class MiColor {
+public class JMRColor {
 
     private int rojo;
     private int verde;
     private int azul;
 
-    public MiColor(){
+    public JMRColor(){
         rojo = 0;
         verde = 0;
         azul = 0;
     }
 
-    public MiColor(int rojo, int verde, int azul){
+    public JMRColor(int rojo, int verde, int azul){
         this.rojo = rojo;
         this.verde = verde;
         this.azul = azul;

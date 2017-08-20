@@ -29,6 +29,7 @@ public class ResultMetadata<R,T> implements Comparable<ResultMetadata> {
         this.metadata = metadata;
     }
 
+
     @Override
     public int compareTo(ResultMetadata o) {
         return ((Comparable)result).compareTo(o.result);
