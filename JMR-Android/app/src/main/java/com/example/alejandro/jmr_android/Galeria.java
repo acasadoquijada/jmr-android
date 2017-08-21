@@ -13,39 +13,46 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.alejandro.jmr_android.jmr.JMRImage;
+
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
 public class Galeria /*extends AppCompatActivity*/ {
 
     /** The images. */
+    private ArrayList<JMRImage> images;
     private ArrayList<String> imagenes;
-    private ImageView imageView;
-    private LinearLayout imageLayout;
     private Activity activity;
     private int tamanio;
 
     public Galeria(Activity activity){
-        this.imagenes = getAllShownImagesPath(activity);
-        this.tamanio = this.imagenes.size();
         this.activity = activity;
+        images = new ArrayList<>();
+        obtenerImagenes();
+      //  this.imagenes = getAllShownImagesPath(activity);
+        this.tamanio = this.images.size();
     }
 
     public ArrayList<String> getImagenes(){
         return imagenes;
     }
 
+    public ArrayList<JMRImage> getImages(){ return images;}
+
     public int getTamanioGaleria(){
         return tamanio;
     }
 
     public Bitmap getImagen(int index){
+
         Bitmap imagen=null;
         try {
             imagen = MediaStore.Images.Media.getBitmap(
                     this.activity.getApplicationContext().getContentResolver(),
-                    Uri.parse("file:///" + imagenes.get(index)));
+                    Uri.parse("file:///" + images.get(index).getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,51 +62,50 @@ public class Galeria /*extends AppCompatActivity*/ {
         return imagenReescalada;
     }
 
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_galeria);
-
-       // imageView = (ImageView) findViewById(R.id.imageView);
-       // imageLayout = (LinearLayout) findViewById(R.id.imageLayout);
-        images = getAllShownImagesPath(this);
-        Log.i("PepitoPerez", Integer.toString(images.size()));
-
-        Bitmap bm=null;
+    public Bitmap getImagen(int index, int ancho, int largo){
+        Bitmap imagen=null;
         try {
-            bm = MediaStore.Images.Media.getBitmap(
-                    getApplicationContext().getContentResolver(),
-                    Uri.parse("file:///" + images.get(0)));
+            imagen = MediaStore.Images.Media.getBitmap(
+                    this.activity.getApplicationContext().getContentResolver(),
+                    Uri.parse("file:///" + imagenes.get(index)));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Bitmap bm2=null;
-        try {
-            bm2 = MediaStore.Images.Media.getBitmap(
-                    getApplicationContext().getContentResolver(),
-                    Uri.parse("file:///" + images.get(2)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,ancho,largo,true);
 
-        imageView.setImageBitmap(bm);
-        ArrayList<ImageView> imagenesView = new ArrayList<>();
-
-        for(int i = 0; i < 10; i++){
-            ImageView imageG = new ImageView (this);
-            imageG.setImageBitmap(bm2);
-            imageLayout.addView(imageG);
-        }
-
-
-       // imageLayout.addView(imageView);
-
-
+        return imagenReescalada;
     }
 
-*/
+    private void obtenerImagenes(){
+        Uri uri;
+        Cursor cursor;
+        int column_index_data, column_index_folder_name;
+        ArrayList<String> listOfAllImages = new ArrayList<String>();
+        String absolutePathOfImage = null;
+        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        String[] projection = { MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
+
+        cursor = activity.getContentResolver().query(uri, projection, null,
+                null, null);
+
+        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        column_index_folder_name = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+
+        int index = 0;
+        while (cursor.moveToNext()) {
+            absolutePathOfImage = cursor.getString(column_index_data);
+            JMRImage jmrImage = new JMRImage();
+            jmrImage.setName(absolutePathOfImage);
+            jmrImage.setIndex(index);
+            index++;
+
+            images.add(jmrImage);
+        }
+    }
 
     private ArrayList<String> getAllShownImagesPath(Activity activity) {
         Uri uri;
@@ -120,7 +126,6 @@ public class Galeria /*extends AppCompatActivity*/ {
                 .getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
-
             listOfAllImages.add(absolutePathOfImage);
         }
         return listOfAllImages;
