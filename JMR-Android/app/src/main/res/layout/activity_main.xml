@@ -1,123 +1,49 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout android:id="@+id/CoordinatorLayout01"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/MainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:weightSum="1">
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/ConsultLayout"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="56dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/fab_add"
+        app:fab_colorNormal="@color/colorPrimary"
+        app:fab_colorPressed="@color/colorPrimaryDark"
+        app:fab_colorRipple="@color/colorAccent">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_camera"
+            app:fab_size="mini"
+            app:fab_label="Cámara" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu_item2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:fab_size="mini"
+            app:fab_label="Galería" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+    <it.sephiroth.android.library.bottomnavigation.BottomNavigation
+        android:id="@+id/BottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="142dp"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:bbn_entries="@menu/bottombar_menu_3items_no_background"
+        app:bbn_scrollEnabled="true"
+        app:bbn_badgeProvider="@string/bbn_badgeProvider"
+        app:layout_behavior="@string/bbn_phone_view_behavior" />
 
-        <LinearLayout
-            android:layout_width="256dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <HorizontalScrollView
-                android:id="@+id/ScrollHorizontalConsulta"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/ImagenesConsultaScrollLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:divider="?android:dividerHorizontal"
-                    android:orientation="horizontal"
-                    android:showDividers="middle">
-
-                </LinearLayout>
-            </HorizontalScrollView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            >
-
-            <ImageButton
-                android:id="@+id/botonAñadirImagenConsulta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                app:srcCompat="@drawable/ic_launcher" />
-
-            <ImageButton
-                android:id="@+id/botonCacular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="false"
-                android:cropToPadding="false"
-                android:gravity="center"
-                app:srcCompat="@mipmap/ic_launcher" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="322dp">
-
-        <GridLayout
-            android:id="@+id/gridLayoutResultado"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:padding="20dp"
-            android:useDefaultMargins="true"
-            android:alignmentMode="alignBounds"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_centerInParent="true"
-            android:columnCount="4">
-
-
-        </GridLayout>
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/LinearLayoutOpciones"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:columnCount="4">
-
-        <Button
-            android:id="@+id/button9"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button12"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button21"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button1f"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:text="Button" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
