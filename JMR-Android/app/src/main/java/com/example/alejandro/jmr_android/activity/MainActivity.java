@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android;
+package com.example.alejandro.jmr_android.activity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -8,34 +8,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.HorizontalScrollView;
@@ -43,21 +34,30 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.alejandro.jmr_android.Galeria;
+import com.example.alejandro.jmr_android.R;
+import com.example.alejandro.jmr_android.Resultado;
+import com.example.alejandro.jmr_android.Utility;
+import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
+import com.example.alejandro.jmr_android.app.AppController;
 import com.example.alejandro.jmr_android.jmr.ImageViewJMR;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
 import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
+import com.example.alejandro.jmr_android.model.Image;
 
-import java.util.Arrays;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,17 +77,21 @@ public class MainActivity extends AppCompatActivity {
     private ResultList <ResultMetadata> resultMetadatas;
     private Semaphore semaforo;
     private Lock l;
-    private TouchImageView tImg;
     private Animator mCurrentAnimator;
     private boolean pressed;
-    private Animation zoomin;
-    private Animation zoomout;
     private ImageViewJMR imageViewJMR;
     private ArrayList<ImageViewJMR> imagesViewJMR;
-
+    private Toolbar mToolbar;
     // The system "short" animation time duration, in milliseconds. This
     // duration is ideal for subtle animations or animations that occur
     // very frequently.
+
+    private String TAG = MainActivity.class.getSimpleName();
+    private static final String endpoint = "https://api.androidhive.info/json/glide.json";
+    private ArrayList<Image> images;
+    private ProgressDialog pDialog;
+    private GalleryAdapter mAdapter;
+    private RecyclerView recyclerView;
 
     private int mShortAnimationDuration;
 
@@ -96,6 +100,83 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        pDialog = new ProgressDialog(this);
+        images = new ArrayList<>();
+        mAdapter = new GalleryAdapter(getApplicationContext(), images);
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+                 recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("images", images);
+                bundle.putInt("position", position);
+
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();                newFragment.setArguments(bundle);
+                newFragment.show(ft, "slideshow");
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        fetchImages();
+
+    }
+
+    private void fetchImages() {
+
+        pDialog.setMessage("Downloading json...");
+        pDialog.show();
+
+        JsonArrayRequest req = new JsonArrayRequest(endpoint,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        pDialog.hide();
+
+                        images.clear();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject object = response.getJSONObject(i);
+                                Image image = new Image();
+                                image.setName("Pepa flores");
+
+                                JSONObject url = object.getJSONObject("url");
+                                image.setSmall(url.getString("small"));
+                                image.setMedium(url.getString("medium"));
+                                image.setLarge(url.getString("large"));
+                                image.setTimestamp(object.getString("timestamp"));
+
+                                images.add(image);
+
+                            } catch (JSONException e) {
+                                Log.e(TAG, "Json parsing error: " + e.getMessage());
+                            }
+                        }
+
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                pDialog.hide();
+            }
+        });
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     public void añadirImagenConsulta(){
@@ -186,15 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.d("CLICK","HOLAAA");
-                    if(!imageViewJMR.isPressed()) {
-                        v.startAnimation(zoomin);
-                        imageViewJMR.setPressed(!imageViewJMR.isPressed());
-                        Log.d("CLICK","ZOOMIN");
-                    } else {
-                        v.startAnimation(zoomout);
-                        imageViewJMR.setPressed(!imageViewJMR.isPressed());
-                        Log.d("CLICK","ZOOMOUT");
-                    }
+
                 }
             });
             gridLayoutResultado.addView(imageViewJMR);

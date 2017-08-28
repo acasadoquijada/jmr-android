@@ -28,5 +28,11 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.github.clans:fab:1.6.4'
     compile 'it.sephiroth.android.library.bottomnavigation:bottom-navigation:2.0.1-rc1'
+    // Glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    // volley
+    compile 'com.android.volley:volley:1.0.0'
+    // Recyclerview
+    compile 'com.android.support:recyclerview-v7:25.1.1'
     testCompile 'junit:junit:4.12'
 }
