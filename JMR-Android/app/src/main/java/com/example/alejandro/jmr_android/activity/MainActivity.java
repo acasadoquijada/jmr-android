@@ -44,7 +44,6 @@ import com.example.alejandro.jmr_android.Resultado;
 import com.example.alejandro.jmr_android.Utility;
 import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
 import com.example.alejandro.jmr_android.app.AppController;
-import com.example.alejandro.jmr_android.jmr.ImageViewJMR;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
 import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
@@ -79,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
     private Lock l;
     private Animator mCurrentAnimator;
     private boolean pressed;
-    private ImageViewJMR imageViewJMR;
-    private ArrayList<ImageViewJMR> imagesViewJMR;
     private Toolbar mToolbar;
     // The system "short" animation time duration, in milliseconds. This
     // duration is ideal for subtle animations or animations that occur
@@ -100,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        galeria = new Galeria(this);
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         pDialog = new ProgressDialog(this);
@@ -111,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-                 recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
+         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
+                 (getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Bundle bundle = new Bundle();
@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
-        fetchImages();
-
+        //fetchImages();
+        colocarImagenesResultado();
     }
 
     private void fetchImages() {
@@ -177,6 +177,29 @@ public class MainActivity extends AppCompatActivity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(req);
+    }
+
+    public void colocarImagenesResultado(){
+
+        pDialog.setMessage("Cargando imágenes...");
+        pDialog.show();
+
+
+        for(int i = 1; i < 100; i++) {
+            Image image = new Image();
+
+            image.setName("Imagen 1");
+            image.setMedium(galeria.getImageURI(i));
+            image.setLarge(galeria.getImageURI(i));
+            image.setTimestamp("distancia");
+
+            images.add(image);
+        }
+
+        pDialog.hide();
+
+
+
     }
 
     public void añadirImagenConsulta(){
@@ -246,33 +269,10 @@ public class MainActivity extends AppCompatActivity {
             double aux = (Double)resultMetadatas.get(i).getResult();
             Log.d("Imagen " + i," " + Double.toString(aux));        }
 
-        colocarImagenesResultado();
+      //  colocarImagenesResultado();
     }
 
-    public void colocarImagenesResultado(){
 
-        for(int i = 1; i < 10; i++) {
-
-            imageViewConsulta = new ImageView(this);
-
-            imageViewJMR = new ImageViewJMR(this);
-
-            final Bitmap imagenGaleria = (Bitmap)resultMetadatas.get(i).getMetadata();
-
-            final String nombre = Double.toString((Double)resultMetadatas.get(i).getResult());
-
-            imageViewJMR.setImageBitmap(imagenGaleria);
-
-            imageViewJMR.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("CLICK","HOLAAA");
-
-                }
-            });
-            gridLayoutResultado.addView(imageViewJMR);
-        }
-    }
 
 
     @Override

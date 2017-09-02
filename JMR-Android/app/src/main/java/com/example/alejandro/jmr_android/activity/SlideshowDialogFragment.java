@@ -1,7 +1,7 @@
 package com.example.alejandro.jmr_android.activity;
 
 /**
- * Created by alejandro on 28/08/2017.
+ * Created by alejandro on 02/09/2017.
  */
 
 import android.content.Context;
@@ -24,6 +24,7 @@ import com.example.alejandro.jmr_android.model.Image;
 import java.util.ArrayList;
 
 
+
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
     private ArrayList<Image> images;
@@ -40,7 +41,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.fragment_image_slider, container, false);
+        View v = inflater.inflate(R.layout.fragment_image_slider, container, false);
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         lblCount = (TextView) v.findViewById(R.id.lbl_count);
         lblTitle = (TextView) v.findViewById(R.id.title);

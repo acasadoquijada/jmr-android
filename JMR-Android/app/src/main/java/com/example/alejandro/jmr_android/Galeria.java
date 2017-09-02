@@ -42,6 +42,10 @@ public class Galeria /*extends AppCompatActivity*/ {
 
     public ArrayList<JMRImage> getImages(){ return images;}
 
+    public String getImageURI(int index){
+        return images.get(index).getName();
+    }
+
     public int getTamanioGaleria(){
         return tamanio;
     }

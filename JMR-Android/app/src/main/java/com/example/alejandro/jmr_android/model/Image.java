@@ -29,10 +29,6 @@ public class Image implements Serializable{
         this.name = name;
     }
 
-    public String getSmall() {
-        return small;
-    }
-
     public void setSmall(String small) {
         this.small = small;
     }
@@ -45,9 +41,7 @@ public class Image implements Serializable{
         this.medium = medium;
     }
 
-    public String getLarge() {
-        return large;
-    }
+    public String getLarge(){ return large; }
 
     public void setLarge(String large) {
         this.large = large;
