@@ -1,11 +1,48 @@
-<android.support.design.widget.CoordinatorLayout android:id="@+id/CoordinatorLayout01"
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CoordinatorLayout01"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/content_main" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".activity.MainActivity"
+            tools:showIn="@layout/activity_main">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view2"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="horizontal"
+                android:scrollbars="vertical" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".activity.MainActivity"
+            tools:showIn="@layout/activity_main">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:scrollbars="vertical" />
+
+        </RelativeLayout>
+    </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab"
@@ -15,25 +52,31 @@
         android:layout_marginBottom="56dp"
         android:layout_marginRight="8dp"
         android:src="@drawable/fab_add"
-        app:fab_colorNormal="@color/colorPrimary"
-        app:fab_colorPressed="@color/colorPrimaryDark"
-        app:fab_colorRipple="@color/colorAccent">
+        app:menu_colorNormal="@color/colorAccent"
+        app:menu_colorPressed="@color/pressedFab"
+        app:menu_colorRipple="@color/colorAccent">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/pressedFab"
+            app:fab_colorRipple="@color/colorAccent"
             android:src="@android:drawable/ic_menu_camera"
-            app:fab_size="mini"
-            app:fab_label="Cámara" />
+            app:fab_label="Cámara"
+            app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/menu_item2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/pressedFab"
+            app:fab_colorRipple="@color/colorAccent"
             android:src="@android:drawable/ic_menu_gallery"
-            app:fab_size="mini"
-            app:fab_label="Galería" />
+            app:fab_label="Galería"
+            app:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
@@ -46,5 +89,4 @@
         app:bbn_scrollEnabled="true"
         app:bbn_badgeProvider="@string/bbn_badgeProvider"
         app:layout_behavior="@string/bbn_phone_view_behavior" />
-
 </android.support.design.widget.CoordinatorLayout>

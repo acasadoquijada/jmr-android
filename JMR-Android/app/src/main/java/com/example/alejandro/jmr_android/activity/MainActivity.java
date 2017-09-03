@@ -7,11 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import android.animation.Animator;
+import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,164 +17,125 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.alejandro.jmr_android.Galeria;
+import com.example.alejandro.jmr_android.Gallery;
 import com.example.alejandro.jmr_android.R;
-import com.example.alejandro.jmr_android.Resultado;
-import com.example.alejandro.jmr_android.Utility;
 import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
-import com.example.alejandro.jmr_android.app.AppController;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
 import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
 import com.example.alejandro.jmr_android.model.Image;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Lock;
 
 public class MainActivity extends AppCompatActivity {
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    private Button btnSelect, btnGaleria;
-    private ImageButton botonAñadirImagenConsulta, botonCalcular;
-    private ImageView imageViewConsulta;
+    final private int REQUEST_MEDIA_ACCESS = 2;
     private String userChoosenTask;
-    private LinearLayout consultLayout;
-    private LinearLayout imagenesConsultaScrollLayout;
-    private HorizontalScrollView horizontalScrollView;
-    private GridLayout gridLayoutResultado;
-    private Galeria galeria;
+    private Gallery imagenesGaleria;
     private Bitmap imagenConsulta;
     private Color colorImagenConsulta;
-    private ArrayList<Resultado> resultados;
     private ResultList <ResultMetadata> resultMetadatas;
-    private Semaphore semaforo;
-    private Lock l;
-    private Animator mCurrentAnimator;
-    private boolean pressed;
-    private Toolbar mToolbar;
-    // The system "short" animation time duration, in milliseconds. This
-    // duration is ideal for subtle animations or animations that occur
-    // very frequently.
-
-    private String TAG = MainActivity.class.getSimpleName();
-    private static final String endpoint = "https://api.androidhive.info/json/glide.json";
     private ArrayList<Image> images;
     private ProgressDialog pDialog;
-    private GalleryAdapter mAdapter;
-    private RecyclerView recyclerView;
-
-    private int mShortAnimationDuration;
+    private GalleryAdapter mAdapter, mAdapter2;
+    private RecyclerView recyclerView, recyclerView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        galeria = new Galeria(this);
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_MEDIA_ACCESS);
 
+        imagenesGaleria = new Gallery(this);
+
+        /*
+            RecyclerView imagenes resultado
+         */
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        pDialog = new ProgressDialog(this);
         images = new ArrayList<>();
+
         mAdapter = new GalleryAdapter(getApplicationContext(), images);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        pDialog = new ProgressDialog(this);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 4);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
-                 (getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("images", images);
-                bundle.putInt("position", position);
-
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();                newFragment.setArguments(bundle);
-                newFragment.show(ft, "slideshow");
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-
-        //fetchImages();
-        colocarImagenesResultado();
-    }
-
-    private void fetchImages() {
-
-        pDialog.setMessage("Downloading json...");
-        pDialog.show();
-
-        JsonArrayRequest req = new JsonArrayRequest(endpoint,
-                new Response.Listener<JSONArray>() {
+        recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
+                (getApplicationContext(), recyclerView, new GalleryAdapter.ClickListener() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
-                        pDialog.hide();
+                    public void onClick(View view, int position) {
+                        Log.d("HE PULSADO","HE PULSADO");
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("images", images);
+                        bundle.putInt("position", position);
 
-                        images.clear();
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject object = response.getJSONObject(i);
-                                Image image = new Image();
-                                image.setName("Pepa flores");
-
-                                JSONObject url = object.getJSONObject("url");
-                                image.setSmall(url.getString("small"));
-                                image.setMedium(url.getString("medium"));
-                                image.setLarge(url.getString("large"));
-                                image.setTimestamp(object.getString("timestamp"));
-
-                                images.add(image);
-
-                            } catch (JSONException e) {
-                                Log.e(TAG, "Json parsing error: " + e.getMessage());
-                            }
-                        }
-
-                        mAdapter.notifyDataSetChanged();
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                        newFragment.setArguments(bundle);
+                        newFragment.show(ft, "slideshow");
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Error: " + error.getMessage());
-                pDialog.hide();
-            }
-        });
 
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(req);
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
+
+        /*
+            RecyclerView imagenes resultado
+         */
+        recyclerView2 = (RecyclerView) findViewById(R.id.recycler_view2);
+
+        mAdapter2 = new GalleryAdapter(getApplicationContext(), images);
+
+        pDialog = new ProgressDialog(this);
+        RecyclerView.LayoutManager jLayoutManager = new LinearLayoutManager
+                (this, LinearLayoutManager.HORIZONTAL, false);
+
+        recyclerView2.setLayoutManager(jLayoutManager);
+        recyclerView2.setItemAnimator(new DefaultItemAnimator());
+        recyclerView2.setAdapter(mAdapter);
+
+        recyclerView2.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
+                (getApplicationContext(), recyclerView2, new GalleryAdapter.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        Log.d("HE PULSADO","HE PULSADO");
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("images", images);
+                        bundle.putInt("position", position);
+
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                        newFragment.setArguments(bundle);
+                        newFragment.show(ft, "slideshow");
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
+
+        colocarImagenesResultado();
     }
 
     public void colocarImagenesResultado(){
@@ -184,22 +143,18 @@ public class MainActivity extends AppCompatActivity {
         pDialog.setMessage("Cargando imágenes...");
         pDialog.show();
 
-
         for(int i = 1; i < 100; i++) {
             Image image = new Image();
 
-            image.setName("Imagen 1");
-            image.setMedium(galeria.getImageURI(i));
-            image.setLarge(galeria.getImageURI(i));
+            image.setName("Imagen " + Integer.toString(i));
+            image.setMedium(imagenesGaleria.getImageURI(i));
+            image.setLarge(imagenesGaleria.getImageURI(i));
             image.setTimestamp("distancia");
 
             images.add(image);
         }
 
         pDialog.hide();
-
-
-
     }
 
     public void añadirImagenConsulta(){
@@ -209,10 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
         obtenerImagen();
 
-        botonCalcular.setVisibility(View.VISIBLE);
 
-
-        // Recorremos la galeria y calculamos.
+        // Recorremos la imagenesGaleria y calculamos.
         // calcularDescriptor();
 
         // Colocamos las imagenes acorde a dicho calculo.
@@ -222,11 +175,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void calcularDescriptor(){
 
-        int tamanioGaleria = galeria.getTamanioGaleria();
+        int tamanioGaleria = imagenesGaleria.size();
 
         /* Cojo la imagen consulta y la meto en el array
          de resultados, para poder compararla con las de
-         la galeria
+         la imagenesGaleria
         */
 
         double distancia = 0.00;
@@ -239,10 +192,10 @@ public class MainActivity extends AppCompatActivity {
 
         resultMetadatas.add(resultMetada);
 
-        Log.d("Estoy en: ", "principio calcular galeria");
+        Log.d("Estoy en: ", "principio calcular imagenesGaleria");
         for(int i = 1; i < 11; i++){
-            Log.d("Estoy en: ", "Cojo imagen galeria");
-            Bitmap img = galeria.getImagen(i);
+            Log.d("Estoy en: ", "Cojo imagen imagenesGaleria");
+            Bitmap img = imagenesGaleria.getImagen(i);
 
             Log.d("Estoy en: ", "Calculo descriptor");
             SingleColorDescription descriptor = new SingleColorDescription(img);
@@ -273,26 +226,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(userChoosenTask.equals("Take Photo"))
-                        cameraIntent();
-                    else if(userChoosenTask.equals("Choose from Library"))
-                        galleryIntent();
+            case REQUEST_MEDIA_ACCESS:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Log.d("HOLA","HOLA");
+                  //  colocarImagenesResultado();
                 } else {
-                    //code for deny
+                    Toast.makeText(MainActivity.this,
+                            "Permission denied to read your External storage"
+                            , Toast.LENGTH_SHORT).show();
                 }
-                break;
         }
     }
 
     private void obtenerImagen() {
-        final CharSequence[] items = {
+        /*final CharSequence[] items = {
                 "Obtener desde la cámara",
                 "Obtener desde la galería",
                 "Cancelar" };
@@ -317,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        builder.show();
+        builder.show();*/
     }
 
     private void galleryIntent()
@@ -366,7 +317,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        addImagenScrollConsulta(imagenConsulta);
     }
 
 
@@ -384,28 +334,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        addImagenScrollConsulta(imagenConsulta);
     }
 
-    public void addImagenScrollConsulta(Bitmap b){
 
-        imageViewConsulta = new ImageView(this);
-
-        RelativeLayout rl = new RelativeLayout(this);
-        Bitmap bm = Bitmap.createScaledBitmap(b, 300,300, true);
-        //  parms.gravity = Gravity.CENTER;
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(
-                444,
-                444);
-        parms.setMargins(20, 20, 20, 20);
-        imageViewConsulta.setLayoutParams(parms);
-        imageViewConsulta.getLayoutParams().height = 500;
-        imageViewConsulta.getLayoutParams().width = 500;
-        imageViewConsulta.setImageBitmap(bm);
-        rl.addView(imageViewConsulta);
-        imagenesConsultaScrollLayout.addView(rl);
-
-    }
 
     public void normalize(){
 

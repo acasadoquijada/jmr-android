@@ -23,8 +23,6 @@ import com.example.alejandro.jmr_android.model.Image;
 
 import java.util.ArrayList;
 
-
-
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
     private ArrayList<Image> images;
@@ -87,7 +85,7 @@ public class SlideshowDialogFragment extends DialogFragment {
     };
 
     private void displayMetaInfo(int position) {
-        lblCount.setText((position + 1) + " of " + images.size());
+        lblCount.setText((position + 1) + " de " + images.size());
 
         Image image = images.get(position);
         lblTitle.setText(image.getName());
