@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android.activity;
+package com.example.alejandro.jmr_android.fragment;
 
 /**
  * Created by alejandro on 02/09/2017.
