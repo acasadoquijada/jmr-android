@@ -3,20 +3,13 @@ package com.example.alejandro.jmr_android;
 import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.style.DrawableMarginSpan;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.example.alejandro.jmr_android.jmr.JMRImage;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Gallery {
@@ -94,6 +87,7 @@ public class Gallery {
         int index = 0;
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
+            Log.d("Nombre", absolutePathOfImage);
             JMRImage jmrImage = new JMRImage();
             jmrImage.setName(absolutePathOfImage);
             jmrImage.setIndex(index);

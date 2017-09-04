@@ -2,37 +2,51 @@ package com.example.alejandro.jmr_android.jmr;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /**
- * Created by alejandro on 21/08/2017.
+ * Created by Lincoln on 04/04/16.
  */
-
-public class JMRImage {
-
-    private Bitmap image;
+public class JMRImage implements Serializable{
     private String name;
+    private String path;
+    private String distance;
+    private Bitmap image;
     private int index;
     private boolean pressed;
 
-    public void JMRImage(){
-        this.image = null;
-        this.name = null;
-        index = -1;
-        pressed = false;
+    public JMRImage() {
+
     }
 
-    public void JMRImage(Bitmap image, String name){
-        this.image = image;
+    public JMRImage(String name, String path, String distance) {
         this.name = name;
-        index = -1;
-        pressed = false;
+        this.path = path;
+        this.distance = distance;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 
     public Bitmap getImage(){
         return image;
-    }
-
-    public String getName(){
-        return name;
     }
 
     public int getIndex(){
@@ -58,4 +72,5 @@ public class JMRImage {
     public void setName(String name){
         this.name = name;
     }
+
 }

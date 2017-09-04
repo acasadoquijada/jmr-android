@@ -4,24 +4,19 @@ package com.example.alejandro.jmr_android.fragment;
  * Created by alejandro on 03/09/2017.
  */
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,46 +26,48 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.example.alejandro.jmr_android.Gallery;
 import com.example.alejandro.jmr_android.R;
+import com.example.alejandro.jmr_android.RealPathUtil;
 import com.example.alejandro.jmr_android.Utility;
 import com.example.alejandro.jmr_android.activity.MainActivity;
 import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
+import com.example.alejandro.jmr_android.helper.SquareLayout;
+import com.example.alejandro.jmr_android.jmr.JMRImage;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
-import com.example.alejandro.jmr_android.model.Image;
+import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
-import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ConsultFragment extends Fragment {
 
     private static final int CAMERA_REQUEST = 1888;
+    private static final int FILE_REQUEST = 2888;
     final private int REQUEST_MEDIA_ACCESS = 2;
     private String userChoosenTask;
-    private Gallery imagenesGaleria;
+    private Gallery galleryImages;
     private Bitmap imagenConsulta;
     private Color colorImagenConsulta;
     private ResultList<ResultMetadata> resultMetadatas;
-    private ArrayList<Image> images, imageConsulta;
+    private ArrayList<JMRImage> JMRImages, consultJMRImages;
     private ProgressDialog pDialog;
-    private GalleryAdapter mAdapter, mAdapter2;
-    private RecyclerView recyclerView, recyclerView2;
-    private FloatingActionButton fab_camera;
+    private GalleryAdapter resultAdapter, consultAdapter;
+    private RecyclerView recyclerViewResult, recyclerViewConsult;
+    private FloatingActionButton fab_camera, fab_gallery, fab_consult;
+    private FloatingActionMenu floatingActionMenu;
     private Uri mImageUri;
-
 
     public static ConsultFragment newInstance() {
         ConsultFragment fragment = new ConsultFragment();
@@ -80,10 +77,12 @@ public class ConsultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        imagenesGaleria = ((MainActivity) getActivity()).getGallery();
-        images = new ArrayList<>();
-        imageConsulta = new ArrayList<>();
-        colocarImagenesResultado();
+        galleryImages = ((MainActivity) getActivity()).getGallery();
+        imagenConsulta = galleryImages.getImagen(4);
+        JMRImages = new ArrayList<>();
+        consultJMRImages = new ArrayList<>();
+        resultMetadatas = new ResultList<>();
+       // colocarImagenesResultado();
     }
 
     @Override
@@ -95,26 +94,64 @@ public class ConsultFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        setConsultImage();
-        setResultImage();
+        initConsultImageView();
+        initResultImagesView();
 
-        fab_camera = (FloatingActionButton) getView().
-                findViewById(R.id.menu_item_camera);
+        floatingActionMenu = (FloatingActionMenu)getView().findViewById(R.id.fab);
+        fab_camera = (FloatingActionButton) getView().findViewById(R.id.menu_item_camera);
+        fab_gallery = (FloatingActionButton) getView().findViewById(R.id.menu_item_gallery);
+        fab_consult = (FloatingActionButton) getView().findViewById(R.id.menu_item_make_consult);
 
-        fab_camera.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                boolean result= Utility.checkPermission(getContext());
-
-                if(result){
-                    cameraIntent();
-                }
-
-            }
-        });
+        floatingCameraButtonBehaviour();
+        floatingGalleryButtonBehaviour();
+        floatingConsultButtonBehaviour();
 
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void floatingCameraButtonBehaviour(){
+        if(fab_camera != null){
+            fab_camera.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    boolean result= Utility.checkPermission(getContext());
+                    if(result){
+                        cameraIntent();
+                    }
+                    floatingActionMenu.close(false);
+                }
+            });
+        }
+    }
+
+    private void floatingGalleryButtonBehaviour(){
+        if(fab_gallery != null){
+            fab_gallery.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    boolean result = Utility.checkPermission(getContext());
+                    if(result){
+                        galleryIntent();
+                    }
+                    floatingActionMenu.close(false);
+                }
+            });
+        }
+    }
+
+    private void floatingConsultButtonBehaviour(){
+        if(fab_consult != null){
+            fab_consult.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    calcularDescriptor();
+                    resultAdapter = new GalleryAdapter(getContext(), JMRImages);
+                    recyclerViewResult.setAdapter(resultAdapter);
+                }
+            });
+        }
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception {
@@ -127,18 +164,22 @@ public class ConsultFragment extends Fragment {
         return File.createTempFile(part, ext, tempDir);
     }
 
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), FILE_REQUEST);
+    }
+
     private void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         File photo = null;
-        try
-        {
-            // place where to store camera taken picture
+        try {
             photo = this.createTemporaryFile("picture", ".jpg");
             photo.delete();
-        }
-        catch(Exception e) {
-
+        } catch(Exception e) {
+            Log.w("cameraIntent exception ",e.toString());
         }
 
         mImageUri = Uri.fromFile(photo);
@@ -146,30 +187,47 @@ public class ConsultFragment extends Fragment {
 
         startActivityForResult(intent, CAMERA_REQUEST);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST)
                 onCaptureImageResult(data);
+            else if(requestCode == FILE_REQUEST)
+                onSelectFromGalleryResult(data);
+        }
+    }
+
+    private void onSelectFromGalleryResult(Intent data){
+        if (data != null) {
+            String realPath;
+
+            if (Build.VERSION.SDK_INT < 11) {
+                realPath = RealPathUtil.getRealPathFromURI_BelowAPI11(getContext(), data.getData());
+            } else if (Build.VERSION.SDK_INT < 19) {
+                realPath = RealPathUtil.getRealPathFromURI_API11to18(getContext(), data.getData());
+            }
+            else {
+                realPath = RealPathUtil.getRealPathFromURI_API19(getContext(), data.getData());
+            }
+            Log.d("PATH galeria", realPath);
+            addConsultImage(realPath);
         }
     }
 
     private void onCaptureImageResult(Intent data) {
         getContext().getContentResolver().notifyChange(mImageUri, null);
         ContentResolver cr = getContext().getContentResolver();
-        Bitmap bitmap;
-        try
-        {
+        Bitmap bitmap = null;
+        File destination = null;
+        try {
             bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
-
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
-
-            File destination = new File(Environment.getExternalStoragePublicDirectory(
+            destination = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DCIM).getPath() + "/Camera",
-
                     System.currentTimeMillis() + ".jpg");
 
             FileOutputStream fo;
@@ -187,6 +245,11 @@ public class ConsultFragment extends Fragment {
         } catch (Exception e) {
             Log.d("Failed to load", e.toString());
         }
+
+        /* Añado la imagen a consultJMRImages*/
+        Log.d("PATH galeria", destination.getAbsolutePath());
+
+        addConsultImage(destination.getAbsolutePath());
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -202,35 +265,39 @@ public class ConsultFragment extends Fragment {
         }
     }
 
-    private void setConsultImage() {
+    private void addConsultImage(String path){
+        JMRImage JMRImage = new JMRImage();
+        JMRImage.setName("Imagen consulta " + Integer.toString(consultJMRImages.size()+1));
+        JMRImage.setPath(path);
+        consultJMRImages.add(JMRImage);
+    }
 
-        /*
-            RecyclerView imagenes resultado
-         */
+    private void initResultImagesView() {
 
-        recyclerView = (RecyclerView) getView().
+        recyclerViewResult = (RecyclerView) getView().
                 findViewById(R.id.recycler_view);
 
-        mAdapter = new GalleryAdapter(((MainActivity) getActivity()).getApplicationContext(), images);
+        resultAdapter = new GalleryAdapter(getContext(), JMRImages);
 
         pDialog = new ProgressDialog(((MainActivity) getActivity()).getApplicationContext());
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(
                 ((MainActivity) getActivity()).getApplicationContext(), 4);
 
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+        recyclerViewResult.setLayoutManager(mLayoutManager);
+        recyclerViewResult.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewResult.setAdapter(resultAdapter);
 
-        recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
+        recyclerViewResult.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
                 (((MainActivity) getActivity()).getApplicationContext(),
-                        recyclerView,
+                        recyclerViewResult,
                         new GalleryAdapter.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
-                                Log.d("HE PULSADO", "HE PULSADO");
+                                Log.d("onClick","on click");
+
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("images", images);
+                                bundle.putSerializable("JMRImages", JMRImages);
                                 bundle.putInt("position", position);
 
                                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -247,61 +314,149 @@ public class ConsultFragment extends Fragment {
 
     }
 
-    private void setResultImage() {
+    private void initConsultImageView() {
 
-        /*
-            RecyclerView imagenes resultado
-         */
-        recyclerView2 = (RecyclerView) ((MainActivity) getActivity()).findViewById(R.id.recycler_view2);
+        recyclerViewConsult = (RecyclerView) ((MainActivity) getActivity()).findViewById(R.id.recycler_view2);
 
-        mAdapter2 = new GalleryAdapter(((MainActivity) getActivity()).getApplicationContext(), images);
+        consultAdapter = new GalleryAdapter(((MainActivity) getActivity()).getApplicationContext(), consultJMRImages);
 
         pDialog = new ProgressDialog(((MainActivity) getActivity()).getApplicationContext());
 
         RecyclerView.LayoutManager jLayoutManager = new LinearLayoutManager(
                 ((MainActivity) getActivity()), LinearLayoutManager.HORIZONTAL, false);
 
-        recyclerView2.setLayoutManager(jLayoutManager);
-        recyclerView2.setItemAnimator(new DefaultItemAnimator());
-        recyclerView2.setAdapter(mAdapter);
+        recyclerViewConsult.setLayoutManager(jLayoutManager);
+        recyclerViewConsult.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewConsult.setAdapter(consultAdapter);
 
-        recyclerView2.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
+        recyclerViewConsult.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener
                 (((MainActivity) getActivity()).getApplicationContext(),
-                        recyclerView2,
+                        recyclerViewConsult,
                         new GalleryAdapter.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
-                                Log.d("HE PULSADO", "HE PULSADO");
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("images", images);
+                                bundle.putSerializable("JMRImages", consultJMRImages);
                                 bundle.putInt("position", position);
 
                                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                                SlideshowDialogFragment newFragment =
+                                        SlideshowDialogFragment.newInstance();
                                 newFragment.setArguments(bundle);
                                 newFragment.show(ft, "slideshow");
                             }
 
                             @Override
                             public void onLongClick(View view, int position) {
+                                SquareLayout squareLayout = (SquareLayout) view;
+                                Log.d("Soy la imagen",Integer.toString(position));
 
+                                ImageView imageIconSelected = (ImageView)
+                                        squareLayout.findViewById(R.id.selectedIcon);
+
+                                int visibility = imageIconSelected.getVisibility();
+
+                                if(visibility == ImageView.INVISIBLE){
+                                    imageIconSelected.setVisibility(ImageView.VISIBLE);
+                                }
+                                else if(visibility == ImageView.VISIBLE){
+                                    imageIconSelected.setVisibility(ImageView.INVISIBLE);
+                                }
                             }
                         }));
     }
 
     public void colocarImagenesResultado(){
 
+        Log.d("COLOCANDO","RESULTADOS");
+        for(int i = 1; i < 11; i++) {
+            JMRImage JMRImage = new JMRImage();
 
-        for(int i = 1; i < 100; i++) {
-            Image image = new Image();
+            JMRImage.setName("Imagen resultado " + Integer.toString(i));
+            JMRImage.setPath((String)(resultMetadatas.get(i).getMetadata()));
+            Double distance = (Double)(resultMetadatas.get(i).getResult());
+            JMRImage.setDistance(Double.toString(distance));
 
-            image.setName("Imagen " + Integer.toString(i));
-            image.setMedium(imagenesGaleria.getImageURI(i));
-            image.setLarge(imagenesGaleria.getImageURI(i));
-            image.setTimestamp("distancia");
+            JMRImages.add(JMRImage);
+        }
 
-            images.add(image);
+    }
+
+    public void calcularDescriptor(){
+
+        int tamanioGaleria = galleryImages.size();
+
+        /* Cojo la imagen consulta y la meto en el array
+         de resultados, para poder compararla con las de
+         la galeria
+        */
+        Log.d("Estoy en: ", "caca calcular galeria");
+
+        double distancia = 0.00;
+
+        ResultMetadata<Double, String> resultMetada =
+                new ResultMetadata(0.0,galleryImages.getImageURI(4));
+
+        SingleColorDescription descriptorImagenConsulta =
+                new SingleColorDescription(imagenConsulta);
+
+        resultMetadatas.add(resultMetada);
+
+        Log.d("Estoy en: ", "principio calcular galeria");
+        for(int i = 1; i < 11; i++){
+            Log.d("Estoy en: ", "Cojo imagen galeria");
+            Bitmap img = galleryImages.getImagen(i);
+
+            Log.d("Estoy en: ", "Calculo descriptor");
+            SingleColorDescription descriptor = new SingleColorDescription(img);
+
+            Log.d("Estoy en: ", "Calculo distancia");
+
+            distancia = SingleColorDescription.DefaultComparator
+                    (descriptorImagenConsulta, descriptor);
+
+            ResultMetadata<Double, String> resultMetadaGaleria
+                    = new ResultMetadata(distancia, galleryImages.getImageURI(i));
+
+            resultMetadatas.add(resultMetadaGaleria);
+        }
+
+        for(int i = 0; i < 11; i++){
+            double aux = (Double)resultMetadatas.get(i).getResult();
+            Log.d("Imagen " + i," " + Double.toString(aux));
+        }
+
+        normalizeResult();
+
+        for(int i = 0; i < 11; i++){
+            double aux = (Double)resultMetadatas.get(i).getResult();
+            Log.d("Imagen " + i," " + Double.toString(aux));
+        }
+
+        colocarImagenesResultado();
+    }
+
+    private void normalizeResult() {
+
+        Collections.sort(resultMetadatas, new Comparator<ResultMetadata>() {
+            public int compare(ResultMetadata r1, ResultMetadata r2) {
+                return r1.compareTo(r2);
+            }
+        });
+
+        double min = (Double) resultMetadatas.get(0).getResult();
+        double max = (Double) resultMetadatas.getLast().getResult();
+
+        for (int i = 1; i < 11; i++) {
+            double newResult;
+            double xi = (Double) resultMetadatas.get(i).getResult();
+
+            newResult = (xi - min) / (max - min);
+
+            resultMetadatas.get(i).setResult(newResult);
+
         }
     }
 
 }
+

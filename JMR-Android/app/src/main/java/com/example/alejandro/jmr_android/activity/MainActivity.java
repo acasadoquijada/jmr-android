@@ -19,9 +19,9 @@ import com.example.alejandro.jmr_android.fragment.SettingFragment;
 import com.example.alejandro.jmr_android.R;
 import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
 import com.example.alejandro.jmr_android.fragment.StatisticsFragment;
+import com.example.alejandro.jmr_android.jmr.JMRImage;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
-import com.example.alejandro.jmr_android.model.Image;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap imagenConsulta;
     private Color colorImagenConsulta;
     private ResultList <ResultMetadata> resultMetadatas;
-    private ArrayList<Image> images;
+    private ArrayList<JMRImage> JMRImages;
     private ProgressDialog pDialog;
     private GalleryAdapter mAdapter, mAdapter2;
     private RecyclerView recyclerView, recyclerView2;

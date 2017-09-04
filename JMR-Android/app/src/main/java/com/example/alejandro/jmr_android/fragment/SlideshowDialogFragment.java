@@ -19,13 +19,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.alejandro.jmr_android.R;
-import com.example.alejandro.jmr_android.model.Image;
+import com.example.alejandro.jmr_android.jmr.JMRImage;
 
 import java.util.ArrayList;
 
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
-    private ArrayList<Image> images;
+    private ArrayList<JMRImage> JMRImages;
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
@@ -45,11 +45,11 @@ public class SlideshowDialogFragment extends DialogFragment {
         lblTitle = (TextView) v.findViewById(R.id.title);
         lblDate = (TextView) v.findViewById(R.id.date);
 
-        images = (ArrayList<Image>) getArguments().getSerializable("images");
+        JMRImages = (ArrayList<JMRImage>) getArguments().getSerializable("JMRImages");
         selectedPosition = getArguments().getInt("position");
 
         Log.e(TAG, "position: " + selectedPosition);
-        Log.e(TAG, "images size: " + images.size());
+        Log.e(TAG, "JMRImages size: " + JMRImages.size());
 
         myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
@@ -85,11 +85,11 @@ public class SlideshowDialogFragment extends DialogFragment {
     };
 
     private void displayMetaInfo(int position) {
-        lblCount.setText((position + 1) + " de " + images.size());
+        lblCount.setText((position + 1) + " de " + JMRImages.size());
 
-        Image image = images.get(position);
-        lblTitle.setText(image.getName());
-        lblDate.setText(image.getTimestamp());
+        JMRImage JMRImage = JMRImages.get(position);
+        lblTitle.setText(JMRImage.getName());
+        lblDate.setText(JMRImage.getDistance());
     }
 
     @Override
@@ -114,9 +114,9 @@ public class SlideshowDialogFragment extends DialogFragment {
 
             ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
 
-            Image image = images.get(position);
+            JMRImage JMRImage = JMRImages.get(position);
 
-            Glide.with(getActivity()).load(image.getLarge())
+            Glide.with(getActivity()).load(JMRImage.getPath())
                     .thumbnail(0.5f)
                     .crossFade()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -129,7 +129,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         @Override
         public int getCount() {
-            return images.size();
+            return JMRImages.size();
         }
 
         @Override

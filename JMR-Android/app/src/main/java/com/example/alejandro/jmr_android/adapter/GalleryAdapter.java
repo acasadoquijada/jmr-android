@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.alejandro.jmr_android.R;
-import com.example.alejandro.jmr_android.model.Image;
+import com.example.alejandro.jmr_android.jmr.JMRImage;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHolder> {
 
-    private List<Image> images;
+    private List<JMRImage> JMRImages;
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,9 +40,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
     }
 
 
-    public GalleryAdapter(Context context, List<Image> images) {
+    public GalleryAdapter(Context context, List<JMRImage> JMRImages) {
         mContext = context;
-        this.images = images;
+        this.JMRImages = JMRImages;
     }
 
     @Override
@@ -55,9 +55,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Image image = images.get(position);
+        JMRImage JMRImage = JMRImages.get(position);
 
-        Glide.with(mContext).load(image.getMedium())
+        Glide.with(mContext).load(JMRImage.getPath())
                 .thumbnail(0.5f)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -66,8 +66,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.MyViewHo
 
     @Override
     public int getItemCount() {
-        return images.size();
+        return JMRImages.size();
     }
+
 
     public interface ClickListener {
         void onClick(View view, int position);

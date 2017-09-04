@@ -83,6 +83,17 @@
                 app:fab_label="Galería"
                 app:fab_size="mini" />
 
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/menu_item_make_consult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorPressed="#9fa8da"
+                app:fab_colorRipple="@color/colorAccent"
+                android:src="@android:drawable/ic_menu_search"
+                app:fab_label="Consulta"
+                app:fab_size="mini" />
+
         </com.github.clans.fab.FloatingActionMenu>
 
     </FrameLayout>
