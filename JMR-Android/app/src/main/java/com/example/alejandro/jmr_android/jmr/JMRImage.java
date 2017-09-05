@@ -1,7 +1,5 @@
 package com.example.alejandro.jmr_android.jmr;
 
-import android.graphics.Bitmap;
-
 import java.io.Serializable;
 
 /**
@@ -11,7 +9,6 @@ public class JMRImage implements Serializable{
     private String name;
     private String path;
     private String distance;
-    private Bitmap image;
     private int index;
     private boolean pressed;
 
@@ -45,10 +42,6 @@ public class JMRImage implements Serializable{
         this.distance = distance;
     }
 
-    public Bitmap getImage(){
-        return image;
-    }
-
     public int getIndex(){
         return index;
     }
@@ -63,10 +56,6 @@ public class JMRImage implements Serializable{
 
     public void setPressed(boolean pressed){
         this.pressed = pressed;
-    }
-
-    public void setImage(Bitmap image){
-        this.image = image;
     }
 
     public void setName(String name){

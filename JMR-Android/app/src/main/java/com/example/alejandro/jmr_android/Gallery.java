@@ -13,45 +13,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Gallery {
-    
-    private ArrayList<JMRImage> images;
+
+    private ArrayList<String> images;
     private Activity activity;
-    private int size;
 
     public Gallery(Activity activity){
 
         this.activity = activity;
-        images = new ArrayList<>();
+        this.images = new ArrayList<>();
         getGalleryImages();
-        this.size = this.images.size();
     }
 
-    public ArrayList<JMRImage> getAllImagesURI(){ return images;}
+    public Bitmap getImagen(String path){
 
-    public String getImageURI(int index){
-        return images.get(index).getName();
-    }
+        Bitmap image = null;
+        if(images.contains(path)){
+            int index = images.indexOf(path);
+            image = this.getImagen(index);
 
-    public int size(){
-        return size;
+            return image;
+        }
+        else{
+            return image;
+        }
+
     }
 
     public Bitmap getImagen(int index){
-        Bitmap imagen=null;
-        try {
-            imagen = MediaStore.Images.Media.getBitmap(
-                    this.activity.getApplicationContext().getContentResolver(),
-                    Uri.parse("file:///" + images.get(index).getName()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,200,200,true);
-
-        return imagenReescalada;
-    }
-
-    public Bitmap getImagen(int index, int ancho, int largo){
         Bitmap imagen=null;
         try {
             imagen = MediaStore.Images.Media.getBitmap(
@@ -61,10 +49,22 @@ public class Gallery {
             e.printStackTrace();
         }
 
-        Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,ancho,largo,true);
+        Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,200,200,true);
 
         return imagenReescalada;
     }
+
+    public String getImageURI(int index){
+        return images.get(index);
+    }
+
+    public void addImage(String path){
+        if(path != null){
+            images.add(path);
+        }
+    }
+
+    public ArrayList<String> getAllImagesURI(){ return images;}
 
     private void getGalleryImages(){
         Uri uri;
@@ -88,12 +88,13 @@ public class Gallery {
         while (cursor.moveToNext()) {
             absolutePathOfImage = cursor.getString(column_index_data);
             Log.d("Nombre", absolutePathOfImage);
-            JMRImage jmrImage = new JMRImage();
-            jmrImage.setName(absolutePathOfImage);
-            jmrImage.setIndex(index);
             index++;
+            images.add(absolutePathOfImage);
 
-            images.add(jmrImage);
         }
+    }
+
+    public int size(){
+        return images.size();
     }
 }

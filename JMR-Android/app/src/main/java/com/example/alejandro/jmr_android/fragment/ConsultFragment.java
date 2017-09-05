@@ -10,7 +10,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,19 +54,17 @@ public class ConsultFragment extends Fragment {
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int FILE_REQUEST = 2888;
-    final private int REQUEST_MEDIA_ACCESS = 2;
-    private String userChoosenTask;
     private Gallery galleryImages;
-    private Bitmap imagenConsulta;
-    private Color colorImagenConsulta;
+    private JMRImage imagenConsultaBuena;
     private ResultList<ResultMetadata> resultMetadatas;
-    private ArrayList<JMRImage> JMRImages, consultJMRImages;
+    private ArrayList<JMRImage> resultImages, consultImages;
     private ProgressDialog pDialog;
     private GalleryAdapter resultAdapter, consultAdapter;
     private RecyclerView recyclerViewResult, recyclerViewConsult;
     private FloatingActionButton fab_camera, fab_gallery, fab_consult;
     private FloatingActionMenu floatingActionMenu;
     private Uri mImageUri;
+    private ProgressDialog dialog;
 
     public static ConsultFragment newInstance() {
         ConsultFragment fragment = new ConsultFragment();
@@ -78,9 +75,13 @@ public class ConsultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         galleryImages = ((MainActivity) getActivity()).getGallery();
-        imagenConsulta = galleryImages.getImagen(4);
-        JMRImages = new ArrayList<>();
-        consultJMRImages = new ArrayList<>();
+        pDialog = new ProgressDialog(getContext());
+        /*
+        imagenConsultaBuena = new JMRImage();
+        imagenConsultaBuena.setPath(galleryImages.getImageURI(4));
+        */
+        resultImages = new ArrayList<>();
+        consultImages = new ArrayList<>();
         resultMetadatas = new ResultList<>();
        // colocarImagenesResultado();
     }
@@ -147,21 +148,11 @@ public class ConsultFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     calcularDescriptor();
-                    resultAdapter = new GalleryAdapter(getContext(), JMRImages);
+                    resultAdapter = new GalleryAdapter(getContext(), resultImages);
                     recyclerViewResult.setAdapter(resultAdapter);
                 }
             });
         }
-    }
-
-    private File createTemporaryFile(String part, String ext) throws Exception {
-        File tempDir= Environment.getExternalStorageDirectory();
-        tempDir=new File(tempDir.getAbsolutePath()+"/.temp/");
-        if(!tempDir.exists())
-        {
-            tempDir.mkdirs();
-        }
-        return File.createTempFile(part, ext, tempDir);
     }
 
     private void galleryIntent() {
@@ -246,30 +237,46 @@ public class ConsultFragment extends Fragment {
             Log.d("Failed to load", e.toString());
         }
 
-        /* Añado la imagen a consultJMRImages*/
-        Log.d("PATH galeria", destination.getAbsolutePath());
+        galleryImages.addImage(destination.getAbsolutePath());
 
         addConsultImage(destination.getAbsolutePath());
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    cameraIntent();
+    public void colocarImagenesResultado(){
 
-                } else {
-                    //code for deny
-                }
-                break;
+        Log.d("COLOCANDO","RESULTADOS");
+
+        if(resultImages.size() > 0){
+            resultImages.clear();
         }
+
+        for(int i = 1; i < resultMetadatas.size(); i++) {
+            JMRImage JMRImage = new JMRImage();
+
+            JMRImage.setName("Imagen resultado " + Integer.toString(i));
+            JMRImage.setPath((String)(resultMetadatas.get(i).getMetadata()));
+            Double distance = (Double)(resultMetadatas.get(i).getResult());
+            JMRImage.setDistance(Double.toString(distance));
+
+            resultImages.add(JMRImage);
+        }
+
+        Log.d("RESULT IMAGE SIZE", Integer.toString(resultImages.size()));
+        Log.d("CONSULT IMAGE SIZE", Integer.toString(consultImages.size()));
     }
 
     private void addConsultImage(String path){
-        JMRImage JMRImage = new JMRImage();
-        JMRImage.setName("Imagen consulta " + Integer.toString(consultJMRImages.size()+1));
-        JMRImage.setPath(path);
-        consultJMRImages.add(JMRImage);
+        JMRImage jmrImage = new JMRImage();
+        jmrImage.setName("Imagen consulta " + Integer.toString(consultImages.size()+1));
+        jmrImage.setPath(path);
+        consultImages.add(jmrImage);
+
+        imagenConsultaBuena = jmrImage;
+        /*
+            Ponerle la estrellita
+         */
+
+        consultAdapter.notifyDataSetChanged();
     }
 
     private void initResultImagesView() {
@@ -277,9 +284,7 @@ public class ConsultFragment extends Fragment {
         recyclerViewResult = (RecyclerView) getView().
                 findViewById(R.id.recycler_view);
 
-        resultAdapter = new GalleryAdapter(getContext(), JMRImages);
-
-        pDialog = new ProgressDialog(((MainActivity) getActivity()).getApplicationContext());
+        resultAdapter = new GalleryAdapter(getContext(), resultImages);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(
                 ((MainActivity) getActivity()).getApplicationContext(), 4);
@@ -294,14 +299,13 @@ public class ConsultFragment extends Fragment {
                         new GalleryAdapter.ClickListener() {
                             @Override
                             public void onClick(View view, int position) {
-                                Log.d("onClick","on click");
-
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("JMRImages", JMRImages);
+                                bundle.putSerializable("images", resultImages);
                                 bundle.putInt("position", position);
 
                                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance();
+                                SlideshowDialogFragment newFragment =
+                                        SlideshowDialogFragment.newInstance();
                                 newFragment.setArguments(bundle);
                                 newFragment.show(ft, "slideshow");
                             }
@@ -318,9 +322,7 @@ public class ConsultFragment extends Fragment {
 
         recyclerViewConsult = (RecyclerView) ((MainActivity) getActivity()).findViewById(R.id.recycler_view2);
 
-        consultAdapter = new GalleryAdapter(((MainActivity) getActivity()).getApplicationContext(), consultJMRImages);
-
-        pDialog = new ProgressDialog(((MainActivity) getActivity()).getApplicationContext());
+        consultAdapter = new GalleryAdapter(((MainActivity) getActivity()).getApplicationContext(), consultImages);
 
         RecyclerView.LayoutManager jLayoutManager = new LinearLayoutManager(
                 ((MainActivity) getActivity()), LinearLayoutManager.HORIZONTAL, false);
@@ -336,7 +338,7 @@ public class ConsultFragment extends Fragment {
                             @Override
                             public void onClick(View view, int position) {
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("JMRImages", consultJMRImages);
+                                bundle.putSerializable("images", consultImages);
                                 bundle.putInt("position", position);
 
                                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -366,74 +368,102 @@ public class ConsultFragment extends Fragment {
                         }));
     }
 
-    public void colocarImagenesResultado(){
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    cameraIntent();
 
-        Log.d("COLOCANDO","RESULTADOS");
-        for(int i = 1; i < 11; i++) {
-            JMRImage JMRImage = new JMRImage();
-
-            JMRImage.setName("Imagen resultado " + Integer.toString(i));
-            JMRImage.setPath((String)(resultMetadatas.get(i).getMetadata()));
-            Double distance = (Double)(resultMetadatas.get(i).getResult());
-            JMRImage.setDistance(Double.toString(distance));
-
-            JMRImages.add(JMRImage);
+                } else {
+                    //code for deny
+                }
+                break;
         }
-
     }
 
     public void calcularDescriptor(){
 
-        int tamanioGaleria = galleryImages.size();
+        if(imagenConsultaBuena != null){
+            int tamanioGaleria = galleryImages.size();
 
         /* Cojo la imagen consulta y la meto en el array
          de resultados, para poder compararla con las de
          la galeria
         */
-        Log.d("Estoy en: ", "caca calcular galeria");
 
-        double distancia = 0.00;
 
-        ResultMetadata<Double, String> resultMetada =
-                new ResultMetadata(0.0,galleryImages.getImageURI(4));
+            ProgressDialog dialog = new ProgressDialog(getActivity()); // this = YourActivity
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setMessage("Loading. Please wait...");
+            dialog.setIndeterminate(true);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
 
-        SingleColorDescription descriptorImagenConsulta =
-                new SingleColorDescription(imagenConsulta);
+            Log.d("Estoy en: ", "caca calcular galeria");
 
-        resultMetadatas.add(resultMetada);
+            double distancia = 0.00;
 
-        Log.d("Estoy en: ", "principio calcular galeria");
-        for(int i = 1; i < 11; i++){
-            Log.d("Estoy en: ", "Cojo imagen galeria");
-            Bitmap img = galleryImages.getImagen(i);
+            ResultMetadata<Double, String> resultMetada =
+                    new ResultMetadata(0.0,imagenConsultaBuena.getPath());
 
-            Log.d("Estoy en: ", "Calculo descriptor");
-            SingleColorDescription descriptor = new SingleColorDescription(img);
+            Bitmap bitmapConsultImage = galleryImages.getImagen(imagenConsultaBuena.getPath());
+            SingleColorDescription descriptorImagenConsulta =
+                    new SingleColorDescription(bitmapConsultImage);
 
-            Log.d("Estoy en: ", "Calculo distancia");
+            if(resultMetadatas.size() > 0){
+                resultMetadatas.clear();
+            }
 
-            distancia = SingleColorDescription.DefaultComparator
-                    (descriptorImagenConsulta, descriptor);
+            resultMetadatas.add(resultMetada);
 
-            ResultMetadata<Double, String> resultMetadaGaleria
-                    = new ResultMetadata(distancia, galleryImages.getImageURI(i));
+            int ini = 20;
+            int fin = 30;
+            Log.d("Estoy en: ", "principio calcular galeria");
+            for(int i = ini; i < fin; i++){
+                Log.d("Estoy en: ", "Cojo imagen galeria");
+                Bitmap img = galleryImages.getImagen(i);
 
-            resultMetadatas.add(resultMetadaGaleria);
+                Log.d("Estoy en: ", "Calculo descriptor");
+                SingleColorDescription descriptor = new SingleColorDescription(img);
+
+                Log.d("Estoy en: ", "Calculo distancia");
+
+                distancia = SingleColorDescription.DefaultComparator
+                        (descriptorImagenConsulta, descriptor);
+
+                ResultMetadata<Double, String> resultMetadaGaleria
+                        = new ResultMetadata(distancia, galleryImages.getImageURI(i));
+
+                resultMetadatas.add(resultMetadaGaleria);
+            }
+
+            for(int i = 1; i < resultMetadatas.size(); i++){
+                double aux = (Double)resultMetadatas.get(i).getResult();
+                Log.d("Imagen " + i," " + Double.toString(aux));
+            }
+
+            normalizeResult();
+
+            for(int i = 1; i < resultMetadatas.size(); i++){
+                double aux = (Double)resultMetadatas.get(i).getResult();
+                Log.d("Imagen " + i," " + Double.toString(aux));
+            }
+
+            colocarImagenesResultado();
+
+            dialog.dismiss();
         }
 
-        for(int i = 0; i < 11; i++){
-            double aux = (Double)resultMetadatas.get(i).getResult();
-            Log.d("Imagen " + i," " + Double.toString(aux));
+    }
+
+    private File createTemporaryFile(String part, String ext) throws Exception {
+        File tempDir= Environment.getExternalStorageDirectory();
+        tempDir=new File(tempDir.getAbsolutePath()+"/.temp/");
+        if(!tempDir.exists())
+        {
+            tempDir.mkdirs();
         }
-
-        normalizeResult();
-
-        for(int i = 0; i < 11; i++){
-            double aux = (Double)resultMetadatas.get(i).getResult();
-            Log.d("Imagen " + i," " + Double.toString(aux));
-        }
-
-        colocarImagenesResultado();
+        return File.createTempFile(part, ext, tempDir);
     }
 
     private void normalizeResult() {
@@ -447,7 +477,7 @@ public class ConsultFragment extends Fragment {
         double min = (Double) resultMetadatas.get(0).getResult();
         double max = (Double) resultMetadatas.getLast().getResult();
 
-        for (int i = 1; i < 11; i++) {
+        for (int i = 1; i < resultMetadatas.size(); i++) {
             double newResult;
             double xi = (Double) resultMetadatas.get(i).getResult();
 
@@ -457,6 +487,5 @@ public class ConsultFragment extends Fragment {
 
         }
     }
-
 }
 

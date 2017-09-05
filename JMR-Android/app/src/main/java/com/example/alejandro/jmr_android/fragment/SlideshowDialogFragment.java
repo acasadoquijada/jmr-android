@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class SlideshowDialogFragment extends DialogFragment {
     private String TAG = SlideshowDialogFragment.class.getSimpleName();
-    private ArrayList<JMRImage> JMRImages;
+    private ArrayList<JMRImage> images;
     private ViewPager viewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
     private TextView lblCount, lblTitle, lblDate;
@@ -45,11 +45,11 @@ public class SlideshowDialogFragment extends DialogFragment {
         lblTitle = (TextView) v.findViewById(R.id.title);
         lblDate = (TextView) v.findViewById(R.id.date);
 
-        JMRImages = (ArrayList<JMRImage>) getArguments().getSerializable("JMRImages");
+        images = (ArrayList<JMRImage>) getArguments().getSerializable("images");
         selectedPosition = getArguments().getInt("position");
 
         Log.e(TAG, "position: " + selectedPosition);
-        Log.e(TAG, "JMRImages size: " + JMRImages.size());
+        Log.e(TAG, "images size: " + images.size());
 
         myViewPagerAdapter = new MyViewPagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
@@ -85,9 +85,9 @@ public class SlideshowDialogFragment extends DialogFragment {
     };
 
     private void displayMetaInfo(int position) {
-        lblCount.setText((position + 1) + " de " + JMRImages.size());
+        lblCount.setText((position + 1) + " de " + images.size());
 
-        JMRImage JMRImage = JMRImages.get(position);
+        JMRImage JMRImage = images.get(position);
         lblTitle.setText(JMRImage.getName());
         lblDate.setText(JMRImage.getDistance());
     }
@@ -114,7 +114,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
             ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
 
-            JMRImage JMRImage = JMRImages.get(position);
+            JMRImage JMRImage = images.get(position);
 
             Glide.with(getActivity()).load(JMRImage.getPath())
                     .thumbnail(0.5f)
@@ -129,7 +129,7 @@ public class SlideshowDialogFragment extends DialogFragment {
 
         @Override
         public int getCount() {
-            return JMRImages.size();
+            return images.size();
         }
 
         @Override
