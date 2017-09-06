@@ -417,7 +417,7 @@ public class ConsultFragment extends Fragment {
             resultMetadatas.add(resultMetada);
 
             int ini = 20;
-            int fin = 30;
+            int fin = 60;
             Log.d("Estoy en: ", "principio calcular galeria");
             for(int i = ini; i < fin; i++){
                 Log.d("Estoy en: ", "Cojo imagen galeria");
