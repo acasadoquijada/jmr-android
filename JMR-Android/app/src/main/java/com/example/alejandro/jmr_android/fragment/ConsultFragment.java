@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.alejandro.jmr_android.Gallery;
+import com.example.alejandro.jmr_android.HMMDImage;
 import com.example.alejandro.jmr_android.R;
 import com.example.alejandro.jmr_android.RealPathUtil;
 import com.example.alejandro.jmr_android.Utility;
@@ -35,6 +36,7 @@ import com.example.alejandro.jmr_android.activity.MainActivity;
 import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
 import com.example.alejandro.jmr_android.helper.SquareLayout;
 import com.example.alejandro.jmr_android.jmr.JMRImage;
+import com.example.alejandro.jmr_android.jmr.MPEG7ColorStructure;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
 import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
@@ -80,11 +82,24 @@ public class ConsultFragment extends Fragment {
         imagenConsultaBuena = new JMRImage();
         imagenConsultaBuena.setPath(galleryImages.getImageURI(4));
         */
+
+        Bitmap m = galleryImages.getImagen(2);
+
+        HMMDImage hmmdImage = new HMMDImage(m);
+
+
+        hmmdImage.toString();
+
         resultImages = new ArrayList<>();
         consultImages = new ArrayList<>();
         resultMetadatas = new ResultList<>();
+        JMRImage img = new JMRImage();
+        img.setPath(galleryImages.getImageURI(2));
+        consultImages.add(img);
        // colocarImagenesResultado();
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -386,11 +401,10 @@ public class ConsultFragment extends Fragment {
         if(imagenConsultaBuena != null){
             int tamanioGaleria = galleryImages.size();
 
-        /* Cojo la imagen consulta y la meto en el array
-         de resultados, para poder compararla con las de
-         la galeria
-        */
-
+            /* Cojo la imagen consulta y la meto en el array
+             de resultados, para poder compararla con las de
+             la galeria
+            */
 
             ProgressDialog dialog = new ProgressDialog(getActivity()); // this = YourActivity
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -407,6 +421,9 @@ public class ConsultFragment extends Fragment {
                     new ResultMetadata(0.0,imagenConsultaBuena.getPath());
 
             Bitmap bitmapConsultImage = galleryImages.getImagen(imagenConsultaBuena.getPath());
+            MPEG7ColorStructure mpeg7ColorStructureConsulta =
+                    new MPEG7ColorStructure(bitmapConsultImage);
+
             SingleColorDescription descriptorImagenConsulta =
                     new SingleColorDescription(bitmapConsultImage);
 
@@ -416,21 +433,22 @@ public class ConsultFragment extends Fragment {
 
             resultMetadatas.add(resultMetada);
 
-            int ini = 20;
-            int fin = 60;
+            int ini = 1;
+            int fin = 10;
             Log.d("Estoy en: ", "principio calcular galeria");
             for(int i = ini; i < fin; i++){
                 Log.d("Estoy en: ", "Cojo imagen galeria");
                 Bitmap img = galleryImages.getImagen(i);
 
                 Log.d("Estoy en: ", "Calculo descriptor");
-                SingleColorDescription descriptor = new SingleColorDescription(img);
-
+               // SingleColorDescription descriptor = new SingleColorDescription(img);
+                MPEG7ColorStructure descriptor = new MPEG7ColorStructure(img);
                 Log.d("Estoy en: ", "Calculo distancia");
 
-                distancia = SingleColorDescription.DefaultComparator
+                distancia = descriptor.compare(mpeg7ColorStructureConsulta);
+                /*distancia = SingleColorDescription.DefaultComparator
                         (descriptorImagenConsulta, descriptor);
-
+*/
                 ResultMetadata<Double, String> resultMetadaGaleria
                         = new ResultMetadata(distancia, galleryImages.getImageURI(i));
 

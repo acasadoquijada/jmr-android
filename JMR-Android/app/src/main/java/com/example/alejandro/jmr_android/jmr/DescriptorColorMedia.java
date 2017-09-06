@@ -1,10 +1,8 @@
-package com.example.alejandro.jmr_android;
+package com.example.alejandro.jmr_android.jmr;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
-
-import com.example.alejandro.jmr_android.jmr.JMRColor;
 
 /**
  * Created by alejandro on 07/08/2017.
