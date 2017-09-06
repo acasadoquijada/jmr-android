@@ -1,6 +1,7 @@
 package com.example.alejandro.jmr_android.jmr;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 /**
  * Created by alejandro on 06/09/2017.
@@ -156,7 +157,6 @@ public class MPEG7ColorStructure {
         //Source image variable
         int wImg = imSrc.getWidth();
         int hImg = imSrc.getHeight();
-        Raster imRst = imSrc.getRaster();
         float[] pix = new float[4];
         //Destination image array
         byte[][] imDst = new byte[hImg][wImg];
@@ -166,7 +166,9 @@ public class MPEG7ColorStructure {
             for (int x = 0; x < wImg; x++) {
                 // Cojo el pixel
                 int c = imSrc.getPixel(x, y);
-                imRst.getPixel(x, y, pix);
+                pix[0] += Color.red(c);
+                pix[1] += Color.green(c);
+                pix[2] += Color.blue(c);
                 //Define the subspace along the Diff axis
                 subspace = getSubspace(pix[DIFF]);
                 //Obtain the value of the hue in this quantization space
