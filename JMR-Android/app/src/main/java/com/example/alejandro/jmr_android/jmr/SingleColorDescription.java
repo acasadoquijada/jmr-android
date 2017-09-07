@@ -25,11 +25,46 @@ public class SingleColorDescription {
         JMRColor pixelColor;
         float mean[] = {0.0f, 0.0f, 0.0f}; //RGB
         double imageSize = image.getWidth() * image.getHeight();
-
+        int c = 0;
         for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
+            for (int y = 0; y < (image.getHeight()/8); y += 8) {
                 // Color conversion takes place in getRGB method, if necessary
-                int c = image.getPixel(x, y);
+                c = image.getPixel(x, y*4);
+                mean[0] += Color.red(c);
+                mean[1] += Color.green(c);
+                mean[2] += Color.blue(c);
+
+                c = image.getPixel(x, (y*4)+1);
+                mean[0] += Color.red(c);
+                mean[1] += Color.green(c);
+                mean[2] += Color.blue(c);
+
+                c = image.getPixel(x, (y*4)+2);
+                mean[0] += Color.red(c);
+                mean[1] += Color.green(c);
+                mean[2] += Color.blue(c);
+
+                c = image.getPixel(x, (y*4)+3);
+                mean[0] += Color.red(c);
+                mean[1] += Color.green(c);
+                mean[2] += Color.blue(c);
+
+                c = image.getPixel(x, (y*4)+4);
+                mean[0] += Color.red(c);
+                mean[1] += Color.green(c);
+                mean[2] += Color.blue(c);
+
+                c = image.getPixel(x, (y*4)+5);
+                mean[0] += Color.red(c);
+                mean[1] += Color.green(c);
+                mean[2] += Color.blue(c);
+
+                c = image.getPixel(x, (y*4)+6);
+                mean[0] += Color.red(c);
+                mean[1] += Color.green(c);
+                mean[2] += Color.blue(c);
+
+                c = image.getPixel(x, (y*4)+7);
                 mean[0] += Color.red(c);
                 mean[1] += Color.green(c);
                 mean[2] += Color.blue(c);

@@ -69,7 +69,6 @@
                 app:fab_colorPressed="#9fa8da"
                 app:fab_colorRipple="@color/colorAccent"
                 android:src="@android:drawable/ic_menu_camera"
-                app:fab_label="Cámara"
                 app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -80,7 +79,6 @@
                 app:fab_colorPressed="#9fa8da"
                 app:fab_colorRipple="@color/colorAccent"
                 android:src="@android:drawable/ic_menu_gallery"
-                app:fab_label="Galería"
                 app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
@@ -91,7 +89,6 @@
                 app:fab_colorPressed="#9fa8da"
                 app:fab_colorRipple="@color/colorAccent"
                 android:src="@android:drawable/ic_menu_search"
-                app:fab_label="Consulta"
                 app:fab_size="mini" />
 
         </com.github.clans.fab.FloatingActionMenu>

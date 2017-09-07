@@ -11,6 +11,7 @@ import com.example.alejandro.jmr_android.jmr.JMRImage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Gallery {
 
@@ -22,6 +23,32 @@ public class Gallery {
         this.activity = activity;
         this.images = new ArrayList<>();
         getGalleryImages();
+
+        Collections.reverse(this.images);
+    }
+
+    public Gallery(Activity activity, boolean debug) {
+        if (debug) {
+            this.activity = activity;
+            this.images = new ArrayList<>();
+            images.add("/storage/emulated/0/DCIM/Camera/Bark.0005.3.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Bark.0005.4.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Bark.0006.1.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Bark.0006.2.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Fabric.0005.3.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Fabric.0005.4.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Fabric.0006.1.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Fabric.0006.2.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Flowers.0002.2.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Flowers.0002.3.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Flowers.0002.4.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Flowers.0003.1.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Fabric.0006.2.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Water.0002.1.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Water.0002.2.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Water.0002.3.jpg");
+            images.add("/storage/emulated/0/DCIM/Camera/Water.0002.4.jpg");
+        }
     }
 
     public Bitmap getImagen(String path){
@@ -49,9 +76,11 @@ public class Gallery {
             e.printStackTrace();
         }
 
-        Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,200,200,true);
-
-        return imagenReescalada;
+        if(imagen != null){
+            Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,200,200,true);
+            return imagenReescalada;
+        }
+        return null;
     }
 
     public String getImageURI(int index){

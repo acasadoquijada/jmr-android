@@ -22,6 +22,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TimingLogger;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.TimeUnit;
 
 public class ConsultFragment extends Fragment {
 
@@ -76,30 +78,20 @@ public class ConsultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        galleryImages = ((MainActivity) getActivity()).getGallery();
+
+        galleryImages = new Gallery(getActivity());
         pDialog = new ProgressDialog(getContext());
         /*
         imagenConsultaBuena = new JMRImage();
         imagenConsultaBuena.setPath(galleryImages.getImageURI(4));
         */
 
-        Bitmap m = galleryImages.getImagen(2);
-
-        HMMDImage hmmdImage = new HMMDImage(m);
-
-
-        hmmdImage.toString();
-
         resultImages = new ArrayList<>();
         consultImages = new ArrayList<>();
         resultMetadatas = new ResultList<>();
-        JMRImage img = new JMRImage();
-        img.setPath(galleryImages.getImageURI(2));
-        consultImages.add(img);
-       // colocarImagenesResultado();
+
+
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -405,13 +397,7 @@ public class ConsultFragment extends Fragment {
              de resultados, para poder compararla con las de
              la galeria
             */
-
-            ProgressDialog dialog = new ProgressDialog(getActivity()); // this = YourActivity
-            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            dialog.setMessage("Loading. Please wait...");
-            dialog.setIndeterminate(true);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
+            long startTime = System.currentTimeMillis();
 
             Log.d("Estoy en: ", "caca calcular galeria");
 
@@ -421,8 +407,6 @@ public class ConsultFragment extends Fragment {
                     new ResultMetadata(0.0,imagenConsultaBuena.getPath());
 
             Bitmap bitmapConsultImage = galleryImages.getImagen(imagenConsultaBuena.getPath());
-            MPEG7ColorStructure mpeg7ColorStructureConsulta =
-                    new MPEG7ColorStructure(bitmapConsultImage);
 
             SingleColorDescription descriptorImagenConsulta =
                     new SingleColorDescription(bitmapConsultImage);
@@ -433,43 +417,45 @@ public class ConsultFragment extends Fragment {
 
             resultMetadatas.add(resultMetada);
 
-            int ini = 1;
-            int fin = 10;
-            Log.d("Estoy en: ", "principio calcular galeria");
+            int ini = 0;
+            int fin = 600;
+
+            Log.d("Descriptor", "comienzo a calcular");
             for(int i = ini; i < fin; i++){
-                Log.d("Estoy en: ", "Cojo imagen galeria");
+                Log.d("Descriptor: ", "imagen " + Integer.toString(i));
+                Log.d("Path", galleryImages.getImageURI(i));
                 Bitmap img = galleryImages.getImagen(i);
 
-                Log.d("Estoy en: ", "Calculo descriptor");
-               // SingleColorDescription descriptor = new SingleColorDescription(img);
-                MPEG7ColorStructure descriptor = new MPEG7ColorStructure(img);
-                Log.d("Estoy en: ", "Calculo distancia");
+                if(img != null){
+                    // SingleColorDescription descriptor = new SingleColorDescription(img);
+                    SingleColorDescription descriptor = new SingleColorDescription(img);
 
-                distancia = descriptor.compare(mpeg7ColorStructureConsulta);
-                /*distancia = SingleColorDescription.DefaultComparator
-                        (descriptorImagenConsulta, descriptor);
-*/
-                ResultMetadata<Double, String> resultMetadaGaleria
-                        = new ResultMetadata(distancia, galleryImages.getImageURI(i));
+                    distancia = SingleColorDescription.DefaultComparator
+                            (descriptorImagenConsulta, descriptor);
 
-                resultMetadatas.add(resultMetadaGaleria);
+                    ResultMetadata<Double, String> resultMetadaGaleria
+                            = new ResultMetadata(distancia, galleryImages.getImageURI(i));
+
+                    resultMetadatas.add(resultMetadaGaleria);
+                }
+
             }
 
-            for(int i = 1; i < resultMetadatas.size(); i++){
-                double aux = (Double)resultMetadatas.get(i).getResult();
-                Log.d("Imagen " + i," " + Double.toString(aux));
-            }
+            long endTime = System.currentTimeMillis();
 
+            long MethodeDuration = (endTime - startTime);
+
+            String formatTime = String.format("%d min, %d sec",
+                    TimeUnit.MILLISECONDS.toMinutes(MethodeDuration),
+                    TimeUnit.MILLISECONDS.toSeconds(MethodeDuration) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(MethodeDuration))
+            );
+
+            Log.d("Tiempo descriptor", formatTime );
             normalizeResult();
-
-            for(int i = 1; i < resultMetadatas.size(); i++){
-                double aux = (Double)resultMetadatas.get(i).getResult();
-                Log.d("Imagen " + i," " + Double.toString(aux));
-            }
 
             colocarImagenesResultado();
 
-            dialog.dismiss();
         }
 
     }
