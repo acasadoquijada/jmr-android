@@ -430,8 +430,7 @@ public class ConsultFragment extends Fragment {
                     // SingleColorDescription descriptor = new SingleColorDescription(img);
                     SingleColorDescription descriptor = new SingleColorDescription(img);
 
-                    distancia = SingleColorDescription.DefaultComparator
-                            (descriptorImagenConsulta, descriptor);
+                    distancia = descriptor.compare(descriptorImagenConsulta);
 
                     ResultMetadata<Double, String> resultMetadaGaleria
                             = new ResultMetadata(distancia, galleryImages.getImageURI(i));
@@ -454,6 +453,13 @@ public class ConsultFragment extends Fragment {
             Log.d("Tiempo descriptor", formatTime );
             normalizeResult();
 
+            for (int i = 1; i < resultMetadatas.size(); i++) {
+                double newResult;
+                double xi = (Double) resultMetadatas.get(i).getResult();
+
+                Log.d("Distancia imagen " + Integer.toString(i) + " ", Double.toString(xi));
+
+            }
             colocarImagenesResultado();
 
         }
