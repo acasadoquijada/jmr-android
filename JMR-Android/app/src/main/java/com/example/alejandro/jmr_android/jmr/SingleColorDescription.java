@@ -14,350 +14,83 @@ public class SingleColorDescription {
 
     private JMRColor color;
     private float[] media;
-    public SingleColorDescription(JMRColor color){
+
+    public SingleColorDescription(JMRColor color) {
         this.color = color;
     }
 
-    public SingleColorDescription(Bitmap image){
+    public SingleColorDescription(Bitmap image) {
         this.color = mean(image);
     }
 
+    static {
+        System.loadLibrary("descriptor");
+    }
+
+    public native float[] meanC(MyBitMap obj);
+
     private JMRColor mean(Bitmap image) {
-        JMRColor pixelColor;
-        media = new float[3];
-        media[0] = 0.0f;
-        media[1] = 0.0f;
-        media[2] = 0.0f;
 
-        float mean[] = {0.0f, 0.0f, 0.0f}; //RGB
-        double imageSize = image.getWidth() * image.getHeight();
-        int c = 0;
-        for (int x = 0; x < (image.getWidth()/8); x +=8) {
-            for (int y = 0; y < (image.getHeight()/8); y += 8) {
-                c = image.getPixel(x*8, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel(x*8, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel(x*8, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel(x*8, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel(x*8, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel(x*8, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel(x*8, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel(x*8, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+1, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+2, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+3, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+4, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+5, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+6, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, y*8);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, (y*8)+1);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, (y*8)+2);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, (y*8)+3);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, (y*8)+4);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, (y*8)+5);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, (y*8)+6);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
-
-                c = image.getPixel((x*8)+7, (y*8)+7);
-                mean[0] += Color.red(c);
-                mean[1] += Color.green(c);
-                mean[2] += Color.blue(c);
+        MyBitMap myBitMap = new MyBitMap(image);
+/*
+        float[] mean = new float[3];
+
+        mean = meanC(myBitMap);*/
+
+        int [] image1D = new int[image.getHeight()*image.getWidth()];
+        int k = 0;
+        for(int x = 0; x < image.getHeight(); x++){
+            for(int y = 0; y < image.getWidth(); y++){
+                image1D[k] = image.getPixel(x,y);
+                k++;
             }
         }
 
-        Log.d("MEDIA", Float.toString(mean[0]) + " " + Float.toString(mean[1])
-                + " " + Float.toString(mean[2]));
+        float mean[] = {0.0f, 0.0f, 0.0f}; //RGB
+        int c = 0;
+        for(int i = 0; i < image1D.length/8; i++){
+            c = image1D[i*2];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+
+            c = image1D[i*2+1];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+
+            c = image1D[i*2+2];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+
+            c = image1D[i*2+3];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+
+            c = image1D[i*2+4];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+
+            c = image1D[i*2+5];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+
+            c = image1D[i*2+6];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+
+            c = image1D[i*2+7];
+            mean[0] += Color.red(c);
+            mean[1] += Color.green(c);
+            mean[2] += Color.blue(c);
+        }
+
+        double imageSize = image.getWidth() * image.getHeight();
 
         mean[0] /= imageSize;
         mean[1] /= imageSize;
@@ -366,36 +99,23 @@ public class SingleColorDescription {
         return new JMRColor((int) mean[0], (int) mean[1], (int) mean[2]);
     }
 
-    private void addMean(Bitmap image, int x, int y){
-        int c = image.getPixel(x,y);
-        media[0] += Color.red(c);
-        media[1] += Color.green(c);
-        media[2] += Color.blue(c);
+    @Override
+    public String toString() {
+        return "SingleColorDescriptor: [" + color.getRojo()
+                + "," + color.getVerde() + "," + color.getAzul() + "]";
     }
 
-    @Override
-    public String toString(){
-        return "SingleColorDescriptor: [" + color.getRojo()
-                + "," + color.getVerde() + "," + color.getAzul()+"]";
-    }
-    public JMRColor getColor(){
+    public JMRColor getColor() {
         return color;
     }
 
     public Double compare(SingleColorDescription desc) {
         JMRColor c1 = this.color, c2 = desc.color;
-        double rDif = Math.pow(c1.getRojo()-c2.getRojo(),2);
-        double gDif = Math.pow(c1.getVerde()-c2.getVerde(),2);
-        double bDif = Math.pow(c1.getAzul()-c2.getAzul(),2);
-        return Math.sqrt(rDif+gDif+bDif);
+        double rDif = Math.pow(c1.getRojo() - c2.getRojo(), 2);
+        double gDif = Math.pow(c1.getVerde() - c2.getVerde(), 2);
+        double bDif = Math.pow(c1.getAzul() - c2.getAzul(), 2);
+        return Math.sqrt(rDif + gDif + bDif);
     }
 
-    static public double DefaultComparator(SingleColorDescription t, SingleColorDescription u){
-        JMRColor c1 = t.color, c2 = u.color;
-        double rDif = Math.pow(c1.getRojo()-c2.getRojo(),2);
-        double gDif = Math.pow(c1.getVerde()-c2.getVerde(),2);
-        double bDif = Math.pow(c1.getAzul()-c2.getAzul(),2);
-        return Math.sqrt(rDif+gDif+bDif);
-        }
-    }
 
+}

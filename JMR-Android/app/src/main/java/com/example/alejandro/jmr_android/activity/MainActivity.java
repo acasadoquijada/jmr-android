@@ -27,17 +27,6 @@ import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    final private int REQUEST_MEDIA_ACCESS = 2;
-    private String userChoosenTask;
-    private Gallery gallery;
-    private Bitmap imagenConsulta;
-    private Color colorImagenConsulta;
-    private ResultList <ResultMetadata> resultMetadatas;
-    private ArrayList<JMRImage> JMRImages;
-    private ProgressDialog pDialog;
-    private GalleryAdapter mAdapter, mAdapter2;
-    private RecyclerView recyclerView, recyclerView2;
     private BottomNavigation bottomNavigation;
     private ConsultFragment consultFragment;
     private SettingFragment settingFragment;
@@ -53,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         statisticsFragment = StatisticsFragment.newInstance();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        gallery = new Gallery(MainActivity.this);
 
         bottomNavigation = (BottomNavigation)findViewById(R.id.BottomNavigation);
 
@@ -103,10 +91,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("LIMMPIO","LIMPIO");
             fragmentManager.popBackStackImmediate();
         }
-    }
-
-    public Gallery getGallery(){
-        return gallery;
     }
 
 

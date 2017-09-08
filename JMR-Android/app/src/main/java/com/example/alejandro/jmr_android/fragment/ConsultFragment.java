@@ -79,17 +79,17 @@ public class ConsultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        galleryImages = new Gallery(getActivity());
+        boolean result= Utility.checkPermission(getContext());
+        if(result) {
+
+            galleryImages = new Gallery(getActivity());
+        }
+
         pDialog = new ProgressDialog(getContext());
-        /*
-        imagenConsultaBuena = new JMRImage();
-        imagenConsultaBuena.setPath(galleryImages.getImageURI(4));
-        */
 
         resultImages = new ArrayList<>();
         consultImages = new ArrayList<>();
         resultMetadatas = new ResultList<>();
-
 
     }
 
@@ -418,7 +418,7 @@ public class ConsultFragment extends Fragment {
             resultMetadatas.add(resultMetada);
 
             int ini = 0;
-            int fin = 800;
+            int fin = 600;
 
             Log.d("Descriptor", "comienzo a calcular");
             for(int i = ini; i < fin; i++){
