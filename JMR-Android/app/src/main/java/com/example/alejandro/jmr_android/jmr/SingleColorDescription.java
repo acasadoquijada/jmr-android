@@ -27,15 +27,13 @@ public class SingleColorDescription {
         System.loadLibrary("descriptor");
     }
 
-    public native float[] meanC(MyBitMap obj);
+    public native float[] meanC(int[] image);
+
+    public native double compare(int red1, int green1, int blue1, int red2, int green2, int blue2);
 
     private JMRColor mean(Bitmap image) {
 
-        MyBitMap myBitMap = new MyBitMap(image);
-/*
-        float[] mean = new float[3];
-
-        mean = meanC(myBitMap);*/
+        float[] mean = {0.0f,0.0f,0.0f};
 
         int [] image1D = new int[image.getHeight()*image.getWidth()];
         int k = 0;
@@ -46,55 +44,7 @@ public class SingleColorDescription {
             }
         }
 
-        float mean[] = {0.0f, 0.0f, 0.0f}; //RGB
-        int c = 0;
-        for(int i = 0; i < image1D.length/8; i++){
-            c = image1D[i*2];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-
-            c = image1D[i*2+1];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-
-            c = image1D[i*2+2];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-
-            c = image1D[i*2+3];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-
-            c = image1D[i*2+4];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-
-            c = image1D[i*2+5];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-
-            c = image1D[i*2+6];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-
-            c = image1D[i*2+7];
-            mean[0] += Color.red(c);
-            mean[1] += Color.green(c);
-            mean[2] += Color.blue(c);
-        }
-
-        double imageSize = image.getWidth() * image.getHeight();
-
-        mean[0] /= imageSize;
-        mean[1] /= imageSize;
-        mean[2] /= imageSize;
+        mean = meanC(image1D);
 
         return new JMRColor((int) mean[0], (int) mean[1], (int) mean[2]);
     }
@@ -111,10 +61,11 @@ public class SingleColorDescription {
 
     public Double compare(SingleColorDescription desc) {
         JMRColor c1 = this.color, c2 = desc.color;
-        double rDif = Math.pow(c1.getRojo() - c2.getRojo(), 2);
-        double gDif = Math.pow(c1.getVerde() - c2.getVerde(), 2);
-        double bDif = Math.pow(c1.getAzul() - c2.getAzul(), 2);
-        return Math.sqrt(rDif + gDif + bDif);
+
+        double value = compare(c1.getRojo(),c1.getVerde(),c1.getAzul(),
+                c2.getRojo(),c2.getVerde(),c2.getAzul());
+
+        return value;
     }
 
 

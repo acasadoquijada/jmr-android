@@ -421,18 +421,20 @@ public class ConsultFragment extends Fragment {
             int fin = 600;
 
             Log.d("Descriptor", "comienzo a calcular");
-            for(int i = ini; i < fin; i++){
+            for(int i = ini; i < (fin); i++){
+
                 Log.d("Descriptor: ", "imagen " + Integer.toString(i));
                 Log.d("Path", galleryImages.getImageURI(i));
                 Bitmap img = galleryImages.getImagen(i);
-
+                ResultMetadata<Double, String> resultMetadaGaleria;
+                SingleColorDescription descriptor;
                 if(img != null){
-                    // SingleColorDescription descriptor = new SingleColorDescription(img);
-                    SingleColorDescription descriptor = new SingleColorDescription(img);
+
+                    descriptor = new SingleColorDescription(img);
 
                     distancia = descriptor.compare(descriptorImagenConsulta);
 
-                    ResultMetadata<Double, String> resultMetadaGaleria
+                    resultMetadaGaleria
                             = new ResultMetadata(distancia, galleryImages.getImageURI(i));
 
                     resultMetadatas.add(resultMetadaGaleria);

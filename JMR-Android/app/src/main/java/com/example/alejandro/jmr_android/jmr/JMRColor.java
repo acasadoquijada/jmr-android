@@ -34,15 +34,15 @@ public class JMRColor {
         this.azul = azul;
     }
 
-    public long getRojo(){
+    public int getRojo(){
         return rojo;
     }
 
-    public long getAzul(){
+    public int getAzul(){
         return azul;
     }
 
-    public long getVerde(){
+    public int getVerde(){
         return verde;
     }
 }
