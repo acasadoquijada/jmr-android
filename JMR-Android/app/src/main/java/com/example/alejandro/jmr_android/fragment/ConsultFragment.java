@@ -22,14 +22,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TimingLogger;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.alejandro.jmr_android.Gallery;
-import com.example.alejandro.jmr_android.HMMDImage;
 import com.example.alejandro.jmr_android.R;
 import com.example.alejandro.jmr_android.RealPathUtil;
 import com.example.alejandro.jmr_android.Utility;
@@ -38,7 +36,6 @@ import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
 import com.example.alejandro.jmr_android.helper.DBHelper;
 import com.example.alejandro.jmr_android.helper.SquareLayout;
 import com.example.alejandro.jmr_android.jmr.JMRImage;
-import com.example.alejandro.jmr_android.jmr.MPEG7ColorStructure;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
 import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
@@ -60,7 +57,7 @@ public class ConsultFragment extends Fragment {
     private static final int CAMERA_REQUEST = 1888;
     private static final int FILE_REQUEST = 2888;
     private Gallery galleryImages;
-    private JMRImage imagenConsultaBuena;
+    private JMRImage consultImage;
     private ResultList<ResultMetadata> resultMetadatas;
     private ArrayList<JMRImage> resultImages, consultImages;
     private ProgressDialog pDialog;
@@ -89,7 +86,7 @@ public class ConsultFragment extends Fragment {
 
 
         pDialog = new ProgressDialog(getContext());
-        //getContext().deleteDatabase(DBHelper.DATABASE_NAME);
+         getContext().deleteDatabase(DBHelper.DATABASE_NAME);
         descriptorBD = new DBHelper(getContext());
 
         resultImages = new ArrayList<>();
@@ -283,7 +280,7 @@ public class ConsultFragment extends Fragment {
         jmrImage.setPath(path);
         consultImages.add(jmrImage);
 
-        imagenConsultaBuena = jmrImage;
+        consultImage = jmrImage;
         /*
             Ponerle la estrellita
          */
@@ -395,7 +392,7 @@ public class ConsultFragment extends Fragment {
 
     public void calcularDescriptor(){
 
-        if(imagenConsultaBuena != null){
+        if(consultImage != null){
             int tamanioGaleria = galleryImages.size();
 
             /* Cojo la imagen consulta y la meto en el array
@@ -412,49 +409,37 @@ public class ConsultFragment extends Fragment {
             Existe el valor de la imagen consulta ya calculado en la BD
              */
 
-            SingleColorDescription descriptorImagenConsulta;
+            SingleColorDescription consultImageDescriptor;
+
             if(descriptorBD.getSingleColorData(
-                    imagenConsultaBuena.getPath()) != null){
+                    consultImage.getPath()) != null){
 
-                Log.d("BD", "COJO VALORES");
-                int [] rgb = descriptorBD.getSingleColorData(imagenConsultaBuena.getPath());
+                int [] rgb = descriptorBD.getSingleColorData(consultImage.getPath());
 
-                Log.d("C CONSULTA",Integer.toString(rgb[0]) + " "
-                        +Integer.toString(rgb[1]) + " "
-                        +Integer.toString(rgb[2]));
-                descriptorImagenConsulta = new SingleColorDescription(rgb);
+                consultImageDescriptor = new SingleColorDescription(rgb);
 
             }
-            /*
-            No existe
-             */
-
             else{
-                Bitmap bitmapConsultImage = galleryImages.getImagen(imagenConsultaBuena.getPath());
+                Bitmap bitmapConsultImage = galleryImages.getImagen(consultImage.getPath());
 
-                descriptorImagenConsulta =
+                consultImageDescriptor =
                         new SingleColorDescription(bitmapConsultImage);
 
-                int [] rgb = descriptorImagenConsulta.getColor();
+                int [] rgb = consultImageDescriptor.getColor();
 
                 descriptorBD.insertSingleColorValues(
-                        imagenConsultaBuena.getPath(),
+                        consultImage.getPath(),
                         rgb[0],
                         rgb[1],
                         rgb[2]
                 );
-
             }
-
-            ResultMetadata<Double, String> resultMetada =
-                    new ResultMetadata(0.0,imagenConsultaBuena.getPath());
 
 
             if(resultMetadatas.size() > 0){
                 resultMetadatas.clear();
             }
 
-           // resultMetadatas.add(resultMetada);
 
             int ini = 0;
             int fin = 800;
@@ -463,43 +448,39 @@ public class ConsultFragment extends Fragment {
 
                 Log.d("Descriptor: ", "imagen " + Integer.toString(i));
                 Log.d("Path", galleryImages.getImageURI(i));
+
                 Bitmap img = galleryImages.getImagen(i);
+
                 ResultMetadata<Double, String> resultMetadaGaleria;
+
                 SingleColorDescription descriptor;
+
                 if(img != null){
 
                     String imagePath = galleryImages.getImageURI(i);
-                    /*
-                    Comprobamos si esta
-                     */
+
                     if(descriptorBD.getSingleColorData(
                             imagePath) != null) {
-                        Log.d("BD", "COJO VALORES RESULTADO");
 
                         int[] rgb = descriptorBD.getSingleColorData(imagePath);
 
                         descriptor = new SingleColorDescription(rgb);
                     }
-
-                    /*
-                     * Si no esta, la aniadimos
-                     */
                     else{
                         descriptor = new SingleColorDescription(img);
-                        int [] rgb = descriptorImagenConsulta.getColor();
+                        int [] rgb = descriptor.getColor();
 
                         descriptorBD.insertSingleColorValues(
                                 imagePath,
                                 rgb[0],
                                 rgb[1],
-                                rgb[2]
-                        );
+                                rgb[2]);
                     }
 
-                    distancia = descriptor.compare(descriptorImagenConsulta);
+                    distancia = descriptor.compare(consultImageDescriptor);
 
                     resultMetadaGaleria
-                            = new ResultMetadata(distancia, galleryImages.getImageURI(i));
+                            = new ResultMetadata(distancia, imagePath);
 
                     resultMetadatas.add(resultMetadaGaleria);
                 }

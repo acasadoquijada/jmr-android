@@ -12,10 +12,6 @@ public class SingleColorDescription {
 
     private int[] color;
 
-    public SingleColorDescription(){
-        color = new int[3];
-    }
-
     public SingleColorDescription(Bitmap image) {
         color = new int[3];
         mean(image);
@@ -35,7 +31,7 @@ public class SingleColorDescription {
 
     private void mean(Bitmap image) {
 
-        float[] mean = {0.0f,0.0f,0.0f};
+        float[] mean;
 
         int [] image1D = new int[image.getHeight()*image.getWidth()];
         int k = 0;
@@ -54,6 +50,7 @@ public class SingleColorDescription {
     }
 
     public void setColor(int[] rgb){
+        color = new int[3];
         color = rgb;
     }
 

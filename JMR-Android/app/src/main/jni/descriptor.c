@@ -21,34 +21,25 @@ Java_com_example_alejandro_jmr_1android_jmr_SingleColorDescription_meanC(JNIEnv 
     int height = 0;
     int x, y;
 
+    int imagesize = 64 * 64;
+
     float mean[3] = {0.0f, 0.0f, 0.0f};
 
     jint *body = (*env)->GetIntArrayElements(env, image_, 0);
 
     int i = 0;
-    for(i = 0; i < size/4; i++){
-        mean[0] += (body[i*4] >> 16) & 0xFF; // rojo
-        mean[1] += (body[i*4] >> 8) & 0xFF; // verde
-        mean[2] += body[i*4] & 0xFF; // azul
+    for(i = 0; i < size; i++){
+        mean[0] += (body[i] >> 16) & 0xFF; // rojo
+        mean[1] += (body[i] >> 8) & 0xFF; // verde
+        mean[2] += body[i] & 0xFF; // azul
 
-        mean[0] += (body[i*4+1] >> 16) & 0xFF; // rojo
-        mean[1] += (body[i*4+1] >> 8) & 0xFF; // verde
-        mean[2] += body[i*4+1] & 0xFF; // azul
-
-        mean[0] += (body[i*4+2] >> 16) & 0xFF; // rojo
-        mean[1] += (body[i*4+2] >> 8) & 0xFF; // verde
-        mean[2] += body[i*4+2] & 0xFF; // azul
-
-        mean[0] += (body[i*4+3] >> 16) & 0xFF; // rojo
-        mean[1] += (body[i*4+3] >> 8) & 0xFF; // verde
-        mean[2] += body[i*4+3] & 0xFF; // azul
 
     }
 
     // Calculo la media
-    mean[0] /= (150*150);
-    mean[1] /= (150*150);
-    mean[2] /= (150*150);
+    mean[0] /= imagesize;
+    mean[1] /= imagesize;
+    mean[2] /= imagesize;
 
 
     jfloatArray mean2 = (*env)->NewFloatArray(env, 3);
