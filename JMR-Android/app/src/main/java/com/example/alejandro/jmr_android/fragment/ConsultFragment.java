@@ -35,6 +35,7 @@ import com.example.alejandro.jmr_android.RealPathUtil;
 import com.example.alejandro.jmr_android.Utility;
 import com.example.alejandro.jmr_android.activity.MainActivity;
 import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
+import com.example.alejandro.jmr_android.helper.DBHelper;
 import com.example.alejandro.jmr_android.helper.SquareLayout;
 import com.example.alejandro.jmr_android.jmr.JMRImage;
 import com.example.alejandro.jmr_android.jmr.MPEG7ColorStructure;
@@ -69,6 +70,8 @@ public class ConsultFragment extends Fragment {
     private FloatingActionMenu floatingActionMenu;
     private Uri mImageUri;
     private ProgressDialog dialog;
+    private DBHelper descriptorBD;
+
 
     public static ConsultFragment newInstance() {
         ConsultFragment fragment = new ConsultFragment();
@@ -81,11 +84,13 @@ public class ConsultFragment extends Fragment {
 
         boolean result= Utility.checkPermission(getContext());
         if(result) {
-
             galleryImages = new Gallery(getActivity());
         }
 
+
         pDialog = new ProgressDialog(getContext());
+        //getContext().deleteDatabase(DBHelper.DATABASE_NAME);
+        descriptorBD = new DBHelper(getContext());
 
         resultImages = new ArrayList<>();
         consultImages = new ArrayList<>();
@@ -403,23 +408,56 @@ public class ConsultFragment extends Fragment {
 
             double distancia = 0.00;
 
+            /*
+            Existe el valor de la imagen consulta ya calculado en la BD
+             */
+
+            SingleColorDescription descriptorImagenConsulta;
+            if(descriptorBD.getSingleColorData(
+                    imagenConsultaBuena.getPath()) != null){
+
+                Log.d("BD", "COJO VALORES");
+                int [] rgb = descriptorBD.getSingleColorData(imagenConsultaBuena.getPath());
+
+                Log.d("C CONSULTA",Integer.toString(rgb[0]) + " "
+                        +Integer.toString(rgb[1]) + " "
+                        +Integer.toString(rgb[2]));
+                descriptorImagenConsulta = new SingleColorDescription(rgb);
+
+            }
+            /*
+            No existe
+             */
+
+            else{
+                Bitmap bitmapConsultImage = galleryImages.getImagen(imagenConsultaBuena.getPath());
+
+                descriptorImagenConsulta =
+                        new SingleColorDescription(bitmapConsultImage);
+
+                int [] rgb = descriptorImagenConsulta.getColor();
+
+                descriptorBD.insertSingleColorValues(
+                        imagenConsultaBuena.getPath(),
+                        rgb[0],
+                        rgb[1],
+                        rgb[2]
+                );
+
+            }
+
             ResultMetadata<Double, String> resultMetada =
                     new ResultMetadata(0.0,imagenConsultaBuena.getPath());
 
-            Bitmap bitmapConsultImage = galleryImages.getImagen(imagenConsultaBuena.getPath());
-
-            SingleColorDescription descriptorImagenConsulta =
-                    new SingleColorDescription(bitmapConsultImage);
 
             if(resultMetadatas.size() > 0){
                 resultMetadatas.clear();
             }
 
-            resultMetadatas.add(resultMetada);
+           // resultMetadatas.add(resultMetada);
 
             int ini = 0;
             int fin = 800;
-
             Log.d("Descriptor", "comienzo a calcular");
             for(int i = ini; i < (fin); i++){
 
@@ -430,7 +468,33 @@ public class ConsultFragment extends Fragment {
                 SingleColorDescription descriptor;
                 if(img != null){
 
-                    descriptor = new SingleColorDescription(img);
+                    String imagePath = galleryImages.getImageURI(i);
+                    /*
+                    Comprobamos si esta
+                     */
+                    if(descriptorBD.getSingleColorData(
+                            imagePath) != null) {
+                        Log.d("BD", "COJO VALORES RESULTADO");
+
+                        int[] rgb = descriptorBD.getSingleColorData(imagePath);
+
+                        descriptor = new SingleColorDescription(rgb);
+                    }
+
+                    /*
+                     * Si no esta, la aniadimos
+                     */
+                    else{
+                        descriptor = new SingleColorDescription(img);
+                        int [] rgb = descriptorImagenConsulta.getColor();
+
+                        descriptorBD.insertSingleColorValues(
+                                imagePath,
+                                rgb[0],
+                                rgb[1],
+                                rgb[2]
+                        );
+                    }
 
                     distancia = descriptor.compare(descriptorImagenConsulta);
 

@@ -2,8 +2,6 @@ package com.example.alejandro.jmr_android.jmr;
 
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.util.Log;
 
 
 /**
@@ -12,15 +10,19 @@ import android.util.Log;
 
 public class SingleColorDescription {
 
-    private JMRColor color;
-    private float[] media;
+    private int[] color;
 
-    public SingleColorDescription(JMRColor color) {
-        this.color = color;
+    public SingleColorDescription(){
+        color = new int[3];
     }
 
     public SingleColorDescription(Bitmap image) {
-        this.color = mean(image);
+        color = new int[3];
+        mean(image);
+    }
+
+    public SingleColorDescription(int[] rgb){
+        setColor(rgb);
     }
 
     static {
@@ -31,7 +33,7 @@ public class SingleColorDescription {
 
     public native double compare(int red1, int green1, int blue1, int red2, int green2, int blue2);
 
-    private JMRColor mean(Bitmap image) {
+    private void mean(Bitmap image) {
 
         float[] mean = {0.0f,0.0f,0.0f};
 
@@ -46,24 +48,25 @@ public class SingleColorDescription {
 
         mean = meanC(image1D);
 
-        return new JMRColor((int) mean[0], (int) mean[1], (int) mean[2]);
+        color[0] = (int)mean[0];
+        color[1] = (int)mean[1];
+        color[2] = (int)mean[2];
     }
 
-    @Override
-    public String toString() {
-        return "SingleColorDescriptor: [" + color.getRojo()
-                + "," + color.getVerde() + "," + color.getAzul() + "]";
+    public void setColor(int[] rgb){
+        color = rgb;
     }
 
-    public JMRColor getColor() {
+    public int[] getColor(){
         return color;
     }
 
     public Double compare(SingleColorDescription desc) {
-        JMRColor c1 = this.color, c2 = desc.color;
+        int[] c1 = this.color;
+        int[] c2 = desc.color;
 
-        double value = compare(c1.getRojo(),c1.getVerde(),c1.getAzul(),
-                c2.getRojo(),c2.getVerde(),c2.getAzul());
+        double value = compare(c1[0],c1[1],c1[2],
+                c2[0],c2[1],c2[2]);
 
         return value;
     }
