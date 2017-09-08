@@ -418,7 +418,7 @@ public class ConsultFragment extends Fragment {
             resultMetadatas.add(resultMetada);
 
             int ini = 0;
-            int fin = 600;
+            int fin = 800;
 
             Log.d("Descriptor", "comienzo a calcular");
             for(int i = ini; i < (fin); i++){

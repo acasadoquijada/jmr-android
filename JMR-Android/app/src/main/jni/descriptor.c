@@ -26,12 +26,23 @@ Java_com_example_alejandro_jmr_1android_jmr_SingleColorDescription_meanC(JNIEnv 
     jint *body = (*env)->GetIntArrayElements(env, image_, 0);
 
     int i = 0;
-    for(i = 0; i < size; i++){
-        mean[0] += (body[i] >> 16) & 0xFF; // rojo
-        mean[1] += (body[i] >> 8) & 0xFF; // verde
-        mean[2] += body[i] & 0xFF; // azul
+    for(i = 0; i < size/4; i++){
+        mean[0] += (body[i*4] >> 16) & 0xFF; // rojo
+        mean[1] += (body[i*4] >> 8) & 0xFF; // verde
+        mean[2] += body[i*4] & 0xFF; // azul
 
-        //   int element = (*env)->GetObjectArrayElement(env, image_, i);
+        mean[0] += (body[i*4+1] >> 16) & 0xFF; // rojo
+        mean[1] += (body[i*4+1] >> 8) & 0xFF; // verde
+        mean[2] += body[i*4+1] & 0xFF; // azul
+
+        mean[0] += (body[i*4+2] >> 16) & 0xFF; // rojo
+        mean[1] += (body[i*4+2] >> 8) & 0xFF; // verde
+        mean[2] += body[i*4+2] & 0xFF; // azul
+
+        mean[0] += (body[i*4+3] >> 16) & 0xFF; // rojo
+        mean[1] += (body[i*4+3] >> 8) & 0xFF; // verde
+        mean[2] += body[i*4+3] & 0xFF; // azul
+
     }
 
     // Calculo la media
