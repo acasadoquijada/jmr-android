@@ -2,6 +2,7 @@ package com.example.alejandro.jmr_android.jmr;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.example.alejandro.jmr_android.HMMDImage;
 
@@ -13,12 +14,10 @@ public class MPEG7ColorStructure {
     /**
      * The source media of this descriptor
      */
-    protected transient HMMDImage source = null;
+  //  protected transient BufferedImage source = null;
+    protected transient Bitmap source = null;
     /**
-     * The color space used in this descriptor
-     */
-    //public static final int COLOR_SPACE = ColorSpaceJMR.CS_HMMD;
-    /**
+
      * Quantization Level of the HMMD ColorSpace
      */
     protected int qLevels = 256;
@@ -64,24 +63,26 @@ public class MPEG7ColorStructure {
      * Constructs a new color structure descriptor and initializes it from the
      * image given by parameter
      *
-     * @param image   the source image
+     * @param image the source image
      * @param qLevels the number of levels associated to this descriptor
      */
-
     public MPEG7ColorStructure(Bitmap image, int qLevels) {
-        this.source = new HMMDImage(image);
+        this.source = image;
         this.init(image, qLevels);
     }
 
-    public MPEG7ColorStructure(Bitmap image) {
+    public MPEG7ColorStructure(int[] h){
+        this.histo = h;
+        qLevels = DEFAULT_NUM_LEVELS;
+    }
 
+    public MPEG7ColorStructure(Bitmap image) {
         this(image, DEFAULT_NUM_LEVELS);
     }
 
-    /**
-     * Initializes the quantization level taking into account that the valid
-     * values are 32, 64, 128 or 256.
-     */
+    public int[] getHisto(){
+        return histo;
+    }
     private void setLevels(int qLevels) {
         if (qLevels <= 32) {
             this.qLevels = 32;
@@ -96,76 +97,25 @@ public class MPEG7ColorStructure {
     }
 
     public void init(Bitmap image, int qLevels) {
-        /*// The MPEG7ColorStructure need a JMRExtendedBufferedImage to be calculated
-        JMRExtendedBufferedImage JMRimage = null;
-        try {
-            JMRimage = (JMRExtendedBufferedImage) image;
-        } catch (ClassCastException ex) {
-            JMRimage = new JMRExtendedBufferedImage(image);
-        }
-        // The color space and the image model must been the suitable ones.
-        if (!checkImage(JMRimage)) {
-            JMRimage = convertImg(JMRimage);
-        }*/
+        // The MPEG7ColorStructure need a JMRExtendedBufferedImage to be calculated
+
         /*
-        Convertir la imagen a HMMD
+            Convertir la imagen a HMMD
          */
-        this.source = new HMMDImage(image);
+        HMMDImage hmmdImage = new HMMDImage(image);
 
+        //hmmdImage.toString();
         this.setLevels(qLevels);
-        byte[][] imQ = quantHMMDImage(this.source);
-        float[] histo = structuredHisto(imQ, image.getWidth(), image.getHeight());
+        byte[][] imQ = quantHMMDImage(hmmdImage);
+        float[] histo = structuredHisto(imQ, hmmdImage.getWidth(), hmmdImage.getHeight());
         this.histo = reQuantization(histo);
-    }
-
-    /**
-     * Re-quantize the histogram (following Caliph & Emir code).
-     *
-     * @param    colorHistogramTemp a {@link #qLevels} non uniform CSD histograms
-     * containing values between [0-1]
-     * @return a {@link #qLevels} uniform histograms.
-     */
-    private int[] reQuantization(float[] colorHistogramTemp) {
-        int[] uniformCSD = new int[colorHistogramTemp.length];
-        for (int i = 0; i < colorHistogramTemp.length; i++) {
-            uniformCSD[i] = quantFunc((double) colorHistogramTemp[i]);
-        }
-        return uniformCSD;
-    }
-
-    /**
-     * Quantize the given value
-     *
-     * @param x the value to be quantized
-     * @return the quantized value
-     */
-    static public int quantFunc(double x) {
-        double[] stepIn = {0.000000001, 0.037, 0.08, 0.195, 0.32, 1};
-        int[] stepOut = {-1, 0, 25, 45, 80, 115};
-        int y = 0;
-        if (x <= 0) {
-            y = 0;
-        } else if (x >= 1) {
-            y = 255;
-        } else {
-            y = (int) Math.round(((x - 0.32) / (1 - 0.32)) * 140.0);
-            for (int i = 0; i < stepIn.length; i++) {
-                if (x < stepIn[i]) {
-                    y += stepOut[i];
-                    break;
-                }
-            }
-            // Since there is a bug in Caliph & emir version the data
-            // are between -66 and 255
-            y = (int) (255.0 * ((double) y + 66) / (255.0 + 66.0));
-        }
-        return y;
     }
 
     private byte[][] quantHMMDImage(HMMDImage imSrc) {
         //Source image variable
         int wImg = imSrc.getWidth();
         int hImg = imSrc.getHeight();
+        //Raster imRst = imSrc.getRaster();
         float[] pix = new float[4];
         //Destination image array
         byte[][] imDst = new byte[hImg][wImg];
@@ -173,8 +123,8 @@ public class MPEG7ColorStructure {
         int[] startSubSpacePos = getStartSubspacePos();
         for (int y = 0; y < hImg; y++) {
             for (int x = 0; x < wImg; x++) {
-                // Cojo el pixel
-                pix = imSrc.getPixel(x, y);
+                pix = imSrc.getPixel(x,y);
+                //imRst.getPixel(x, y, pix);
                 //Define the subspace along the Diff axis
                 subspace = getSubspace(pix[DIFF]);
                 //Obtain the value of the hue in this quantization space
@@ -198,71 +148,28 @@ public class MPEG7ColorStructure {
         }
         return imDst;
     }
+    public void init(Bitmap image) {
+        init(image,DEFAULT_NUM_LEVELS);
+    }
 
-    /**
-     * Returns the type of subspace used in this descriptor.
-     *
-     * @param diff the 'diff' component in the HMMD color space
-     * @return the type of subspace
-     */
     private int getSubspace(float diff) {
         if (diff < 7f / 255f) {
             return 0;
-        } else if (diff < 21f / 255f) {
+        }
+        else if (diff < 21f / 255f) {
             return 1;
-        } else if (diff < 61f / 255f) {
+        }
+        else if (diff < 61f / 255f) {
             return 2;
-        } else if (diff < 111f / 255f) {
+        }
+        else if (diff < 111f / 255f) {
             return 3;
-        } else {
+        }
+        else {
             return 4;
         }
     }
 
-    /**
-     * Calculates log(x)/log(2)
-     *
-     * @param x the value
-     * @return log(x)/log(2)
-     */
-    private static double log2(int x) {
-        return Math.log(x) / Math.log(2);
-    }
-
-    /**
-     * Calculates the subspace start positions (depending on the qLevels)
-     *
-     * @return an array with the 5 start position
-     */
-    private int[] getStartSubspacePos() {
-        return getStartSubspacePos(this.offset);
-    }
-
-    private static int[] getStartSubspacePos(int offset) {
-        int[] startP = new int[5];
-        startP[0] = 0;
-        for (int i = 1; i < startP.length; i++) {
-            startP[i] = startP[i - 1]; //Set the position of the previous subspace start
-            startP[i] += QUANTIZATION_TABLE[offset][i - 1][0] * QUANTIZATION_TABLE[offset][i - 1][1]; //Add the length of the previous subspace
-        }
-        return startP;
-    }
-
-    /**
-     * Returns the CSD histograms with value between 0 and 1.
-     * <p>
-     * It creates a structuring block elements according to the size of the
-     * quantified HMMD image. Then it computes a local histogram with the 8x8
-     * structuring elements in the "sliding windows" block element. If one color
-     * is present at least once on the local histogram of the sliding windows,
-     * fill the CSD histogram with this color.
-     *
-     * @param imQ  a byte matrix representing the quantifized values between
-     *             [0,qLevels] (heigh x width)
-     * @param wImg width of the image
-     * @param hImg height of the image
-     * @return a {@link #qLevels} histograms
-     */
     private float[] structuredHisto(byte[][] imQ, int wImg, int hImg) {
         int m = 0;
         double hw = Math.sqrt(hImg * wImg);
@@ -310,34 +217,35 @@ public class MPEG7ColorStructure {
         return histo;
     }
 
-
-    public Double compare(MPEG7ColorStructure desc) {
-        int[] f1, f2;
-        if (desc.histo == null || this.histo == null) {
-            return (null);
+    private int[] reQuantization(float[] colorHistogramTemp) {
+        int[] uniformCSD = new int[colorHistogramTemp.length];
+        for (int i = 0; i < colorHistogramTemp.length; i++) {
+            uniformCSD[i] = quantFunc((double) colorHistogramTemp[i]);
         }
-        if (this.qLevels == desc.qLevels) {
-            f1 = this.histo;
-            f2 = desc.histo;
-        } else if (this.qLevels < desc.qLevels) {
-            f1 = this.histo;
-            f2 = resizeCSD(desc, this.qLevels);
-        } else {
-            f1 = resizeCSD(this, desc.qLevels);
-            f2 = desc.histo;
-        }
-        Double distance = 0.0;
-        for (int i = 0; i < f1.length; i++) {
-            distance += Math.abs(f1[i] - f2[i]);
-        }
-        distance /= (256 * f1.length); //Normalization
-
-        return distance;
-
+        return uniformCSD;
     }
 
-    public int getQuantLevels() {
-        return qLevels;
+    static public int quantFunc(double x) {
+        double[] stepIn = {0.000000001, 0.037, 0.08, 0.195, 0.32, 1};
+        int[] stepOut = {-1, 0, 25, 45, 80, 115};
+        int y = 0;
+        if (x <= 0) {
+            y = 0;
+        } else if (x >= 1) {
+            y = 255;
+        } else {
+            y = (int) Math.round(((x - 0.32) / (1 - 0.32)) * 140.0);
+            for (int i = 0; i < stepIn.length; i++) {
+                if (x < stepIn[i]) {
+                    y += stepOut[i];
+                    break;
+                }
+            }
+            // Since there is a bug in Caliph & emir version the data
+            // are between -66 and 255
+            y = (int) (255.0 * ((double) y + 66) / (255.0 + 66.0));
+        }
+        return y;
     }
 
     private static int[] resizeCSD(MPEG7ColorStructure c, int qSizeDst) {
@@ -374,5 +282,54 @@ public class MPEG7ColorStructure {
             }
         }
         return dstHisto;
+    }
+
+    public Double compare(MPEG7ColorStructure desc) {
+        int[] f1, f2;
+        if (desc.histo == null || this.histo == null) {
+            return (null);
+        }
+        if (this.qLevels == desc.qLevels) {
+            f1 = this.histo;
+            f2 = desc.histo;
+        } else if (this.qLevels < desc.qLevels) {
+            f1 = this.histo;
+            f2 = resizeCSD(desc, this.qLevels);
+        } else {
+            f1 = resizeCSD(this, desc.qLevels);
+            f2 = desc.histo;
+        }
+        Log.d("size f1 f2",Integer.toString(f1.length) +  " " + Integer.toString(f2.length));
+        Double distance = 0.0;
+        for (int i = 0; i < f1.length; i++) {
+            distance += Math.abs(f1[i] - f2[i]);
+        }
+        distance /= (256 * f1.length); //Normalization
+
+        return distance;
+    }
+
+    public int getQuantLevels() {
+        return qLevels;
+    }
+
+    private int[] getStartSubspacePos() {
+        return getStartSubspacePos(this.offset);
+    }
+
+
+
+    private static int[] getStartSubspacePos(int offset) {
+        int[] startP = new int[5];
+        startP[0] = 0;
+        for (int i = 1; i < startP.length; i++) {
+            startP[i] = startP[i - 1]; //Set the position of the previous subspace start
+            startP[i] += QUANTIZATION_TABLE[offset][i - 1][0] * QUANTIZATION_TABLE[offset][i - 1][1]; //Add the length of the previous subspace
+        }
+        return startP;
+    }
+
+    private static double log2(int x) {
+        return Math.log(x) / Math.log(2);
     }
 }

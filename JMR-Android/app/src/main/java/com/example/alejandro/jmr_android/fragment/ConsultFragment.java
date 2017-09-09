@@ -36,6 +36,7 @@ import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
 import com.example.alejandro.jmr_android.helper.DBHelper;
 import com.example.alejandro.jmr_android.helper.SquareLayout;
 import com.example.alejandro.jmr_android.jmr.JMRImage;
+import com.example.alejandro.jmr_android.jmr.MPEG7ColorStructure;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
 import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
@@ -48,6 +49,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
@@ -79,14 +81,13 @@ public class ConsultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean result= Utility.checkPermission(getContext());
+        boolean result = Utility.checkPermission(getContext());
         if(result) {
             galleryImages = new Gallery(getActivity());
         }
 
-
         pDialog = new ProgressDialog(getContext());
-         getContext().deleteDatabase(DBHelper.DATABASE_NAME);
+        getContext().deleteDatabase(DBHelper.DATABASE_NAME);
         descriptorBD = new DBHelper(getContext());
 
         resultImages = new ArrayList<>();
@@ -409,22 +410,29 @@ public class ConsultFragment extends Fragment {
             Existe el valor de la imagen consulta ya calculado en la BD
              */
 
-            SingleColorDescription consultImageDescriptor;
-
-            if(descriptorBD.getSingleColorData(
+            //SingleColorDescription consultImageDescriptor;
+            Bitmap image = galleryImages.getImagen(consultImage.getPath());
+            MPEG7ColorStructure consultImageDescriptor; // = new MPEG7ColorStructure(image);
+            if(descriptorBD.getColorStructureHist(
                     consultImage.getPath()) != null){
+                Log.d("AQUI","AQUI");
+                int []histo = descriptorBD.getColorStructureHist(consultImage.getPath());
 
-                int [] rgb = descriptorBD.getSingleColorData(consultImage.getPath());
+                consultImageDescriptor = new MPEG7ColorStructure(histo);
+                /*int [] rgb = descriptorBD.getSingleColorData(consultImage.getPath());
 
                 consultImageDescriptor = new SingleColorDescription(rgb);
-
+                */
             }
             else{
-                Bitmap bitmapConsultImage = galleryImages.getImagen(consultImage.getPath());
 
                 consultImageDescriptor =
-                        new SingleColorDescription(bitmapConsultImage);
+                        new MPEG7ColorStructure(image);
 
+                int[] h = consultImageDescriptor.getHisto();
+                descriptorBD.insertColorStructureHist(consultImage.getPath(),h);
+
+                /*
                 int [] rgb = consultImageDescriptor.getColor();
 
                 descriptorBD.insertSingleColorValues(
@@ -432,8 +440,9 @@ public class ConsultFragment extends Fragment {
                         rgb[0],
                         rgb[1],
                         rgb[2]
-                );
+                );*/
             }
+
 
 
             if(resultMetadatas.size() > 0){
@@ -442,31 +451,42 @@ public class ConsultFragment extends Fragment {
 
 
             int ini = 0;
-            int fin = 800;
+            int fin = 50;
             Log.d("Descriptor", "comienzo a calcular");
             for(int i = ini; i < (fin); i++){
 
-                Log.d("Descriptor: ", "imagen " + Integer.toString(i));
-                Log.d("Path", galleryImages.getImageURI(i));
+              //  Log.d("Descriptor: ", "imagen " + Integer.toString(i));
+               // Log.d("Path", galleryImages.getImageURI(i));
 
                 Bitmap img = galleryImages.getImagen(i);
 
                 ResultMetadata<Double, String> resultMetadaGaleria;
 
-                SingleColorDescription descriptor;
+               // SingleColorDescription descriptor;
+                MPEG7ColorStructure descriptor = new MPEG7ColorStructure(img);
 
                 if(img != null){
-
                     String imagePath = galleryImages.getImageURI(i);
 
-                    if(descriptorBD.getSingleColorData(
+                    if(descriptorBD.getColorStructureHist(
                             imagePath) != null) {
 
-                        int[] rgb = descriptorBD.getSingleColorData(imagePath);
+                        int []histo = descriptorBD.getColorStructureHist(imagePath);
 
-                        descriptor = new SingleColorDescription(rgb);
+                        descriptor = new MPEG7ColorStructure(histo);
+
+                        //int[] rgb = descriptorBD.getSingleColorData(imagePath);
+
+                        //descriptor = new SingleColorDescription(rgb);
                     }
                     else{
+                        descriptor =
+                                new MPEG7ColorStructure(img);
+
+                        int[] h = descriptor.getHisto();
+                        descriptorBD.insertColorStructureHist(imagePath,h);
+
+                        /*
                         descriptor = new SingleColorDescription(img);
                         int [] rgb = descriptor.getColor();
 
@@ -474,11 +494,13 @@ public class ConsultFragment extends Fragment {
                                 imagePath,
                                 rgb[0],
                                 rgb[1],
-                                rgb[2]);
+                                rgb[2]);*/
                     }
+
 
                     distancia = descriptor.compare(consultImageDescriptor);
 
+                   // Log.d("Distancia " + Integer.toString(i), Double.toString(distancia));
                     resultMetadaGaleria
                             = new ResultMetadata(distancia, imagePath);
 
@@ -501,7 +523,7 @@ public class ConsultFragment extends Fragment {
             normalizeResult();
 
             for (int i = 1; i < resultMetadatas.size(); i++) {
-                double newResult;
+
                 double xi = (Double) resultMetadatas.get(i).getResult();
 
                 Log.d("Distancia imagen " + Integer.toString(i) + " ", Double.toString(xi));

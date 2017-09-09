@@ -23,14 +23,19 @@ public class HMMDImage {
         width = bitmap.getWidth();
         image = new float[height][width][4];
 
+        int[] auxRgbVec = new int[3];
         float[] rgbVec = new float[3];
 
         for (int y = 0; y < bitmap.getHeight(); y++) {
             for (int x = 0; x < bitmap.getWidth(); x++) {
                 int c = bitmap.getPixel(x, y);
-                rgbVec[0] = Color.red(c);
-                rgbVec[1] = Color.green(c);
-                rgbVec[2] = Color.blue(c);
+                auxRgbVec[0] = Color.red(c);
+                auxRgbVec[1] = Color.green(c);
+                auxRgbVec[2] = Color.blue(c);
+
+                rgbVec[0] = (auxRgbVec[0]*1.0f)/255;
+                rgbVec[1] = (auxRgbVec[1]*1.0f)/255;
+                rgbVec[2] = (auxRgbVec[2]*1.0f)/255;
 
                 image[x][y] = fromRGB(rgbVec);
             }
@@ -112,7 +117,7 @@ public class HMMDImage {
                         + Float.toString(getPixel(x, y)[2]) + " "
                         + Float.toString(getPixel(x, y)[3]);
 
-                Log.d("Pixel " + Integer.toString(x) + "," + Integer.toString(y), pixelString);
+              //  Log.d("Pixel " + Integer.toString(x) + "," + Integer.toString(y), pixelString);
             }
 
         }
