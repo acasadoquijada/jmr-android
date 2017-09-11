@@ -58,6 +58,9 @@ public class ConsultFragment extends Fragment {
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int FILE_REQUEST = 2888;
+    public static final int SINGLE_COLOR_DESCRIPTOR = 0;
+    public static final int MPEG7_COLOR_STRUCTURE = 1;
+    private int active_descriptor;
     private Gallery galleryImages;
     private JMRImage consultImage;
     private ResultList<ResultMetadata> resultMetadatas;
@@ -85,7 +88,7 @@ public class ConsultFragment extends Fragment {
         if(result) {
             galleryImages = new Gallery(getActivity());
         }
-
+        active_descriptor = SINGLE_COLOR_DESCRIPTOR;
         pDialog = new ProgressDialog(getContext());
         getContext().deleteDatabase(DBHelper.DATABASE_NAME);
         descriptorBD = new DBHelper(getContext());
@@ -126,9 +129,14 @@ public class ConsultFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    boolean result= Utility.checkPermission(getContext());
+
+                    boolean result = Utility.checkPermission(getContext());
                     if(result){
                         cameraIntent();
+                    }
+
+                    else{
+                        Log.d("PERMISOS","DENEGADO");
                     }
                     floatingActionMenu.close(false);
                 }
@@ -221,6 +229,7 @@ public class ConsultFragment extends Fragment {
         getContext().getContentResolver().notifyChange(mImageUri, null);
         ContentResolver cr = getContext().getContentResolver();
         Bitmap bitmap = null;
+        String path = null;
         File destination = null;
         try {
             bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
@@ -230,6 +239,8 @@ public class ConsultFragment extends Fragment {
             destination = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DCIM).getPath() + "/Camera",
                     System.currentTimeMillis() + ".jpg");
+
+            path = destination.getAbsolutePath();
 
             FileOutputStream fo;
             try {
@@ -247,9 +258,9 @@ public class ConsultFragment extends Fragment {
             Log.d("Failed to load", e.toString());
         }
 
-        galleryImages.addImage(destination.getAbsolutePath());
+        galleryImages.addImage(path);
 
-        addConsultImage(destination.getAbsolutePath());
+        addConsultImage(path);
     }
 
     public void colocarImagenesResultado(){
@@ -545,6 +556,7 @@ public class ConsultFragment extends Fragment {
         return File.createTempFile(part, ext, tempDir);
     }
 
+
     private void normalizeResult() {
 
         Collections.sort(resultMetadatas, new Comparator<ResultMetadata>() {
@@ -565,6 +577,10 @@ public class ConsultFragment extends Fragment {
             resultMetadatas.get(i).setResult(newResult);
 
         }
+    }
+
+    public void setActiveDescriptor(int descriptor){
+        active_descriptor = descriptor;
     }
 }
 

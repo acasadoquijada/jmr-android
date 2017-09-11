@@ -15,9 +15,9 @@ import android.util.Log;
 
 import com.example.alejandro.jmr_android.Gallery;
 import com.example.alejandro.jmr_android.fragment.ConsultFragment;
-import com.example.alejandro.jmr_android.fragment.SettingFragment;
 import com.example.alejandro.jmr_android.R;
 import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
+import com.example.alejandro.jmr_android.fragment.SettingsFragment;
 import com.example.alejandro.jmr_android.fragment.StatisticsFragment;
 import com.example.alejandro.jmr_android.jmr.JMRImage;
 import com.example.alejandro.jmr_android.jmr.ResultList;
@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigation bottomNavigation;
     private ConsultFragment consultFragment;
-    private SettingFragment settingFragment;
-    private StatisticsFragment statisticsFragment;
+    private SettingsFragment settingsFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         consultFragment = ConsultFragment.newInstance();
-        settingFragment = SettingFragment.newInstance();
-        statisticsFragment = StatisticsFragment.newInstance();
+
+        settingsFragment = new SettingsFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -58,18 +58,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 1:
-
-                        transaction.replace(R.id.main_fragment, settingFragment, "b");
+                        transaction.replace(R.id.main_fragment,settingsFragment,"A");
                         transaction.addToBackStack("b");
                         transaction.commit();
                         break;
+                      /*  transaction.replace(R.id.main_fragment, settingFragment, "b");
 
-                    case 2:
+                        break;*/
 
-                        transaction.replace(R.id.main_fragment, statisticsFragment, "c");
-                        transaction.addToBackStack("c");
-                        transaction.commit();
-                        break;
                 }
 
             }
@@ -90,6 +86,19 @@ public class MainActivity extends AppCompatActivity {
         while (fragmentManager.getBackStackEntryCount() != 0) {
             Log.d("LIMMPIO","LIMPIO");
             fragmentManager.popBackStackImmediate();
+        }
+    }
+
+    public void setActiveDescriptor(int descriptor){
+
+        if(descriptor == ConsultFragment.MPEG7_COLOR_STRUCTURE ||
+                descriptor == ConsultFragment.SINGLE_COLOR_DESCRIPTOR) {
+
+            consultFragment.setActiveDescriptor(descriptor);
+        }
+
+        else{
+            Log.e("Descriptor", "descriptor erroneo");
         }
     }
 

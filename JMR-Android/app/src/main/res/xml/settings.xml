@@ -1,0 +1,52 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Selección de descriptor">
+
+        <CheckBoxPreference
+            android:key="singleColor"
+            android:title="Media color"
+            android:clickable="true"
+            android:summary="Basado en el color medio de la imagen"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="structureColor"
+            android:title="Color estructurado"
+            android:summary="Basado en el histograma de la imagen"
+            android:clickable="true"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Imágenes">
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="Todas las disponibles"
+            android:summary="
+            Las consultas se realizarán usando todas las imágenes que se
+            encuentren en el teléfono"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="Número concreto"
+            android:summary="Establece un número concreto de imágenes sobre las que consultar"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Base de datos">
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="Eliminar base datos"
+            android:summary="Basado en el color medio de la imagen"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

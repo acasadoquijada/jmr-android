@@ -17,5 +17,5 @@
     <item
         android:id="@+id/bbn_item3"
         android:icon="@drawable/ic_cloud_off_white_24dp"
-        android:title="Estadísticas" />
+        android:title="Adicional" />
 </menu>

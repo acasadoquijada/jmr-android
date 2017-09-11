@@ -1,5 +1,4 @@
 <android.support.design.widget.CoordinatorLayout
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/CoordinatorLayout01"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,7 +9,6 @@
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </FrameLayout>
 
     <it.sephiroth.android.library.bottomnavigation.BottomNavigation
