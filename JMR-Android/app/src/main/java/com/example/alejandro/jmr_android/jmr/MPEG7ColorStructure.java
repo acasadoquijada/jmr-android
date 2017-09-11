@@ -80,9 +80,16 @@ public class MPEG7ColorStructure {
         this(image, DEFAULT_NUM_LEVELS);
     }
 
+    static {
+        System.loadLibrary("descriptor");
+    }
+
+    public native int quantFuncC(double x);
+
     public int[] getHisto(){
         return histo;
     }
+
     private void setLevels(int qLevels) {
         if (qLevels <= 32) {
             this.qLevels = 32;
@@ -111,6 +118,17 @@ public class MPEG7ColorStructure {
         this.histo = reQuantization(histo);
     }
 
+  /*  private native byte[][] quantHMMDImageC(
+            float[][][] imSrc,
+            float[][][] quantizationTable ,
+            int offset,
+            int height,
+            int width,
+            int hue,
+            int max,
+            int min,
+            int diff);
+*/
     private byte[][] quantHMMDImage(HMMDImage imSrc) {
         //Source image variable
         int wImg = imSrc.getWidth();
@@ -148,6 +166,8 @@ public class MPEG7ColorStructure {
         }
         return imDst;
     }
+
+
     public void init(Bitmap image) {
         init(image,DEFAULT_NUM_LEVELS);
     }
@@ -170,8 +190,12 @@ public class MPEG7ColorStructure {
         }
     }
 
+    private native float[] structureHistoC(byte[][] imQ, int wImg, int hImg, int qLevels);
+
     private float[] structuredHisto(byte[][] imQ, int wImg, int hImg) {
-        int m = 0;
+
+
+         int m = 0;
         double hw = Math.sqrt(hImg * wImg);
         double p = Math.floor(Math.log(hw) / Math.log(2) - 7.5); //Formula by Manjunath2002
         if (p < 0) {
@@ -219,33 +243,15 @@ public class MPEG7ColorStructure {
 
     private int[] reQuantization(float[] colorHistogramTemp) {
         int[] uniformCSD = new int[colorHistogramTemp.length];
+
         for (int i = 0; i < colorHistogramTemp.length; i++) {
-            uniformCSD[i] = quantFunc((double) colorHistogramTemp[i]);
+            uniformCSD[i] = quantFuncC((double) colorHistogramTemp[i]);
         }
         return uniformCSD;
     }
 
-    static public int quantFunc(double x) {
-        double[] stepIn = {0.000000001, 0.037, 0.08, 0.195, 0.32, 1};
-        int[] stepOut = {-1, 0, 25, 45, 80, 115};
-        int y = 0;
-        if (x <= 0) {
-            y = 0;
-        } else if (x >= 1) {
-            y = 255;
-        } else {
-            y = (int) Math.round(((x - 0.32) / (1 - 0.32)) * 140.0);
-            for (int i = 0; i < stepIn.length; i++) {
-                if (x < stepIn[i]) {
-                    y += stepOut[i];
-                    break;
-                }
-            }
-            // Since there is a bug in Caliph & emir version the data
-            // are between -66 and 255
-            y = (int) (255.0 * ((double) y + 66) / (255.0 + 66.0));
-        }
-        return y;
+    public int quantFunc(double x) {
+        return quantFuncC(x);
     }
 
     private static int[] resizeCSD(MPEG7ColorStructure c, int qSizeDst) {
@@ -313,11 +319,13 @@ public class MPEG7ColorStructure {
         return qLevels;
     }
 
+    private static native int[] getStartSubspacePosC(
+            int offset,
+            int[] quantArray);
+
     private int[] getStartSubspacePos() {
         return getStartSubspacePos(this.offset);
     }
-
-
 
     private static int[] getStartSubspacePos(int offset) {
         int[] startP = new int[5];
@@ -332,4 +340,6 @@ public class MPEG7ColorStructure {
     private static double log2(int x) {
         return Math.log(x) / Math.log(2);
     }
+
+
 }

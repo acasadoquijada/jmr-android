@@ -42,6 +42,10 @@ public class HMMDImage {
         }
     }
 
+    static {
+        System.loadLibrary("descriptor");
+    }
+
     public void getHeight(int heigth){
         this.height = heigth;
     }
@@ -67,6 +71,8 @@ public class HMMDImage {
             image[x][y] = pixel;
         }
     }
+
+    public native float[] fromRGBC(float[] rgbVec);
 
     private float[] fromRGB(float[] rgbVec) {
 
