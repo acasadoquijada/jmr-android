@@ -77,7 +77,7 @@ public class Gallery {
         }
 
         if(imagen != null){
-            Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,64,64,true);
+            Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,32,32,true);
             return imagenReescalada;
         }
         return null;

@@ -305,7 +305,7 @@ public class MPEG7ColorStructure {
             f1 = resizeCSD(this, desc.qLevels);
             f2 = desc.histo;
         }
-        Log.d("size f1 f2",Integer.toString(f1.length) +  " " + Integer.toString(f2.length));
+       // Log.d("size f1 f2",Integer.toString(f1.length) +  " " + Integer.toString(f2.length));
         Double distance = 0.0;
         for (int i = 0; i < f1.length; i++) {
             distance += Math.abs(f1[i] - f2[i]);

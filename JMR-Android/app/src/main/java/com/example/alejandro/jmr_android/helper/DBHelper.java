@@ -53,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(IMAGE_PATH, imageName);
         contentValues.put(VALUE, value);
-        Log.d("INSERTO", imageName);
+       // Log.d("INSERTO", imageName);
         db.insert(SINGLE_COLOR_TABLE_NAME, null, contentValues);
         db.insert(STRUCTURE_COLOR_TABLE_NAME, null, contentValues);
         return true;
@@ -67,7 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String sHist = convertArrayToString(hist);
         contentValues.put("HIST", sHist);
 
-        Log.d("INSERTO", imageName);
+      //  Log.d("INSERTO", imageName);
         db.insert(STRUCTURE_COLOR_TABLE_NAME, null, contentValues);
         return true;
     }
@@ -79,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("RED", r);
         contentValues.put("GREEN", g);
         contentValues.put("BLUE", b);
-        Log.d("INSERTO", imageName);
+     //   Log.d("INSERTO", imageName);
         db.insert(SINGLE_COLOR_TABLE_NAME, null, contentValues);
         return true;
     }
@@ -98,7 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             hist = convertStringToArray(sHist);
 
-            Log.d("hist size",Integer.toString(hist.length));
+          //  Log.d("hist size",Integer.toString(hist.length));
             return hist;
         }
 
@@ -151,7 +151,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                 IMAGE_PATH +" = '"+imageName+"'", null);
                 if (cursor.moveToFirst()){
                     int index = cursor.getColumnIndex(VALUE);
-                    Log.d("INDEX",Integer.toString(index));
+                  //  Log.d("INDEX",Integer.toString(index));
                     value = cursor.getDouble(index);
                     return value;
                 }
@@ -164,7 +164,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                 IMAGE_PATH +" = '"+imageName+"'", null);
                 if (cursor.moveToFirst()){
                     int index = cursor.getColumnIndex(VALUE);
-                    Log.d("INDEX",Integer.toString(index));
+                   // Log.d("INDEX",Integer.toString(index));
                     value = cursor.getDouble(index);
                     return value;
                 }
@@ -197,7 +197,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         for(int i = 0; i < integerArray.length; i++){
             integerArray[i] = Integer.valueOf(arr[i]);
-            Log.d("INT",Integer.toString(integerArray[i]));
+           // Log.d("INT",Integer.toString(integerArray[i]));
         }
 
         return integerArray;

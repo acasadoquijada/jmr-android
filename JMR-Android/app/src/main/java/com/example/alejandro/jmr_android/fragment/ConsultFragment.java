@@ -361,7 +361,7 @@ public class ConsultFragment extends Fragment {
                             @Override
                             public void onLongClick(View view, int position) {
                                 SquareLayout squareLayout = (SquareLayout) view;
-                                Log.d("Soy la imagen",Integer.toString(position));
+                            //    Log.d("Soy la imagen",Integer.toString(position));
 
                                 ImageView imageIconSelected = (ImageView)
                                         squareLayout.findViewById(R.id.selectedIcon);
@@ -402,7 +402,7 @@ public class ConsultFragment extends Fragment {
             */
             long startTime = System.currentTimeMillis();
 
-            Log.d("Estoy en: ", "caca calcular galeria");
+          //  Log.d("Estoy en: ", "caca calcular galeria");
 
             double distancia = 0.00;
 
@@ -415,7 +415,7 @@ public class ConsultFragment extends Fragment {
             MPEG7ColorStructure consultImageDescriptor; // = new MPEG7ColorStructure(image);
             if(descriptorBD.getColorStructureHist(
                     consultImage.getPath()) != null){
-                Log.d("AQUI","AQUI");
+             //   Log.d("AQUI","AQUI");
                 int []histo = descriptorBD.getColorStructureHist(consultImage.getPath());
 
                 consultImageDescriptor = new MPEG7ColorStructure(histo);
@@ -451,11 +451,11 @@ public class ConsultFragment extends Fragment {
 
 
             int ini = 0;
-            int fin = 50;
-            Log.d("Descriptor", "comienzo a calcular");
+            int fin = 800;
+        //    Log.d("Descriptor", "comienzo a calcular");
             for(int i = ini; i < (fin); i++){
 
-              //  Log.d("Descriptor: ", "imagen " + Integer.toString(i));
+                Log.d("Descriptor: ", "imagen " + Integer.toString(i));
                // Log.d("Path", galleryImages.getImageURI(i));
 
                 Bitmap img = galleryImages.getImagen(i);
@@ -463,7 +463,7 @@ public class ConsultFragment extends Fragment {
                 ResultMetadata<Double, String> resultMetadaGaleria;
 
                // SingleColorDescription descriptor;
-                MPEG7ColorStructure descriptor = new MPEG7ColorStructure(img);
+                MPEG7ColorStructure descriptor;
 
                 if(img != null){
                     String imagePath = galleryImages.getImageURI(i);
