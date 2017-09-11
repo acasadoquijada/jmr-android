@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Java Multimedia Retrival Android</string>
+    <string name="app_name">Java Multimedia Retrival</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->

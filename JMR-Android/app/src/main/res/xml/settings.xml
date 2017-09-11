@@ -25,8 +25,7 @@
         <CheckBoxPreference
             android:key="checkbox_preference"
             android:title="Todas las disponibles"
-            android:summary="
-            Las consultas se realizarán usando todas las imágenes que se
+            android:summary="Las consultas se realizarán usando todas las imágenes que se
             encuentren en el teléfono"
             android:defaultValue="true"/>
 

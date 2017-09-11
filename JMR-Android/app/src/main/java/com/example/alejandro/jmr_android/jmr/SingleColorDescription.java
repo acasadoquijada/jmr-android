@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
  * Created by alejandro on 15/08/2017.
  */
 
-public class SingleColorDescription {
+public class SingleColorDescription implements  MediaDescriptor{
 
     private int[] color;
 
@@ -58,15 +58,15 @@ public class SingleColorDescription {
         return color;
     }
 
-    public Double compare(SingleColorDescription desc) {
+    public Double compare(MediaDescriptor desc) {
         int[] c1 = this.color;
-        int[] c2 = desc.color;
+        SingleColorDescription singleColorDescription = (SingleColorDescription) desc;
+        int[] c2 = singleColorDescription.color;
 
         double value = compare(c1[0],c1[1],c1[2],
                 c2[0],c2[1],c2[2]);
 
         return value;
     }
-
 
 }

@@ -10,7 +10,7 @@ import com.example.alejandro.jmr_android.HMMDImage;
  * Created by alejandro on 06/09/2017.
  */
 
-public class MPEG7ColorStructure {
+public class MPEG7ColorStructure implements MediaDescriptor{
     /**
      * The source media of this descriptor
      */
@@ -290,20 +290,21 @@ public class MPEG7ColorStructure {
         return dstHisto;
     }
 
-    public Double compare(MPEG7ColorStructure desc) {
+    public Double compare(MediaDescriptor desc) {
         int[] f1, f2;
-        if (desc.histo == null || this.histo == null) {
+        MPEG7ColorStructure mpeg7ColorStructure = (MPEG7ColorStructure) desc;
+        if (mpeg7ColorStructure.histo == null || this.histo == null) {
             return (null);
         }
-        if (this.qLevels == desc.qLevels) {
+        if (this.qLevels == mpeg7ColorStructure.qLevels) {
             f1 = this.histo;
-            f2 = desc.histo;
-        } else if (this.qLevels < desc.qLevels) {
+            f2 = mpeg7ColorStructure.histo;
+        } else if (this.qLevels < mpeg7ColorStructure.qLevels) {
             f1 = this.histo;
-            f2 = resizeCSD(desc, this.qLevels);
+            f2 = resizeCSD(mpeg7ColorStructure, this.qLevels);
         } else {
-            f1 = resizeCSD(this, desc.qLevels);
-            f2 = desc.histo;
+            f1 = resizeCSD(this, mpeg7ColorStructure.qLevels);
+            f2 = mpeg7ColorStructure.histo;
         }
        // Log.d("size f1 f2",Integer.toString(f1.length) +  " " + Integer.toString(f2.length));
         Double distance = 0.0;

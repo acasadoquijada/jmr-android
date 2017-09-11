@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.alejandro.jmr_android.fragment.ConsultFragment;
+
 import java.sql.Array;
+import java.sql.SQLRecoverableException;
 import java.util.Arrays;
 
 /**
@@ -72,17 +75,48 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean insertSingleColorValues(String imageName, int r, int g, int b){
+    public boolean insertSingleColorValues(String imageName, int[] values){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(IMAGE_PATH, imageName);
-        contentValues.put("RED", r);
-        contentValues.put("GREEN", g);
-        contentValues.put("BLUE", b);
+        contentValues.put("RED", values[0]);
+        contentValues.put("GREEN", values[1]);
+        contentValues.put("BLUE", values[2]);
      //   Log.d("INSERTO", imageName);
         db.insert(SINGLE_COLOR_TABLE_NAME, null, contentValues);
         return true;
     }
+
+    public int[] getData(String imageName, int active_descriptor){
+
+        switch (active_descriptor){
+            case ConsultFragment.SINGLE_COLOR_DESCRIPTOR:
+                return getSingleColorData(imageName);
+
+            case ConsultFragment.MPEG7_COLOR_STRUCTURE:
+                return getColorStructureHist(imageName);
+
+            default:
+                return null;
+        }
+
+    }
+
+    public void setData(String imageName, int[] values, int active_descriptor){
+        switch (active_descriptor){
+            case ConsultFragment.SINGLE_COLOR_DESCRIPTOR:
+                insertSingleColorValues(imageName, values);
+                break;
+
+            case ConsultFragment.MPEG7_COLOR_STRUCTURE:
+                insertColorStructureHist(imageName, values);
+                break;
+
+            default:
+
+        }
+    }
+
     public int[] getColorStructureHist(String imageName){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
@@ -115,7 +149,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         IMAGE_PATH +" = '"+imageName+"'", null);
 
         if (cursor.moveToFirst()){
-            hist[0] = cursor.getInt(cursor.getColumnIndex("HIST"));
+            hist[0] = cursor.getInt(cursor.getColumnIndex("RED"));
             hist[1] = cursor.getInt(cursor.getColumnIndex("GREEN"));
             hist[2] = cursor.getInt(cursor.getColumnIndex("BLUE"));
             return hist;
@@ -123,6 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return null;
     }
+
     public int numberOfRows(String database){
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows;
@@ -190,6 +225,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return string;
     }
+
     public static int[] convertStringToArray(String str){
         String[] arr = str.split(strSeparator);
 

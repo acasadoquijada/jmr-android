@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private ConsultFragment consultFragment;
     private SettingsFragment settingsFragment;
 
+    private boolean isConsultFragment;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         consultFragment = ConsultFragment.newInstance();
+
+        isConsultFragment = true;
 
         settingsFragment = new SettingsFragment();
 
@@ -48,19 +55,31 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setOnMenuItemClickListener(new BottomNavigation.OnMenuItemSelectionListener() {
             @Override
             public void onMenuItemSelect(@IdRes int i, int i1, boolean b) {
+
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 clearBackStack();
                 switch (i1){
+
                     case 0:
+                        Log.d("ESTOY", "1");
+
                         transaction.replace(R.id.main_fragment, consultFragment, "a");
                         transaction.addToBackStack("a");
                         transaction.commit();
+
+                        if(isConsultFragment){
+                            Log.d("ESTOY", "CAL");
+                        }
+                        isConsultFragment = true;
                         break;
 
                     case 1:
+                        Log.d("ESTOY", "2");
+
                         transaction.replace(R.id.main_fragment,settingsFragment,"A");
                         transaction.addToBackStack("b");
                         transaction.commit();
+                        isConsultFragment = false;
                         break;
                       /*  transaction.replace(R.id.main_fragment, settingFragment, "b");
 
@@ -73,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMenuItemReselect(@IdRes int i, int i1, boolean b) {
                 // Do something
+
+                if(i1 == 0){
+                    consultFragment.calcularDescriptor();
+                }
             }
         });
 
@@ -96,11 +119,11 @@ public class MainActivity extends AppCompatActivity {
 
             consultFragment.setActiveDescriptor(descriptor);
         }
-
         else{
             Log.e("Descriptor", "descriptor erroneo");
         }
     }
+
 
 
 }

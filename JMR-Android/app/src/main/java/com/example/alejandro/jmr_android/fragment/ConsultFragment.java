@@ -37,6 +37,7 @@ import com.example.alejandro.jmr_android.helper.DBHelper;
 import com.example.alejandro.jmr_android.helper.SquareLayout;
 import com.example.alejandro.jmr_android.jmr.JMRImage;
 import com.example.alejandro.jmr_android.jmr.MPEG7ColorStructure;
+import com.example.alejandro.jmr_android.jmr.MediaDescriptor;
 import com.example.alejandro.jmr_android.jmr.ResultList;
 import com.example.alejandro.jmr_android.jmr.ResultMetadata;
 import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
@@ -65,10 +66,13 @@ public class ConsultFragment extends Fragment {
     private JMRImage consultImage;
     private ResultList<ResultMetadata> resultMetadatas;
     private ArrayList<JMRImage> resultImages, consultImages;
+    private ArrayList<MediaDescriptor> descriptors;
+    private SingleColorDescription singleColorDescription;
+    private MPEG7ColorStructure mpeg7ColorStructure;
     private ProgressDialog pDialog;
     private GalleryAdapter resultAdapter, consultAdapter;
     private RecyclerView recyclerViewResult, recyclerViewConsult;
-    private FloatingActionButton fab_camera, fab_gallery, fab_consult;
+    private FloatingActionButton fab_camera, fab_gallery;
     private FloatingActionMenu floatingActionMenu;
     private Uri mImageUri;
     private ProgressDialog dialog;
@@ -93,6 +97,13 @@ public class ConsultFragment extends Fragment {
         getContext().deleteDatabase(DBHelper.DATABASE_NAME);
         descriptorBD = new DBHelper(getContext());
 
+        descriptors = new ArrayList<>();
+        SingleColorDescription singleColorDescription = null;
+        MPEG7ColorStructure mpeg7ColorStructure = null;
+
+        descriptors.add((MediaDescriptor)singleColorDescription);
+        descriptors.add((MediaDescriptor)mpeg7ColorStructure);
+
         resultImages = new ArrayList<>();
         consultImages = new ArrayList<>();
         resultMetadatas = new ResultList<>();
@@ -114,11 +125,9 @@ public class ConsultFragment extends Fragment {
         floatingActionMenu = (FloatingActionMenu)getView().findViewById(R.id.fab);
         fab_camera = (FloatingActionButton) getView().findViewById(R.id.menu_item_camera);
         fab_gallery = (FloatingActionButton) getView().findViewById(R.id.menu_item_gallery);
-        fab_consult = (FloatingActionButton) getView().findViewById(R.id.menu_item_make_consult);
 
         floatingCameraButtonBehaviour();
         floatingGalleryButtonBehaviour();
-        floatingConsultButtonBehaviour();
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -155,19 +164,6 @@ public class ConsultFragment extends Fragment {
                         galleryIntent();
                     }
                     floatingActionMenu.close(false);
-                }
-            });
-        }
-    }
-
-    private void floatingConsultButtonBehaviour(){
-        if(fab_consult != null){
-            fab_consult.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    calcularDescriptor();
-                    resultAdapter = new GalleryAdapter(getContext(), resultImages);
-                    recyclerViewResult.setAdapter(resultAdapter);
                 }
             });
         }
@@ -281,6 +277,8 @@ public class ConsultFragment extends Fragment {
 
             resultImages.add(JMRImage);
         }
+
+        resultAdapter.notifyDataSetChanged();
 
         Log.d("RESULT IMAGE SIZE", Integer.toString(resultImages.size()));
         Log.d("CONSULT IMAGE SIZE", Integer.toString(consultImages.size()));
@@ -407,54 +405,42 @@ public class ConsultFragment extends Fragment {
         if(consultImage != null){
             int tamanioGaleria = galleryImages.size();
 
-            /* Cojo la imagen consulta y la meto en el array
-             de resultados, para poder compararla con las de
-             la galeria
-            */
             long startTime = System.currentTimeMillis();
 
-          //  Log.d("Estoy en: ", "caca calcular galeria");
+            double distance = 0.00;
 
-            double distancia = 0.00;
+            Bitmap image = null;
+            if(descriptorBD.getData(
+                    consultImage.getPath(),active_descriptor) != null){
 
-            /*
-            Existe el valor de la imagen consulta ya calculado en la BD
-             */
+                int [] value = descriptorBD.getData(consultImage.getPath(), active_descriptor);
 
-            //SingleColorDescription consultImageDescriptor;
-            Bitmap image = galleryImages.getImagen(consultImage.getPath());
-            MPEG7ColorStructure consultImageDescriptor; // = new MPEG7ColorStructure(image);
-            if(descriptorBD.getColorStructureHist(
-                    consultImage.getPath()) != null){
-             //   Log.d("AQUI","AQUI");
-                int []histo = descriptorBD.getColorStructureHist(consultImage.getPath());
-
-                consultImageDescriptor = new MPEG7ColorStructure(histo);
-                /*int [] rgb = descriptorBD.getSingleColorData(consultImage.getPath());
-
-                consultImageDescriptor = new SingleColorDescription(rgb);
-                */
+                switch (active_descriptor){
+                    case SINGLE_COLOR_DESCRIPTOR:
+                        singleColorDescription = new SingleColorDescription(value);
+                        break;
+                    case MPEG7_COLOR_STRUCTURE:
+                        mpeg7ColorStructure = new MPEG7ColorStructure(value);
+                        break;
+                }
             }
-            else{
+            else {
+                image = galleryImages.getImagen(consultImage.getPath());
 
-                consultImageDescriptor =
-                        new MPEG7ColorStructure(image);
+                int[] values = null;
+                switch (active_descriptor){
+                    case SINGLE_COLOR_DESCRIPTOR:
+                        singleColorDescription = new SingleColorDescription(image);
+                        values = singleColorDescription.getColor();
+                        break;
+                    case MPEG7_COLOR_STRUCTURE:
+                        mpeg7ColorStructure = new MPEG7ColorStructure(image);
+                        values = mpeg7ColorStructure.getHisto();
+                        break;
+                }
 
-                int[] h = consultImageDescriptor.getHisto();
-                descriptorBD.insertColorStructureHist(consultImage.getPath(),h);
-
-                /*
-                int [] rgb = consultImageDescriptor.getColor();
-
-                descriptorBD.insertSingleColorValues(
-                        consultImage.getPath(),
-                        rgb[0],
-                        rgb[1],
-                        rgb[2]
-                );*/
+                descriptorBD.setData(consultImage.getPath(),values,active_descriptor);
             }
-
-
 
             if(resultMetadatas.size() > 0){
                 resultMetadatas.clear();
@@ -462,7 +448,7 @@ public class ConsultFragment extends Fragment {
 
 
             int ini = 0;
-            int fin = 800;
+            int fin = 50;
         //    Log.d("Descriptor", "comienzo a calcular");
             for(int i = ini; i < (fin); i++){
 
@@ -473,47 +459,59 @@ public class ConsultFragment extends Fragment {
 
                 ResultMetadata<Double, String> resultMetadaGaleria;
 
-               // SingleColorDescription descriptor;
-                MPEG7ColorStructure descriptor;
+                SingleColorDescription singleColorDescriptionConsult = null;
+                MPEG7ColorStructure mpeg7ColorStructureConsult = null;
 
                 if(img != null){
                     String imagePath = galleryImages.getImageURI(i);
 
-                    if(descriptorBD.getColorStructureHist(
-                            imagePath) != null) {
+                    if(descriptorBD.getData(
+                            imagePath,active_descriptor) != null){
+                        //   Log.d("AQUI","AQUI");
 
-                        int []histo = descriptorBD.getColorStructureHist(imagePath);
+                        int [] value = descriptorBD.getData(imagePath, active_descriptor);
 
-                        descriptor = new MPEG7ColorStructure(histo);
+                        switch (active_descriptor){
+                            case SINGLE_COLOR_DESCRIPTOR:
+                                singleColorDescriptionConsult = new SingleColorDescription(value);
+                                break;
+                            case MPEG7_COLOR_STRUCTURE:
+                                mpeg7ColorStructureConsult = new MPEG7ColorStructure(value);
+                                break;
+                        }
 
-                        //int[] rgb = descriptorBD.getSingleColorData(imagePath);
-
-                        //descriptor = new SingleColorDescription(rgb);
                     }
-                    else{
-                        descriptor =
-                                new MPEG7ColorStructure(img);
+                    else {
+                        image = galleryImages.getImagen(imagePath);
 
-                        int[] h = descriptor.getHisto();
-                        descriptorBD.insertColorStructureHist(imagePath,h);
+                        int[] values = null;
+                        switch (active_descriptor){
+                            case SINGLE_COLOR_DESCRIPTOR:
+                                singleColorDescriptionConsult = new SingleColorDescription(image);
+                                values = singleColorDescriptionConsult.getColor();
+                                break;
+                            case MPEG7_COLOR_STRUCTURE:
+                                mpeg7ColorStructureConsult = new MPEG7ColorStructure(image);
+                                values = mpeg7ColorStructureConsult.getHisto();
+                                break;
+                        }
 
-                        /*
-                        descriptor = new SingleColorDescription(img);
-                        int [] rgb = descriptor.getColor();
-
-                        descriptorBD.insertSingleColorValues(
-                                imagePath,
-                                rgb[0],
-                                rgb[1],
-                                rgb[2]);*/
+                        descriptorBD.setData(imagePath,values,active_descriptor);
                     }
 
+                    switch (active_descriptor){
+                        case SINGLE_COLOR_DESCRIPTOR:
+                            distance = singleColorDescriptionConsult.compare
+                                    (singleColorDescription);
+                            break;
+                        case MPEG7_COLOR_STRUCTURE:
+                            distance = mpeg7ColorStructureConsult.compare
+                                    (mpeg7ColorStructure);
+                            break;
+                    }
 
-                    distancia = descriptor.compare(consultImageDescriptor);
-
-                   // Log.d("Distancia " + Integer.toString(i), Double.toString(distancia));
                     resultMetadaGaleria
-                            = new ResultMetadata(distancia, imagePath);
+                            = new ResultMetadata(distance, imagePath);
 
                     resultMetadatas.add(resultMetadaGaleria);
                 }
@@ -556,7 +554,6 @@ public class ConsultFragment extends Fragment {
         return File.createTempFile(part, ext, tempDir);
     }
 
-
     private void normalizeResult() {
 
         Collections.sort(resultMetadatas, new Comparator<ResultMetadata>() {
@@ -582,5 +579,6 @@ public class ConsultFragment extends Fragment {
     public void setActiveDescriptor(int descriptor){
         active_descriptor = descriptor;
     }
+
 }
 
