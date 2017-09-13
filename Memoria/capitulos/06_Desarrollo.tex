@@ -78,14 +78,20 @@ En nuestro caso es ideal, ya que nos proporciona una manera sencilla de trabajar
 
 Lo primero que podemos encontrar es información abundante sobre CBIR en computadores, pero en nuestro caso no nos es necesaria, ya que partimos de uno previo, Java Multimedia Retrival, que cuenta con todo lo que necesitamos sobre este tipo de sistemas. Aunque siempre es interesante estar al día en estos asuntos.\\
 
-Por lo que vamos a centrarnos en los CBIR desarrollados exclusivamente para sistemas Android.
+Por lo que vamos a centrarnos en los CBIR desarrollados exclusivamente para sistemas Android, sin embargo, si vamos a comentar el CBIR Java Multimeda Retrieval, ya que partimos de él.
 
-\subsubsection{Content based image retrieval using color and texture feature extraction in Android}
+\subsubsection{Java Multimedia Retrieval}
 
-Se trata de un artículo escrito por \textit{M Vel Murugan} y \textit{P Jeyanthi}, del departamento de tecnologías de la información de la universidad de Sathyabama, Chennai, Tamil Nadu.\\
+Se trata de un CBIR desarrollado en Java, iniciado por Jesus Chamorro, profesor de la universidad de Granada.\\
 
-En el comentan que técnicas utilizan, como la extracción de características del color se hace por el método del refinamiento del histograma del color y la extracción de la característica de textura es adquirida por la matriz de la coinocceso del nivel del gris (GLCM), es decir, estos serían sus descriptores.
+Este CBIR trabaja con 3 descriptores distintos, basados en el color dominante, estructurado y escalable. Nos ofrece la posibilidad de realizar las consultas con cualquiera de dichos descriptores, incluso con 2 o 3 a la vez. A su vez cuenta con una pequeña base de datos donde se almacenan los resultados de las consultas para agilizar las posteriores.
 
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.5]{imagenes/jmr.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{jmr}
+\caption{Interfaz Java Multimedia Retrieval}
+\end{figure}
 
 \subsubsection{Content based image retrieval for mobile systems}
 
@@ -116,8 +122,44 @@ Tras realizar un estudio del estado del arte de los CBIR en Android podemos lleg
 
 En esta sección vamos a detallar los distintos elementos que componen el proyecto con un nivel de detalle suficiente para dar una visión global del proyecto y entender cada uno de sus componentes.\\
 
+Como visión global podemos ver la aplicación como una única actividad que va cambiando el fragment que se muestra en pantalla, cada fragment se encarga de sus propias tareas, dejando a la actividad encargándose únicamente de cambiar fragments y otras cosas triviales.
 
+\subsection{Paquetes}
 
+Vamos a comenzar hablando de los distintos paquetes de los que se compone el proyecto.
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.9]{imagenes/paquetes.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{paquetes}
+\caption{Paquetes del proyecto}
+\end{figure}
+
+\subsubsection{Activity}
+
+En él se cuentran las activities que forman parte del proyecto. En este caso solo forma parte de él una única actividad, \textit{MainActivity} que es la encarga de gestionar la aplicación.
+
+\subsubsection{Adapter}
+
+Formado por \textit{GalleryAdapter} y \textit{ViewPagerAdapter}. El primero se encarga de renderizar las imágenes para su correcta visualización, mientras que el segundo se encarga se usa para permitir que podamos interactuar con las imágenes.
+
+\subsubsection{Fragment}
+
+En este paquete se encuentan los distintos framgents de los que se componen el proyecto, un total de 4. Los tres primeros se corresponden a cada una de las opciones del menú inferior de la aplicación, mientras que el último se encarga de que podamos interactuar con las imágenes al pulsar sobre ellas, aportandónos información.
+
+\subsubsection{Helper}
+
+Formado por clases que se encargan de \textit{ayudar} al resto para que su funcionamiento sea el esperado. Entre algunos de los miembros de este paquete destacan \textit{DBHelper}, que se encarga de la gestión de la base de datos y \textit{GalleryHelper}, encargado de la gestión de la galería del usuario.
+
+\subsubsection{JMR}
+
+Paquete en el que se encuentra todo lo relacionado con el cálculo de descriptores y la organización de sus resultados. A su vez cuenta con clases como \textit{HMMDImage} que se encarga de pasar una imagen en el espacio de color \textit{RGB} al espacio de color \textit{HMMD}. Esto se explicará con detalle en el próximo apartado
+
+Hablar de los disintos paquetes del proyecto. Aqui meter diagrama
+
+Hablar de las clases, que hacen y sus principales métodos. Aqui meter diagrama
+
+historias de usuario. 
 
 
 
