@@ -155,6 +155,82 @@ Formado por clases que se encargan de \textit{ayudar} al resto para que su funci
 
 Paquete en el que se encuentra todo lo relacionado con el cálculo de descriptores y la organización de sus resultados. A su vez cuenta con clases como \textit{HMMDImage} que se encarga de pasar una imagen en el espacio de color \textit{RGB} al espacio de color \textit{HMMD}. Esto se explicará con detalle en el próximo apartado
 
+\subsection{Clases}
+
+Una vez que se ha terminado de hablar de los paquetes, es hora de hablar de cada clase individualmente. Al igual que en el caso anterior, lo haremos con cierto nivel de detalle, sin entrar en cuestiones demasiado técnicas.
+
+\subsubsection{MainActivity}
+
+Es la única clase actividad, \textit{Activity}, del proyecto. Se encarga de instanciar e iniciar las 3 clases \textit{Fragment} que se corresponden a cada una de las opciones del menú inferior. A su vez, se ocupa de la comunicación entre \textit{Fragments}, necesaria para un correcto funcionamiento de la aplicación, y también se ocupa de gestionar la memoria, para evitar que la aplicación ocupe demasiados recursos. Esto se consigue controlando la cola de \textit{Fragments} de la aplicación.
+
+\subsubsection{GalleryAdapter}
+
+Esta clase se encarga de \textit{hinchar}, \textit{inflate}, un fichero XML llamado gallery_thumbnail.xml, en el cuál se colocan las imágenes, una por cada instancia del fichero, y a su vez, se encarga de reenderizar las imágenes. Se puede decir, que esta clase se encarga de colocar todas las imágenes y nos permite interactuar con ellas a través de eventos.
+
+\subsubsection{ConsultFragment}
+
+Clase de tipo \textit{Fragment} que puede considerarse como el núcleo del proyecto.\\
+
+En ella se inicializa su propia interfaz, al igual que el resto de sus clases \textit{Fragment} hermanas. Garantiza que el usuario pueda elegir la imagen consulta tanto de la cámara como de la galería, estas imágenes se van acumulando en la parte superior de la pantalla, pudiendo moverse realizando un movimiento de scroll. También gestiona los permisos, ya que es aquí donde se encuentran los métodos que requieren de ellos para poder desempeñar correctamente su función.\\
+
+Todos los cálculos de descriptores son realizados aquí, consultado previamente si los valores a calcular se encuentran en la base de datos y actuando en consecuencia. Para estos cálculos se utilizan las clases que se encuentran en el paquete JMR. Las imágenes resultantes de una consulta, imágenes resultado, se colocan justo debajo de las imágenes consulta, en cuatro columnas, pudiendo realizar un movimiento de scroll en caso de que no cupiesen todas en la pantalla del dipositivo.
+
+\subsubsection{SettingsFragment}
+
+Esta clase se encarga de gestionar el apartado de opciones de la aplicación. Permite al usuario elegir con que descriptor desea realizar las consultas, entre otras cosas. Básicamente, a través de eventos recoge las acciones del usuario y se las transmite a otras clases, en caso de ser necesario, usando la clase \textit{MainActivity}.\\
+
+Un ejemplo de esto es cuando el usuario decide cambiar el descriptor activo. En esa ocasión, esta clase notifica a \textit{ConsultFragment} utilizando a \textit{MainActivity}
+
+\subsubsection{SlideshowDialogFragment}
+
+Esta clase, junto con su clase interna adapter, \textit{MyViewPageAdapter}, nos proporciona los métodos necesarios para que, cuando pulsemos una imagen, esta aparezca ocupando toda la pantalla y a su vez, nos muestra información sobre ella. Esta información es el número de imagen que ocupa del total, imagen 5 de 400, y la distancia de la imagen consulta, un valor entre 0 y 1 que nos indica como de parecidas son las imágenes entre si, siendo 0 iguales y 1 totalmente distintas.
+
+\subsubsection{Fragment sobre nosotros}
+
+Poner licencias, que hable un poco del proyecto.
+ 
+\subsubsection{DBHelper}
+
+Clase encargada de la gestión de la base de datos. Cuenta con métodos para crearla, alterarla y destruirla. Cuando se están realizando los cálculos de los descriptores, se consulta la base de datos a través de los métodos de esta clase, para comprobar si el valor que se desea calcular se encuentra en ella, o en caso contrario, introducirlo. Esta base de datos es de tipo relacional.
+
+\subsubsection{GalleryHelper}
+
+Se encarga de gestionar todas las imágenes disponibles en el dispositivo del usuario, como es natural pensar, requiere de permisos por parte de él. Dispone de todo tipo de métodos para obtener las imágenes, y para minimizar el consumo de recursos lo único que se mantiene en memoria es la ruta de las imágenes, \textit{path}. Cuando es necesario cargar una imagen, se hace en base a su ruta, lo que evita tener todas las imágenes en memoria, un escenario que sería imposible.
+
+\subsubsection{RealPathUtil}
+
+Clase que se ocupa de tratar la ruta o \textit{path} de las imágenes, tarea que puede resultar trivial, pero no lo es.
+
+\subsubsection{SquareLayout}
+
+En esta ocasión, esta clase extiende de \textit{RelativeLayout} y se encarga de representar una imagen de manera cuadrada en un \textit{grid view}, es decir, en las 4 columnas de las que hablabamos previamente.
+
+\subsubsection{Utility}
+
+Se encarga de gestionar los permisos que necesitan el resto de clases para actuar correctamente. Cuando una clase requiere cualquier tipo de permiso se pone en contacto con ella y actua en consecuencia.
+
+\subsubsection{HMMDImage}
+
+Dado que el descriptor \textit{MPEG7ColorStructure} necesita que la imagen en el espacio de color HMMD, esta clase se encarga de dicha tarea. Utiliza una imagen en espacio de color RGB y la transforma HMMD, con una serie de operaciones matemáticas no muy complejas.
+
+\subsubsection{JMRImage}
+
+Siempre que nos referimos a imagen, nos referimos a esta clase. Cuenta con todo lo necesario para garantizar que el consumo de memoria sea lo mínimo posible, como se ha comentado anteriormete. Simplemente guarda información sobre la imagen, pero no a la propia imagen. Esta información es utilizada a la hora de cargar la imagen, y de añadirle más nivel de detalle, tal que el número de la imagen respecto a las demás o su distancia a la imagen consulta, en caso de que se trate de una imagen resultado.
+
+\subsection{MPEG7ColorStructure}
+
+Clase que representa al descriptor de mismo nombre y que utiliza el histograma de una imagen en espacio de color HMMD, que posteriormente se comparará con el resto de histogramas del resto de las imágenes para ver cuan parecidas son entre ellas.
+
+\subsection{ResultList}
+
+Extiende de \textit{
+
+
+
+
+
+
+
 Hablar de los disintos paquetes del proyecto. Aqui meter diagrama
 
 Hablar de las clases, que hacen y sus principales métodos. Aqui meter diagrama
