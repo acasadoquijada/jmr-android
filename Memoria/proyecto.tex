@@ -2,7 +2,7 @@
 %\documentclass[a4paper,twoside,11pt,titlepage]{book}
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
+\usepackage[spanish,es-tabla]{babel}
 
 % \usepackage[style=list, number=none]{glossary} %
 %\usepackage{titlesec}
@@ -185,8 +185,16 @@ pdfproducer = {pdflatex}
 \begin{document}
 \input{portada/portada}
 %\frontmatter
+\renewcommand\contentsname{Contenido}
 \tableofcontents
+
+\renewcommand\listfigurename{Lista de Figuras}
 \listoffigures
+
+\renewcommand\listtablename{Lista de Tablas}
+\listoftables
+
+
 %\listoftables
 
 %
@@ -205,15 +213,16 @@ pdfproducer = {pdflatex}
 %
 \input{capitulos/06_Desarrollo}
 %
-%\input{capitulos/07_Pruebas}
+\input{capitulos/07_Resultados}
 %
-%\input{capitulos/08_Conclusiones_y_trabajos_futuros}
+\input{capitulos/08_Conclusiones}
 %
 %%\chapter{Conclusiones y Trabajos Futuros}
 %
 %
 \nocite{*}
 \bibliography{bibliografia/bibliografia}\addcontentsline{toc}{chapter}{Bibliografía}
+\lhead{\textsc{Bibliograf\'ia}} % Change the page header to say "Bibliografía"
 \bibliographystyle{plain}
 %
 \appendix
