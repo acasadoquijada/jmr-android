@@ -1,12 +1,13 @@
 package com.jmr_android.jmr;
 
 import android.graphics.Bitmap;
+import android.provider.MediaStore;
 
 /**
  * Created by alejandro on 06/09/2017.
  */
 
-public class MPEG7ColorStructure{
+public class MPEG7ColorStructure implements MediaDescriptor{
     /**
      * The source media of this descriptor
      */

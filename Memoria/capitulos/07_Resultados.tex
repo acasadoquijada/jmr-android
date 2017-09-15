@@ -41,14 +41,48 @@ Una vez discutidos los tiempos y tamaños, es hora de comprobar que los resultad
 Como es natural, también se han realizado las pruebas con imágenes propias de mi dispositivo, pero por comodidad y para ver mejor los resultados se ha decidido usar estas dos bibliotecas.
 
 
-\subsection{Color medio}
+\subsection{SingleColorDescription}
 
-Hablar sobre el color medio, y poner resultados usando las imágenes bandera, y vistex. 2/4 pantallazos
+Este descriptor se basa en el cálculo del color medio de la imagen encontrándose esta, en un espacio de color RGB. Por lo que las imágenes con colores más parecidos aparecerán juntas.
+
+Ahora vamos a comentar una consulta utilizando este descriptor y la VisTex:
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.4]{imagenes/SingleColorresultado1.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{SingleColorresultado1.png}
+\caption{Resultado consulta SingleColorDescriptor 1 }
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.4]{imagenes/SingleColorresultado2.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{SingleColorresultado2.png}
+\caption{Resultado consulta SingleColorDescriptor 2 }
+\end{figure}
+
+Podemos comprobar como en la primera imagen, que sería lo primero que veríamos al realizar una consulta, las imágenes resultado, son muy parecidas en color a la imagen original. Por otro lado, en la segunda imagen se aprecian imágenes que se parecen menos a la consulta, por lo que se encuentran en posiciones más alejadas. Para llegar a ellas podemos usar el movimiento de scroll.
 
 
-\subsection{MPEG7}
+\subsection{MPEG7ColorStructure}
 
-Hablar sobre el MPEG7, y poner resultados usando las imágenes banedra y vistex. 2/4 pantallazos
+El descriptor MPEG7ColorStructure se basa en el cálculo del histograma empleando imágenes en el espacio de color HMMD. Los resultados serían parecidos a los del descriptor anterior.
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.4]{imagenes/mpegResultado1.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{mpegResultado1.png}
+\caption{Resultado consulta SingleColorDescriptor 1 }
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.4]{imagenes/mpegResultado2.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{mpegResultado1.png}
+\caption{Resultado consulta SingleColorDescriptor 2 }
+\end{figure}
+
+Se puede ver como este descriptor obtiene mejores resultados. Las primeras imágenes resultado son mas uniformes, mientrás que en el caso anterior, habia un mayor número de diferencias.
 
 
 

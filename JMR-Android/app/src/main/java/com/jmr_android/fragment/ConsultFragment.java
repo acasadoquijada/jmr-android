@@ -392,7 +392,7 @@ public class ConsultFragment extends Fragment {
         }
     }
 
-    private void calculateDescriptor() {
+    public void calculateDescriptor() {
 
         if (consultImage != null) {
             int tamanioGaleria = galleryImages.size();
@@ -439,7 +439,7 @@ public class ConsultFragment extends Fragment {
 
 
             int ini = 0;
-            int fin = 50;
+            int fin = 669;
             //    Log.d("Descriptor", "comienzo a calcular");
             for (int i = ini; i < (fin); i++) {
 
