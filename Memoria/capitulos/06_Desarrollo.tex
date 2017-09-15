@@ -157,7 +157,47 @@ Paquete en el que se encuentra todo lo relacionado con el cálculo de descriptor
 
 \subsection{Clases}
 
-Una vez que se ha terminado de hablar de los paquetes, es hora de hablar de cada clase individualmente. Al igual que en el caso anterior, lo haremos con cierto nivel de detalle, sin entrar en cuestiones demasiado técnicas.
+Una vez que se ha terminado de hablar de los paquetes, es hora de hablar de cada clase individualmente. Al igual que en el caso anterior, lo haremos con cierto nivel de detalle, sin entrar en cuestiones demasiado técnicas.\\
+
+Comenzaremos mostrando diagramas de clase, uno que muestre todas las clases y otro de las clases de cada paquete, para su mayor comprensión
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama1.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama1}
+\caption{Diagrama clase paquete Activity}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama2.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama2}
+\caption{Diagrama clase paquete Adapter}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama3.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama3}
+\caption{Diagrama clase paquete Fragment}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama4.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama4}
+\caption{Diagrama clase paquete Helper}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama5.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama5}
+\caption{Diagrama clase paquete JMR}
+\end{figure}
+
+Una vez vistos los distintos diagramas, es hora de hablar de cada clase.
+
 
 \subsubsection{MainActivity}
 
@@ -165,7 +205,7 @@ Es la única clase actividad, \textit{Activity}, del proyecto. Se encarga de ins
 
 \subsubsection{GalleryAdapter}
 
-Esta clase se encarga de \textit{hinchar}, \textit{inflate}, un fichero XML llamado gallery_thumbnail.xml, en el cuál se colocan las imágenes, una por cada instancia del fichero, y a su vez, se encarga de reenderizar las imágenes. Se puede decir, que esta clase se encarga de colocar todas las imágenes y nos permite interactuar con ellas a través de eventos.
+Esta clase se encarga de \textit{hinchar}, \textit{inflate}, un fichero XML llamado gallery\_thumbnail.xml, en el cuál se colocan las imágenes, una por cada instancia del fichero, y a su vez, se encarga de reenderizar las imágenes. Se puede decir, que esta clase se encarga de colocar todas las imágenes y nos permite interactuar con ellas a través de eventos.
 
 \subsubsection{ConsultFragment}
 
@@ -217,27 +257,204 @@ Dado que el descriptor \textit{MPEG7ColorStructure} necesita que la imagen en el
 
 Siempre que nos referimos a imagen, nos referimos a esta clase. Cuenta con todo lo necesario para garantizar que el consumo de memoria sea lo mínimo posible, como se ha comentado anteriormete. Simplemente guarda información sobre la imagen, pero no a la propia imagen. Esta información es utilizada a la hora de cargar la imagen, y de añadirle más nivel de detalle, tal que el número de la imagen respecto a las demás o su distancia a la imagen consulta, en caso de que se trate de una imagen resultado.
 
-\subsection{MPEG7ColorStructure}
+\subsubsection{MPEG7ColorStructure}
 
 Clase que representa al descriptor de mismo nombre y que utiliza el histograma de una imagen en espacio de color HMMD, que posteriormente se comparará con el resto de histogramas del resto de las imágenes para ver cuan parecidas son entre ellas.
 
-\subsection{ResultList}
+\subsubsection{ResultList}
 
-Extiende de \textit{
+Extiende de \textit{LinkedList}, en la cual se almacenaran los objetos de la clase \textit{ResultMetadata}.
 
+\subsubsection{ResultMetada}
 
+Clase parametrizable que representa el resultado de una descriptor. Contiene dos atributos que pueden ser de cualquier tipo, en este caso dichos atributos son de tipo \textit{String}, que representa la ruta o \textit{path} de la imagen y un \textit{Double}, que representa la distancia entre dos imágenes, como de parecidas son en un valor que va desde 0 a 1.\\
 
+A su vez implementa la interfaz \textit{Comparable}, de esta manera garantizamos de que se disponga de un método para comparar distintos \textit{ResultMetada}
 
+\subsubsection{SingleColorDescriptor}
 
+Representa al otro descriptor disponible en el proyecto. En este caso se calcula el color medio de una imagen en espacio de color RGB, recorriendo la imagen pixel a pixel.
 
+\subsection{Código nativo}
 
-Hablar de los disintos paquetes del proyecto. Aqui meter diagrama
+Como se ha comentado en la memoria, algunas partes del código han sido implementandas en código nativo utilizando \textit{Android nkd}. Solo ha sido implementado un poco del proyecto por dos razones:
 
-Hablar de las clases, que hacen y sus principales métodos. Aqui meter diagrama
+\begin{itemize}
+\item Carencia de tiempo y complejidad: Dado que he estado realizando prácticas a media jornada en una empresa y a la dificultad de encontrar la resolución a algunas dudas, me ha sido imposible aumentar la cantidad de código nativo del proyecto. Aunque, se va a tener muy en cuentra como trabajo futuro del proyecto.
 
-historias de usuario. 
+\item Malos resultados: En algunas ocasiones, al implementar algunas funciones sencillas en código nativo, se obtenían unos tiempos peores que empleando la misma función implementada en Java. Por lo que como trabajo futuro, se investigará el motivo con mas detalle. 
 
+\end{itemize} 
 
+\subsection{Historias de usuario}
 
+Cuando nos referimos a historias de usuario, nos refererimos a la representación de un requisito que se encuentra escrito en varias frases cortas, utilizando el lenguaje común del usuario.\\
 
+A continuación vamos a comentar las historias de usuario correspondientes a este proyecto.
 
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			1 & \multicolumn{2}{c}{Interacción con la interfaz} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra mover con libertad por los distintos menús diponibles en la interfaz.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{consulta} se muestra la interfaz asociada.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en el action button, este se despliega mostrando dos opciones, cámara y galería.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{ajustes} se muestra la interfaz asociada.} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{adicional} se muestra la interfaz asociada.} \\ 
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Interacción con la interfaz}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			2 & \multicolumn{2}{c}{Cargar imagen cámara} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra mover cargar la imagen consulta utilizando la cámara del dispositivo.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{cámara} del \textit{floating button}, se lanza la actividad cámara, pudiendo elegir la delantera o trasera en caso de que se diponga de ellas.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al tomar una fotografía esta se añade a la sección de imágenes consulta.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con esta nueva imagen.} \\ \hline
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Cargar imagen consulta cámara}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			3 & \multicolumn{2}{c}{Cargar imagen galería} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra mover cargar la imagen consulta utilizando la galería del dispositivo.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{galería} del \textit{floating button}, se lanza la galería.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al tomar seleccionar una imagen, esta se añade a la sección de imágenes consulta.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con esta nueva imagen.} \\ \hline
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Cargar imagen consulta galería}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			4 & \multicolumn{2}{c}{Realizar consulta} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra mover realizar una consulta usando una de las fotos consulta.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar durante unos segundos sobre una imagen esta se establece como la imagen consulta.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que solo una imagen puede ser seleccionada para su consulta al mismo tiempo.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con esta imagen seleccionada.} \\ \hline
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Realizar consulta}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			5 & \multicolumn{2}{c}{Cambiar de descriptor} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra cambiar el descriptor que se emplea durante las consultas.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre el descriptor deseado este queda maracado como activo.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que solo un descriptor puede ser seleccionado.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con este descriptor seleccionado.} \\ \hline
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Cambiar descriptor}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			6 & \multicolumn{2}{c}{Eliminar base de datos} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra eliminar la base de datos.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre la opción \textit{Eliminar BD} se lanza un desplegable para realizar la acción.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en aceptar, se notifica de que la BD ha sido eliminada.} \\
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Eliminar base de datos}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			7 & \multicolumn{2}{c}{Calcular base de datos} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra precalcular la base de datos para agilizar consultas.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre la opción \textit{Calcular BD} se lanza un diálogo sobre el proceso.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al realizar una consulta, el tiempo es menor que si no hubiese base de datos.} \\
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Calcular base de datos}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			8 & \multicolumn{2}{c}{Elegir número de imágenes} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra elegir el número de imágenes que serán consultadas.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre la opción \textit{Elegir número de imagenes} se lanza un desplegable permitiendonos elegir el número.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que el número de las imágenes resultado se corresponde con el establecido previamente.} \\
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Elegir número de imágenes}
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			9 & \multicolumn{2}{c}{Interactuar con las imágenes consulta} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra interactuar con las imágenes consulta.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que se puede realizar movimiento scroll de derecha a izquierda y viceversa sobre las imágenes consulta, siempre que haya las suficientes.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre una, esta se muestra a pantalla completa indicándonos la posición que ocupa respecto a las demás.} \\
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Interactuar con las imágenes consulta }
+	\label{tab:interaccion-interfaz}
+\end{table}
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular} {l|c|l}
+			\hline
+			10 & \multicolumn{2}{c}{Interactuar con las imágenes resultado} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Descripción} \\ \hline
+			\multicolumn{3}{p{12cm}}{Se podra interactuar con las imágenes resultado.} \\ \noalign{\hrule height 1pt}
+			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
+			\multicolumn{3}{p{12cm}}{ - Comprobar que se puede realizar movimiento scroll hacia arriba, hacia abajo y viceversa sobre las imágenes resultado, siempre que haya las suficientes.} \\
+			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre una, esta se muestra a pantalla completa indicándonos la posición que ocupa respecto a las demás, y la distancia respecto a la imagen consulta.} \\
+		\end{tabular}
+	\end{center}
+	\caption{Historia de usuario - Interactuar con las imágenes consulta}
+	\label{tab:interaccion-interfaz}
+\end{table}
