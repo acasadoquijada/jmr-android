@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android.helper;
+package com.jmr_android.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,13 +6,8 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.example.alejandro.jmr_android.fragment.ConsultFragment;
-
-import java.sql.Array;
-import java.sql.SQLRecoverableException;
-import java.util.Arrays;
+import com.jmr_android.fragment.ConsultFragment;
 
 /**
  * Created by alejandro on 08/09/2017.
@@ -27,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String VALUE = "value";
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME , null, 1);
+        super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
@@ -51,18 +46,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertValue (String imageName, double value) {
+    public boolean insertValue(String imageName, double value) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(IMAGE_PATH, imageName);
         contentValues.put(VALUE, value);
-       // Log.d("INSERTO", imageName);
+        // Log.d("INSERTO", imageName);
         db.insert(SINGLE_COLOR_TABLE_NAME, null, contentValues);
         db.insert(STRUCTURE_COLOR_TABLE_NAME, null, contentValues);
         return true;
     }
 
-    public boolean insertColorStructureHist(String imageName, int[] hist){
+    public boolean insertColorStructureHist(String imageName, int[] hist) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(IMAGE_PATH, imageName);
@@ -70,26 +65,26 @@ public class DBHelper extends SQLiteOpenHelper {
         String sHist = convertArrayToString(hist);
         contentValues.put("HIST", sHist);
 
-      //  Log.d("INSERTO", imageName);
+        //  Log.d("INSERTO", imageName);
         db.insert(STRUCTURE_COLOR_TABLE_NAME, null, contentValues);
         return true;
     }
 
-    public boolean insertSingleColorValues(String imageName, int[] values){
+    public boolean insertSingleColorValues(String imageName, int[] values) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(IMAGE_PATH, imageName);
         contentValues.put("RED", values[0]);
         contentValues.put("GREEN", values[1]);
         contentValues.put("BLUE", values[2]);
-     //   Log.d("INSERTO", imageName);
+        //   Log.d("INSERTO", imageName);
         db.insert(SINGLE_COLOR_TABLE_NAME, null, contentValues);
         return true;
     }
 
-    public int[] getData(String imageName, int active_descriptor){
+    public int[] getData(String imageName, int active_descriptor) {
 
-        switch (active_descriptor){
+        switch (active_descriptor) {
             case ConsultFragment.SINGLE_COLOR_DESCRIPTOR:
                 return getSingleColorData(imageName);
 
@@ -102,8 +97,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void setData(String imageName, int[] values, int active_descriptor){
-        switch (active_descriptor){
+    public void setData(String imageName, int[] values, int active_descriptor) {
+        switch (active_descriptor) {
             case ConsultFragment.SINGLE_COLOR_DESCRIPTOR:
                 insertSingleColorValues(imageName, values);
                 break;
@@ -117,38 +112,38 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public int[] getColorStructureHist(String imageName){
+    public int[] getColorStructureHist(String imageName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
         int hist[];
         String sHist;
 
-        cursor =  db.rawQuery
+        cursor = db.rawQuery
                 ("SELECT * FROM " + STRUCTURE_COLOR_TABLE_NAME + " WHERE " +
-                        IMAGE_PATH +" = '"+imageName+"'", null);
+                        IMAGE_PATH + " = '" + imageName + "'", null);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             sHist = cursor.getString(cursor.getColumnIndex("HIST"));
 
             hist = convertStringToArray(sHist);
 
-          //  Log.d("hist size",Integer.toString(hist.length));
+            //  Log.d("hist size",Integer.toString(hist.length));
             return hist;
         }
 
         return null;
     }
 
-    public int[] getSingleColorData(String imageName){
+    public int[] getSingleColorData(String imageName) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
-        int hist[] = {-1,-1,-1};
+        int hist[] = {-1, -1, -1};
 
-        cursor =  db.rawQuery
-                ("SELECT * FROM " + SINGLE_COLOR_TABLE_NAME  + " WHERE " +
-                        IMAGE_PATH +" = '"+imageName+"'", null);
+        cursor = db.rawQuery
+                ("SELECT * FROM " + SINGLE_COLOR_TABLE_NAME + " WHERE " +
+                        IMAGE_PATH + " = '" + imageName + "'", null);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             hist[0] = cursor.getInt(cursor.getColumnIndex("RED"));
             hist[1] = cursor.getInt(cursor.getColumnIndex("GREEN"));
             hist[2] = cursor.getInt(cursor.getColumnIndex("BLUE"));
@@ -158,10 +153,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public int numberOfRows(String database){
+    public int numberOfRows(String database) {
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows;
-        switch (database){
+        switch (database) {
             case SINGLE_COLOR_TABLE_NAME:
                 numRows = (int) DatabaseUtils.queryNumEntries(db, SINGLE_COLOR_TABLE_NAME);
                 break;
@@ -181,12 +176,12 @@ public class DBHelper extends SQLiteOpenHelper {
         double value = -1;
         switch (database) {
             case SINGLE_COLOR_TABLE_NAME:
-                cursor =  db.rawQuery
+                cursor = db.rawQuery
                         ("SELECT * FROM " + SINGLE_COLOR_TABLE_NAME + " WHERE " +
-                                IMAGE_PATH +" = '"+imageName+"'", null);
-                if (cursor.moveToFirst()){
+                                IMAGE_PATH + " = '" + imageName + "'", null);
+                if (cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(VALUE);
-                  //  Log.d("INDEX",Integer.toString(index));
+                    //  Log.d("INDEX",Integer.toString(index));
                     value = cursor.getDouble(index);
                     return value;
                 }
@@ -194,12 +189,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 break;
 
             case STRUCTURE_COLOR_TABLE_NAME:
-                cursor =  db.rawQuery
+                cursor = db.rawQuery
                         ("SELECT * FROM " + STRUCTURE_COLOR_TABLE_NAME + " WHERE " +
-                                IMAGE_PATH +" = '"+imageName+"'", null);
-                if (cursor.moveToFirst()){
+                                IMAGE_PATH + " = '" + imageName + "'", null);
+                if (cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(VALUE);
-                   // Log.d("INDEX",Integer.toString(index));
+                    // Log.d("INDEX",Integer.toString(index));
                     value = cursor.getDouble(index);
                     return value;
                 }
@@ -211,29 +206,29 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static String strSeparator = "__,__";
 
-    public static String convertArrayToString(int[] arrayInt){
+    public static String convertArrayToString(int[] arrayInt) {
 
         String string = "";
-        for(int i = 0; i < arrayInt.length; i++){
+        for (int i = 0; i < arrayInt.length; i++) {
             int v = arrayInt[i];
             String vString = Integer.toString(v);
             string = string + vString;
 
-            if(i<arrayInt.length-1){
-                string = string+strSeparator;
+            if (i < arrayInt.length - 1) {
+                string = string + strSeparator;
             }
         }
         return string;
     }
 
-    public static int[] convertStringToArray(String str){
+    public static int[] convertStringToArray(String str) {
         String[] arr = str.split(strSeparator);
 
         int[] integerArray = new int[arr.length];
 
-        for(int i = 0; i < integerArray.length; i++){
+        for (int i = 0; i < integerArray.length; i++) {
             integerArray[i] = Integer.valueOf(arr[i]);
-           // Log.d("INT",Integer.toString(integerArray[i]));
+            // Log.d("INT",Integer.toString(integerArray[i]));
         }
 
         return integerArray;

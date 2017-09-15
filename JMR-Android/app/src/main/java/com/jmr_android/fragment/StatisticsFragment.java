@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android.fragment;
+package com.jmr_android.fragment;
 
 /**
  * Created by alejandro on 03/09/2017.

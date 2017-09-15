@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android.fragment;
+package com.jmr_android.fragment;
 
 /**
  * Created by alejandro on 02/09/2017.
@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.alejandro.jmr_android.R;
-import com.example.alejandro.jmr_android.jmr.JMRImage;
+import com.jmr_android.jmr.JMRImage;
 
 import java.util.ArrayList;
 

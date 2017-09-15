@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android.helper;
+package com.jmr_android.helper;
 
 /**
  * Created by alejandro on 28/08/2017.

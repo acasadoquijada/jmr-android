@@ -1,23 +1,18 @@
-package com.example.alejandro.jmr_android.jmr;
+package com.jmr_android.jmr;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.util.Log;
-
-import com.example.alejandro.jmr_android.HMMDImage;
 
 /**
  * Created by alejandro on 06/09/2017.
  */
 
-public class MPEG7ColorStructure implements MediaDescriptor{
+public class MPEG7ColorStructure{
     /**
      * The source media of this descriptor
      */
-  //  protected transient BufferedImage source = null;
+    //  protected transient BufferedImage source = null;
     protected transient Bitmap source = null;
     /**
-
      * Quantization Level of the HMMD ColorSpace
      */
     protected int qLevels = 256;
@@ -63,7 +58,7 @@ public class MPEG7ColorStructure implements MediaDescriptor{
      * Constructs a new color structure descriptor and initializes it from the
      * image given by parameter
      *
-     * @param image the source image
+     * @param image   the source image
      * @param qLevels the number of levels associated to this descriptor
      */
     public MPEG7ColorStructure(Bitmap image, int qLevels) {
@@ -71,7 +66,7 @@ public class MPEG7ColorStructure implements MediaDescriptor{
         this.init(image, qLevels);
     }
 
-    public MPEG7ColorStructure(int[] h){
+    public MPEG7ColorStructure(int[] h) {
         this.histo = h;
         qLevels = DEFAULT_NUM_LEVELS;
     }
@@ -86,7 +81,7 @@ public class MPEG7ColorStructure implements MediaDescriptor{
 
     public native int quantFuncC(double x);
 
-    public int[] getHisto(){
+    public int[] getHisto() {
         return histo;
     }
 
@@ -118,17 +113,17 @@ public class MPEG7ColorStructure implements MediaDescriptor{
         this.histo = reQuantization(histo);
     }
 
-  /*  private native byte[][] quantHMMDImageC(
-            float[][][] imSrc,
-            float[][][] quantizationTable ,
-            int offset,
-            int height,
-            int width,
-            int hue,
-            int max,
-            int min,
-            int diff);
-*/
+    /*  private native byte[][] quantHMMDImageC(
+              float[][][] imSrc,
+              float[][][] quantizationTable ,
+              int offset,
+              int height,
+              int width,
+              int hue,
+              int max,
+              int min,
+              int diff);
+  */
     private byte[][] quantHMMDImage(HMMDImage imSrc) {
         //Source image variable
         int wImg = imSrc.getWidth();
@@ -141,7 +136,7 @@ public class MPEG7ColorStructure implements MediaDescriptor{
         int[] startSubSpacePos = getStartSubspacePos();
         for (int y = 0; y < hImg; y++) {
             for (int x = 0; x < wImg; x++) {
-                pix = imSrc.getPixel(x,y);
+                pix = imSrc.getPixel(x, y);
                 //imRst.getPixel(x, y, pix);
                 //Define the subspace along the Diff axis
                 subspace = getSubspace(pix[DIFF]);
@@ -169,33 +164,27 @@ public class MPEG7ColorStructure implements MediaDescriptor{
 
 
     public void init(Bitmap image) {
-        init(image,DEFAULT_NUM_LEVELS);
+        init(image, DEFAULT_NUM_LEVELS);
     }
 
     private int getSubspace(float diff) {
         if (diff < 7f / 255f) {
             return 0;
-        }
-        else if (diff < 21f / 255f) {
+        } else if (diff < 21f / 255f) {
             return 1;
-        }
-        else if (diff < 61f / 255f) {
+        } else if (diff < 61f / 255f) {
             return 2;
-        }
-        else if (diff < 111f / 255f) {
+        } else if (diff < 111f / 255f) {
             return 3;
-        }
-        else {
+        } else {
             return 4;
         }
     }
 
-    private native float[] structureHistoC(byte[][] imQ, int wImg, int hImg, int qLevels);
-
     private float[] structuredHisto(byte[][] imQ, int wImg, int hImg) {
 
 
-         int m = 0;
+        int m = 0;
         double hw = Math.sqrt(hImg * wImg);
         double p = Math.floor(Math.log(hw) / Math.log(2) - 7.5); //Formula by Manjunath2002
         if (p < 0) {
@@ -250,9 +239,6 @@ public class MPEG7ColorStructure implements MediaDescriptor{
         return uniformCSD;
     }
 
-    public int quantFunc(double x) {
-        return quantFuncC(x);
-    }
 
     private static int[] resizeCSD(MPEG7ColorStructure c, int qSizeDst) {
         int qSizeSrc = c.getQuantLevels();
@@ -283,7 +269,7 @@ public class MPEG7ColorStructure implements MediaDescriptor{
                 hueBinDst = QUANTIZATION_TABLE[offsetDst][sVal][0] * (hueBinSrc / QUANTIZATION_TABLE[offsetSrc][sVal][0]);
                 sumBinDst = QUANTIZATION_TABLE[offsetDst][sVal][1] * (sumBinSrc / QUANTIZATION_TABLE[offsetSrc][sVal][1]);
                 //Then compute find the exact position in the destination histogram and increment
-                tmp = subStartPosDst[sVal]  + QUANTIZATION_TABLE[offsetDst][sVal][0] * (int) sumBinDst + (int) hueBinDst;
+                tmp = subStartPosDst[sVal] + QUANTIZATION_TABLE[offsetDst][sVal][0] * (int) sumBinDst + (int) hueBinDst;
                 dstHisto[tmp] += srcHisto[i];
             }
         }
@@ -306,7 +292,7 @@ public class MPEG7ColorStructure implements MediaDescriptor{
             f1 = resizeCSD(this, mpeg7ColorStructure.qLevels);
             f2 = mpeg7ColorStructure.histo;
         }
-       // Log.d("size f1 f2",Integer.toString(f1.length) +  " " + Integer.toString(f2.length));
+        // Log.d("size f1 f2",Integer.toString(f1.length) +  " " + Integer.toString(f2.length));
         Double distance = 0.0;
         for (int i = 0; i < f1.length; i++) {
             distance += Math.abs(f1[i] - f2[i]);
@@ -320,9 +306,6 @@ public class MPEG7ColorStructure implements MediaDescriptor{
         return qLevels;
     }
 
-    private static native int[] getStartSubspacePosC(
-            int offset,
-            int[] quantArray);
 
     private int[] getStartSubspacePos() {
         return getStartSubspacePos(this.offset);

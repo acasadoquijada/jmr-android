@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android.adapter;
+package com.jmr_android.adapter;
 
 /**
  * Created by alejandro on 28/08/2017.
@@ -13,10 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.jmr_android.jmr.JMRImage;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.alejandro.jmr_android.R;
-import com.example.alejandro.jmr_android.jmr.JMRImage;
 
 import java.util.List;
 

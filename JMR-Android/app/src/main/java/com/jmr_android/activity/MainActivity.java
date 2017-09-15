@@ -1,28 +1,15 @@
-package com.example.alejandro.jmr_android.activity;
+package com.jmr_android.activity;
 
-import java.util.ArrayList;
-
-import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.example.alejandro.jmr_android.Gallery;
-import com.example.alejandro.jmr_android.fragment.ConsultFragment;
+import com.jmr_android.fragment.ConsultFragment;
 import com.example.alejandro.jmr_android.R;
-import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
-import com.example.alejandro.jmr_android.fragment.SettingsFragment;
-import com.example.alejandro.jmr_android.fragment.StatisticsFragment;
-import com.example.alejandro.jmr_android.jmr.JMRImage;
-import com.example.alejandro.jmr_android.jmr.ResultList;
-import com.example.alejandro.jmr_android.jmr.ResultMetadata;
+import com.jmr_android.fragment.SettingsFragment;
 
 import it.sephiroth.android.library.bottomnavigation.BottomNavigation;
 
@@ -33,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private SettingsFragment settingsFragment;
 
     private boolean isConsultFragment;
-
-
 
 
     @Override
@@ -50,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        bottomNavigation = (BottomNavigation)findViewById(R.id.BottomNavigation);
+        bottomNavigation = (BottomNavigation) findViewById(R.id.BottomNavigation);
 
         bottomNavigation.setOnMenuItemClickListener(new BottomNavigation.OnMenuItemSelectionListener() {
             @Override
@@ -58,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 clearBackStack();
-                switch (i1){
+                switch (i1) {
 
                     case 0:
                         Log.d("ESTOY", "1");
@@ -67,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                         transaction.addToBackStack("a");
                         transaction.commit();
 
-                        if(isConsultFragment){
+                        if (isConsultFragment) {
                             Log.d("ESTOY", "CAL");
                         }
                         isConsultFragment = true;
@@ -76,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                         Log.d("ESTOY", "2");
 
-                        transaction.replace(R.id.main_fragment,settingsFragment,"A");
+                        transaction.replace(R.id.main_fragment, settingsFragment, "A");
                         transaction.addToBackStack("b");
                         transaction.commit();
                         isConsultFragment = false;
@@ -93,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
             public void onMenuItemReselect(@IdRes int i, int i1, boolean b) {
                 // Do something
 
-                if(i1 == 0){
-                    consultFragment.calcularDescriptor();
+                if (i1 == 0) {
+                    consultFragment.calculateDescriptor();
                 }
             }
         });
@@ -107,23 +92,21 @@ public class MainActivity extends AppCompatActivity {
     private void clearBackStack() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         while (fragmentManager.getBackStackEntryCount() != 0) {
-            Log.d("LIMMPIO","LIMPIO");
+            Log.d("LIMMPIO", "LIMPIO");
             fragmentManager.popBackStackImmediate();
         }
     }
 
-    public void setActiveDescriptor(int descriptor){
+    public void setActiveDescriptor(int descriptor) {
 
-        if(descriptor == ConsultFragment.MPEG7_COLOR_STRUCTURE ||
+        if (descriptor == ConsultFragment.MPEG7_COLOR_STRUCTURE ||
                 descriptor == ConsultFragment.SINGLE_COLOR_DESCRIPTOR) {
 
             consultFragment.setActiveDescriptor(descriptor);
-        }
-        else{
+        } else {
             Log.e("Descriptor", "descriptor erroneo");
         }
     }
-
 
 
 }

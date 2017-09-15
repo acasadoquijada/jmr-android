@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android.fragment;
+package com.jmr_android.fragment;
 
 /**
  * Created by alejandro on 03/09/2017.
@@ -27,20 +27,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.alejandro.jmr_android.Gallery;
+import com.jmr_android.activity.MainActivity;
+import com.jmr_android.adapter.GalleryAdapter;
+import com.jmr_android.helper.DBHelper;
+import com.jmr_android.helper.GalleryHelper;
+import com.jmr_android.helper.RealPathUtil;
+import com.jmr_android.helper.SquareLayout;
+import com.jmr_android.helper.Utility;
+import com.jmr_android.jmr.JMRImage;
+import com.jmr_android.jmr.MPEG7ColorStructure;
+import com.jmr_android.jmr.MediaDescriptor;
+import com.jmr_android.jmr.ResultList;
+import com.jmr_android.jmr.ResultMetadata;
+import com.jmr_android.jmr.SingleColorDescription;
 import com.example.alejandro.jmr_android.R;
-import com.example.alejandro.jmr_android.RealPathUtil;
-import com.example.alejandro.jmr_android.Utility;
-import com.example.alejandro.jmr_android.activity.MainActivity;
-import com.example.alejandro.jmr_android.adapter.GalleryAdapter;
-import com.example.alejandro.jmr_android.helper.DBHelper;
-import com.example.alejandro.jmr_android.helper.SquareLayout;
-import com.example.alejandro.jmr_android.jmr.JMRImage;
-import com.example.alejandro.jmr_android.jmr.MPEG7ColorStructure;
-import com.example.alejandro.jmr_android.jmr.MediaDescriptor;
-import com.example.alejandro.jmr_android.jmr.ResultList;
-import com.example.alejandro.jmr_android.jmr.ResultMetadata;
-import com.example.alejandro.jmr_android.jmr.SingleColorDescription;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -50,7 +50,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
@@ -61,21 +60,19 @@ public class ConsultFragment extends Fragment {
     private static final int FILE_REQUEST = 2888;
     public static final int SINGLE_COLOR_DESCRIPTOR = 0;
     public static final int MPEG7_COLOR_STRUCTURE = 1;
-    private int active_descriptor;
-    private Gallery galleryImages;
+    private int activeDescriptor;
+    private GalleryHelper galleryImages;
     private JMRImage consultImage;
     private ResultList<ResultMetadata> resultMetadatas;
     private ArrayList<JMRImage> resultImages, consultImages;
     private ArrayList<MediaDescriptor> descriptors;
     private SingleColorDescription singleColorDescription;
     private MPEG7ColorStructure mpeg7ColorStructure;
-    private ProgressDialog pDialog;
     private GalleryAdapter resultAdapter, consultAdapter;
     private RecyclerView recyclerViewResult, recyclerViewConsult;
-    private FloatingActionButton fab_camera, fab_gallery;
+    private FloatingActionButton fabCamera, fabGallery;
     private FloatingActionMenu floatingActionMenu;
     private Uri mImageUri;
-    private ProgressDialog dialog;
     private DBHelper descriptorBD;
 
 
@@ -89,11 +86,10 @@ public class ConsultFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         boolean result = Utility.checkPermission(getContext());
-        if(result) {
-            galleryImages = new Gallery(getActivity());
+        if (result) {
+            galleryImages = new GalleryHelper(getActivity());
         }
-        active_descriptor = SINGLE_COLOR_DESCRIPTOR;
-        pDialog = new ProgressDialog(getContext());
+        activeDescriptor = SINGLE_COLOR_DESCRIPTOR;
         getContext().deleteDatabase(DBHelper.DATABASE_NAME);
         descriptorBD = new DBHelper(getContext());
 
@@ -101,8 +97,8 @@ public class ConsultFragment extends Fragment {
         SingleColorDescription singleColorDescription = null;
         MPEG7ColorStructure mpeg7ColorStructure = null;
 
-        descriptors.add((MediaDescriptor)singleColorDescription);
-        descriptors.add((MediaDescriptor)mpeg7ColorStructure);
+        descriptors.add((MediaDescriptor) singleColorDescription);
+        descriptors.add((MediaDescriptor) mpeg7ColorStructure);
 
         resultImages = new ArrayList<>();
         consultImages = new ArrayList<>();
@@ -122,9 +118,9 @@ public class ConsultFragment extends Fragment {
         initConsultImageView();
         initResultImagesView();
 
-        floatingActionMenu = (FloatingActionMenu)getView().findViewById(R.id.fab);
-        fab_camera = (FloatingActionButton) getView().findViewById(R.id.menu_item_camera);
-        fab_gallery = (FloatingActionButton) getView().findViewById(R.id.menu_item_gallery);
+        floatingActionMenu = (FloatingActionMenu) getView().findViewById(R.id.fab);
+        fabCamera = (FloatingActionButton) getView().findViewById(R.id.menu_item_camera);
+        fabGallery = (FloatingActionButton) getView().findViewById(R.id.menu_item_gallery);
 
         floatingCameraButtonBehaviour();
         floatingGalleryButtonBehaviour();
@@ -132,20 +128,18 @@ public class ConsultFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void floatingCameraButtonBehaviour(){
-        if(fab_camera != null){
-            fab_camera.setOnClickListener(new View.OnClickListener() {
+    private void floatingCameraButtonBehaviour() {
+        if (fabCamera != null) {
+            fabCamera.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
                     boolean result = Utility.checkPermission(getContext());
-                    if(result){
+                    if (result) {
                         cameraIntent();
-                    }
-
-                    else{
-                        Log.d("PERMISOS","DENEGADO");
+                    } else {
+                        Log.d("PERMISOS", "DENEGADO");
                     }
                     floatingActionMenu.close(false);
                 }
@@ -153,14 +147,14 @@ public class ConsultFragment extends Fragment {
         }
     }
 
-    private void floatingGalleryButtonBehaviour(){
-        if(fab_gallery != null){
-            fab_gallery.setOnClickListener(new View.OnClickListener() {
+    private void floatingGalleryButtonBehaviour() {
+        if (fabGallery != null) {
+            fabGallery.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     boolean result = Utility.checkPermission(getContext());
-                    if(result){
+                    if (result) {
                         galleryIntent();
                     }
                     floatingActionMenu.close(false);
@@ -183,8 +177,8 @@ public class ConsultFragment extends Fragment {
         try {
             photo = this.createTemporaryFile("picture", ".jpg");
             photo.delete();
-        } catch(Exception e) {
-            Log.w("cameraIntent exception ",e.toString());
+        } catch (Exception e) {
+            Log.w("cameraIntent exception ", e.toString());
         }
 
         mImageUri = Uri.fromFile(photo);
@@ -199,12 +193,12 @@ public class ConsultFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST)
                 onCaptureImageResult(data);
-            else if(requestCode == FILE_REQUEST)
+            else if (requestCode == FILE_REQUEST)
                 onSelectFromGalleryResult(data);
         }
     }
 
-    private void onSelectFromGalleryResult(Intent data){
+    private void onSelectFromGalleryResult(Intent data) {
         if (data != null) {
             String realPath;
 
@@ -212,8 +206,7 @@ public class ConsultFragment extends Fragment {
                 realPath = RealPathUtil.getRealPathFromURI_BelowAPI11(getContext(), data.getData());
             } else if (Build.VERSION.SDK_INT < 19) {
                 realPath = RealPathUtil.getRealPathFromURI_API11to18(getContext(), data.getData());
-            }
-            else {
+            } else {
                 realPath = RealPathUtil.getRealPathFromURI_API19(getContext(), data.getData());
             }
             Log.d("PATH galeria", realPath);
@@ -259,20 +252,20 @@ public class ConsultFragment extends Fragment {
         addConsultImage(path);
     }
 
-    public void colocarImagenesResultado(){
+    private void colocarImagenesResultado() {
 
-        Log.d("COLOCANDO","RESULTADOS");
+        Log.d("COLOCANDO", "RESULTADOS");
 
-        if(resultImages.size() > 0){
+        if (resultImages.size() > 0) {
             resultImages.clear();
         }
 
-        for(int i = 1; i < resultMetadatas.size(); i++) {
+        for (int i = 1; i < resultMetadatas.size(); i++) {
             JMRImage JMRImage = new JMRImage();
 
             JMRImage.setName("Imagen resultado " + Integer.toString(i));
-            JMRImage.setPath((String)(resultMetadatas.get(i).getMetadata()));
-            Double distance = (Double)(resultMetadatas.get(i).getResult());
+            JMRImage.setPath((String) (resultMetadatas.get(i).getMetadata()));
+            Double distance = (Double) (resultMetadatas.get(i).getResult());
             JMRImage.setDistance(Double.toString(distance));
 
             resultImages.add(JMRImage);
@@ -284,9 +277,9 @@ public class ConsultFragment extends Fragment {
         Log.d("CONSULT IMAGE SIZE", Integer.toString(consultImages.size()));
     }
 
-    private void addConsultImage(String path){
+    private void addConsultImage(String path) {
         JMRImage jmrImage = new JMRImage();
-        jmrImage.setName("Imagen consulta " + Integer.toString(consultImages.size()+1));
+        jmrImage.setName("Imagen consulta " + Integer.toString(consultImages.size() + 1));
         jmrImage.setPath(path);
         consultImages.add(jmrImage);
 
@@ -370,17 +363,16 @@ public class ConsultFragment extends Fragment {
                             @Override
                             public void onLongClick(View view, int position) {
                                 SquareLayout squareLayout = (SquareLayout) view;
-                            //    Log.d("Soy la imagen",Integer.toString(position));
+                                //    Log.d("Soy la imagen",Integer.toString(position));
 
                                 ImageView imageIconSelected = (ImageView)
                                         squareLayout.findViewById(R.id.selectedIcon);
 
                                 int visibility = imageIconSelected.getVisibility();
 
-                                if(visibility == ImageView.INVISIBLE){
+                                if (visibility == ImageView.INVISIBLE) {
                                     imageIconSelected.setVisibility(ImageView.VISIBLE);
-                                }
-                                else if(visibility == ImageView.VISIBLE){
+                                } else if (visibility == ImageView.VISIBLE) {
                                     imageIconSelected.setVisibility(ImageView.INVISIBLE);
                                 }
                             }
@@ -400,9 +392,9 @@ public class ConsultFragment extends Fragment {
         }
     }
 
-    public void calcularDescriptor(){
+    private void calculateDescriptor() {
 
-        if(consultImage != null){
+        if (consultImage != null) {
             int tamanioGaleria = galleryImages.size();
 
             long startTime = System.currentTimeMillis();
@@ -410,12 +402,12 @@ public class ConsultFragment extends Fragment {
             double distance = 0.00;
 
             Bitmap image = null;
-            if(descriptorBD.getData(
-                    consultImage.getPath(),active_descriptor) != null){
+            if (descriptorBD.getData(
+                    consultImage.getPath(), activeDescriptor) != null) {
 
-                int [] value = descriptorBD.getData(consultImage.getPath(), active_descriptor);
+                int[] value = descriptorBD.getData(consultImage.getPath(), activeDescriptor);
 
-                switch (active_descriptor){
+                switch (activeDescriptor) {
                     case SINGLE_COLOR_DESCRIPTOR:
                         singleColorDescription = new SingleColorDescription(value);
                         break;
@@ -423,12 +415,11 @@ public class ConsultFragment extends Fragment {
                         mpeg7ColorStructure = new MPEG7ColorStructure(value);
                         break;
                 }
-            }
-            else {
+            } else {
                 image = galleryImages.getImagen(consultImage.getPath());
 
                 int[] values = null;
-                switch (active_descriptor){
+                switch (activeDescriptor) {
                     case SINGLE_COLOR_DESCRIPTOR:
                         singleColorDescription = new SingleColorDescription(image);
                         values = singleColorDescription.getColor();
@@ -439,21 +430,21 @@ public class ConsultFragment extends Fragment {
                         break;
                 }
 
-                descriptorBD.setData(consultImage.getPath(),values,active_descriptor);
+                descriptorBD.setData(consultImage.getPath(), values, activeDescriptor);
             }
 
-            if(resultMetadatas.size() > 0){
+            if (resultMetadatas.size() > 0) {
                 resultMetadatas.clear();
             }
 
 
             int ini = 0;
             int fin = 50;
-        //    Log.d("Descriptor", "comienzo a calcular");
-            for(int i = ini; i < (fin); i++){
+            //    Log.d("Descriptor", "comienzo a calcular");
+            for (int i = ini; i < (fin); i++) {
 
                 Log.d("Descriptor: ", "imagen " + Integer.toString(i));
-               // Log.d("Path", galleryImages.getImageURI(i));
+                // Log.d("Path", galleryImages.getImageURI(i));
 
                 Bitmap img = galleryImages.getImagen(i);
 
@@ -462,16 +453,16 @@ public class ConsultFragment extends Fragment {
                 SingleColorDescription singleColorDescriptionConsult = null;
                 MPEG7ColorStructure mpeg7ColorStructureConsult = null;
 
-                if(img != null){
+                if (img != null) {
                     String imagePath = galleryImages.getImageURI(i);
 
-                    if(descriptorBD.getData(
-                            imagePath,active_descriptor) != null){
+                    if (descriptorBD.getData(
+                            imagePath, activeDescriptor) != null) {
                         //   Log.d("AQUI","AQUI");
 
-                        int [] value = descriptorBD.getData(imagePath, active_descriptor);
+                        int[] value = descriptorBD.getData(imagePath, activeDescriptor);
 
-                        switch (active_descriptor){
+                        switch (activeDescriptor) {
                             case SINGLE_COLOR_DESCRIPTOR:
                                 singleColorDescriptionConsult = new SingleColorDescription(value);
                                 break;
@@ -480,12 +471,11 @@ public class ConsultFragment extends Fragment {
                                 break;
                         }
 
-                    }
-                    else {
+                    } else {
                         image = galleryImages.getImagen(imagePath);
 
                         int[] values = null;
-                        switch (active_descriptor){
+                        switch (activeDescriptor) {
                             case SINGLE_COLOR_DESCRIPTOR:
                                 singleColorDescriptionConsult = new SingleColorDescription(image);
                                 values = singleColorDescriptionConsult.getColor();
@@ -496,10 +486,10 @@ public class ConsultFragment extends Fragment {
                                 break;
                         }
 
-                        descriptorBD.setData(imagePath,values,active_descriptor);
+                        descriptorBD.setData(imagePath, values, activeDescriptor);
                     }
 
-                    switch (active_descriptor){
+                    switch (activeDescriptor) {
                         case SINGLE_COLOR_DESCRIPTOR:
                             distance = singleColorDescriptionConsult.compare
                                     (singleColorDescription);
@@ -528,7 +518,7 @@ public class ConsultFragment extends Fragment {
                             TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(MethodeDuration))
             );
 
-            Log.d("Tiempo descriptor", formatTime );
+            Log.d("Tiempo descriptor", formatTime);
             normalizeResult();
 
             for (int i = 1; i < resultMetadatas.size(); i++) {
@@ -545,10 +535,9 @@ public class ConsultFragment extends Fragment {
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception {
-        File tempDir= Environment.getExternalStorageDirectory();
-        tempDir=new File(tempDir.getAbsolutePath()+"/.temp/");
-        if(!tempDir.exists())
-        {
+        File tempDir = Environment.getExternalStorageDirectory();
+        tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+        if (!tempDir.exists()) {
             tempDir.mkdirs();
         }
         return File.createTempFile(part, ext, tempDir);
@@ -576,8 +565,8 @@ public class ConsultFragment extends Fragment {
         }
     }
 
-    public void setActiveDescriptor(int descriptor){
-        active_descriptor = descriptor;
+    public void setActiveDescriptor(int descriptor) {
+        activeDescriptor = descriptor;
     }
 
 }

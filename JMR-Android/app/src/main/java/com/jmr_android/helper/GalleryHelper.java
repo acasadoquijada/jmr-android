@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android;
+package com.jmr_android.helper;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -7,18 +7,16 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import com.example.alejandro.jmr_android.jmr.JMRImage;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Gallery {
+public class GalleryHelper {
 
     private ArrayList<String> images;
     private Activity activity;
 
-    public Gallery(Activity activity){
+    public GalleryHelper(Activity activity) {
 
         this.activity = activity;
         this.images = new ArrayList<>();
@@ -27,7 +25,7 @@ public class Gallery {
         Collections.reverse(this.images);
     }
 
-    public Gallery(Activity activity, boolean debug) {
+    public GalleryHelper(Activity activity, boolean debug) {
         if (debug) {
             this.activity = activity;
             this.images = new ArrayList<>();
@@ -51,23 +49,22 @@ public class Gallery {
         }
     }
 
-    public Bitmap getImagen(String path){
+    public Bitmap getImagen(String path) {
 
         Bitmap image = null;
-        if(images.contains(path)){
+        if (images.contains(path)) {
             int index = images.indexOf(path);
             image = this.getImagen(index);
 
             return image;
-        }
-        else{
+        } else {
             return image;
         }
 
     }
 
-    public Bitmap getImagen(int index){
-        Bitmap imagen=null;
+    public Bitmap getImagen(int index) {
+        Bitmap imagen = null;
         try {
             imagen = MediaStore.Images.Media.getBitmap(
                     this.activity.getApplicationContext().getContentResolver(),
@@ -76,26 +73,28 @@ public class Gallery {
             e.printStackTrace();
         }
 
-        if(imagen != null){
-            Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen,32,32,true);
+        if (imagen != null) {
+            Bitmap imagenReescalada = Bitmap.createScaledBitmap(imagen, 32, 32, true);
             return imagenReescalada;
         }
         return null;
     }
 
-    public String getImageURI(int index){
+    public String getImageURI(int index) {
         return images.get(index);
     }
 
-    public void addImage(String path){
-        if(path != null){
+    public void addImage(String path) {
+        if (path != null) {
             images.add(path);
         }
     }
 
-    public ArrayList<String> getAllImagesURI(){ return images;}
+    public ArrayList<String> getAllImagesURI() {
+        return images;
+    }
 
-    private void getGalleryImages(){
+    private void getGalleryImages() {
         Uri uri;
         Cursor cursor;
         int column_index_data, column_index_folder_name;
@@ -103,8 +102,8 @@ public class Gallery {
         String absolutePathOfImage = null;
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        String[] projection = { MediaStore.MediaColumns.DATA,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
+        String[] projection = {MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME};
 
         cursor = activity.getContentResolver().query(uri, projection, null,
                 null, null);
@@ -123,7 +122,7 @@ public class Gallery {
         }
     }
 
-    public int size(){
+    public int size() {
         return images.size();
     }
 }

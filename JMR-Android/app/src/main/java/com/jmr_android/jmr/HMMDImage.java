@@ -1,4 +1,4 @@
-package com.example.alejandro.jmr_android;
+package com.jmr_android.jmr;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -33,9 +33,9 @@ public class HMMDImage {
                 auxRgbVec[1] = Color.green(c);
                 auxRgbVec[2] = Color.blue(c);
 
-                rgbVec[0] = (auxRgbVec[0]*1.0f)/255;
-                rgbVec[1] = (auxRgbVec[1]*1.0f)/255;
-                rgbVec[2] = (auxRgbVec[2]*1.0f)/255;
+                rgbVec[0] = (auxRgbVec[0] * 1.0f) / 255;
+                rgbVec[1] = (auxRgbVec[1] * 1.0f) / 255;
+                rgbVec[2] = (auxRgbVec[2] * 1.0f) / 255;
 
                 image[x][y] = fromRGB(rgbVec);
             }
@@ -46,19 +46,19 @@ public class HMMDImage {
         System.loadLibrary("descriptor");
     }
 
-    public void getHeight(int heigth){
+    public void getHeight(int heigth) {
         this.height = heigth;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
     }
 
-    public void setWidth(int width){
+    public void setWidth(int width) {
         this.width = width;
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return width;
     }
 
@@ -123,7 +123,7 @@ public class HMMDImage {
                         + Float.toString(getPixel(x, y)[2]) + " "
                         + Float.toString(getPixel(x, y)[3]);
 
-              //  Log.d("Pixel " + Integer.toString(x) + "," + Integer.toString(y), pixelString);
+                //  Log.d("Pixel " + Integer.toString(x) + "," + Integer.toString(y), pixelString);
             }
 
         }
