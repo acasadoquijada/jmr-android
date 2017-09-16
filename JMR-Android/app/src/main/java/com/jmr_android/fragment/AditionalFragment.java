@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 
 import com.example.alejandro.jmr_android.R;
 
-public class StatisticsFragment extends Fragment {
-    public static StatisticsFragment newInstance() {
-        StatisticsFragment fragment = new StatisticsFragment();
+public class AditionalFragment extends Fragment {
+    public static AditionalFragment newInstance() {
+        AditionalFragment fragment = new AditionalFragment();
         return fragment;
     }
 

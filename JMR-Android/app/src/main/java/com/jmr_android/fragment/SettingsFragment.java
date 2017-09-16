@@ -10,7 +10,9 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.alejandro.jmr_android.R;
@@ -31,10 +33,26 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     private Preference myPref = (Preference) findPreference("myKey");
     private ListPreference mListPreference;
+    private int previousImageNumber = 200;
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.settings);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString("imagesNumber", "50");
+
+        editor.apply();
+
+    }
+
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.settings, rootKey);
+       // setPreferencesFromResource(R.xml.settings, rootKey);
     }
 
     @Override
@@ -45,6 +63,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
         CheckBoxPreference structureColorDescriptorButton = (CheckBoxPreference)
                 findPreference("structureColor");
+
+        EditTextPreference editTextPreferenceImages = (EditTextPreference)
+                findPreference("imagesNumber");
+
+        SwitchPreference switchPreferenceCompatrence = (SwitchPreference)
+                findPreference("switchAllImages");
 
         switch (key) {
 
@@ -84,17 +108,17 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
             case "imagesNumber":
 
-                EditTextPreference editTextPreferenceImages = (EditTextPreference)
+                editTextPreferenceImages = (EditTextPreference)
                         findPreference(key);
 
                 String text = editTextPreferenceImages.getText();
 
                 /* Comprobar si son mas que size de gallery(); */
                 editTextPreferenceImages.setSummary("Imágenes a consultar: " + text);
-
+                previousImageNumber = Integer.valueOf(text);
                 ((MainActivity) getActivity()).setImageConsultNumber(Integer.valueOf(text));
 
-                SwitchPreference switchPreferenceCompatrence = (SwitchPreference)
+                switchPreferenceCompatrence = (SwitchPreference)
                         findPreference("switchAllImages");
 
                 if(switchPreferenceCompatrence.isChecked()){
@@ -124,11 +148,22 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     ((MainActivity) getActivity()).setAllImageConsult();
                 }
 
+                else{
 
+                    editTextPreferenceImages.setSummary("Imágenes a consultar: " +
+                            Integer.toString(previousImageNumber));
+
+                }
 
                 break;
         }
 
+        /*
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("enable_background", false);
+        editor.putString("server_address", "server1.com");
+        editor.apply();
+*/
     }
 
     @Override

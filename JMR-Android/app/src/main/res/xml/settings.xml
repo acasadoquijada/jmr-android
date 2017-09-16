@@ -34,7 +34,7 @@
         <EditTextPreference
             android:key="imagesNumber"
             android:title="Número imagenes"
-            android:summary="Imagenes a consultar: 100"
+            android:summary="@string/defaultImages"
             android:numeric="integer" />
 
     </PreferenceCategory>
