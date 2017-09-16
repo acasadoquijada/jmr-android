@@ -6,6 +6,7 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.jmr_android.DialogPreference.CalculateBDDialogPreference;
@@ -23,12 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private SettingsFragment settingsFragment;
     public static Activity act;
 
-    private CalculateBDDialogPreference calculateBDDialogPreference;
-    private DeleteBDDialogPreference deleteBDDialogPreference;
-
-    private boolean isConsultFragment;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         act = this;
 
-        calculateBDDialogPreference = new CalculateBDDialogPreference
-                (this.getApplicationContext(),null);
 
         consultFragment = ConsultFragment.newInstance();
 
@@ -67,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                         transaction.replace(R.id.main_fragment, settingsFragment, "A");
                         transaction.addToBackStack("b");
                         transaction.commit();
-                        isConsultFragment = false;
                         break;
 
                 }

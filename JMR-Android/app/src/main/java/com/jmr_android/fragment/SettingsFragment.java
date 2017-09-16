@@ -18,6 +18,9 @@ import com.jmr_android.DialogPreference.CustomDialogPreference;
 import com.jmr_android.activity.MainActivity;
 import com.takisoft.fix.support.v7.preference.EditTextPreference;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+import com.takisoft.fix.support.v7.preference.SwitchPreferenceCompat;
+
+import android.support.v14.preference.SwitchPreference;
 
 /**
  * Created by alejandro on 03/09/2017.
@@ -26,28 +29,13 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private CalculateBDDialogPreference2 calculateBDDialogPreference2;
     private Preference myPref = (Preference) findPreference("myKey");
     private ListPreference mListPreference;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings, rootKey);
-
-        // additional setup
-
-        calculateBDDialogPreference2 = new CalculateBDDialogPreference2(getContext(),null);
-
-        calculateBDDialogPreference2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-
-                return true;
-            }
-        });
-
     }
-
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -94,21 +82,48 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
                 break;
 
-            case "images":
+            case "imagesNumber":
 
                 EditTextPreference editTextPreferenceImages = (EditTextPreference)
                         findPreference(key);
 
                 String text = editTextPreferenceImages.getText();
 
-                /* Comrpobar si son mas que size de gallery(); */
+                /* Comprobar si son mas que size de gallery(); */
                 editTextPreferenceImages.setSummary("Imágenes a consultar: " + text);
 
                 ((MainActivity) getActivity()).setImageConsultNumber(Integer.valueOf(text));
 
+                SwitchPreference switchPreferenceCompatrence = (SwitchPreference)
+                        findPreference("switchAllImages");
+
+                if(switchPreferenceCompatrence.isChecked()){
+                    switchPreferenceCompatrence.setChecked(false);
+                }
+
                 break;
 
             case "deleteDB":
+                ((MainActivity) getActivity()).deleteDataBase();
+                break;
+
+
+            case "switchAllImages":
+
+                switchPreferenceCompatrence = (SwitchPreference)
+                        findPreference(key);
+
+                if(switchPreferenceCompatrence.isChecked()){
+                    ((MainActivity) getActivity()).setAllImageConsult();
+
+                    editTextPreferenceImages = (EditTextPreference)
+                            findPreference("imagesNumber");
+
+                    editTextPreferenceImages.setSummary("Imágenes a consultar: -");
+
+                    ((MainActivity) getActivity()).setAllImageConsult();
+                }
+
 
 
                 break;
@@ -128,53 +143,4 @@ public class SettingsFragment extends PreferenceFragmentCompat
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
-    public class CalculateBDDialogPreference2 extends CustomDialogPreference {
-        private String title;
-        private String message;
-        private String positiveButtonString;
-        private String positiveButtonOnClickString;
-        private String cancelButtonString;
-
-        public CalculateBDDialogPreference2(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            title = "¿Calcular base de datos?";
-            message = "Se calculará la base de datos, reduciendo el tiempo de consulta";
-            positiveButtonString = "Calcular";
-            positiveButtonOnClickString = "Base de datos calculada";
-            cancelButtonString = "Cancelar";
-        }
-
-        @Override
-        protected void onClick() {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-            dialog.setTitle(title);
-            dialog.setMessage(message);
-            dialog.setCancelable(true);
-            dialog.setPositiveButton(positiveButtonString, new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-
-
-                    //((MainActivity) getContext()).calculateDataBase();
-
-                    //reset database
-                    Toast.makeText(getContext(),positiveButtonOnClickString, Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            dialog.setNegativeButton(cancelButtonString, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dlg, int which)
-                {
-                    dlg.cancel();
-                }
-            });
-
-            AlertDialog al = dialog.create();
-            al.show();
-        }
-    }
-
 }

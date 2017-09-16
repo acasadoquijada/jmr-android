@@ -97,7 +97,7 @@ public class ConsultFragment extends Fragment {
         imageNumberConsult = 200;
         activeDescriptor = SINGLE_COLOR_DESCRIPTOR;
         descriptorBD = new DBHelper(getContext());
-        deleteDataBase();
+        //deleteDataBase();
         descriptors = new ArrayList<>();
         SingleColorDescription singleColorDescription = null;
         MPEG7ColorStructure mpeg7ColorStructure = null;
@@ -548,7 +548,6 @@ public class ConsultFragment extends Fragment {
 
         t.start();
 
-
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception {
@@ -634,7 +633,7 @@ public class ConsultFragment extends Fragment {
     }
 
     public void deleteDataBase(){
-        getContext().deleteDatabase(DBHelper.DATABASE_NAME);
+        descriptorBD.clearDatabase();
     }
 
 }

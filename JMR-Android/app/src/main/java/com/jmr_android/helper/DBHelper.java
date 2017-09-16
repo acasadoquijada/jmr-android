@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.jmr_android.fragment.ConsultFragment;
+import com.jmr_android.jmr.MPEG7ColorStructure;
 
 /**
  * Created by alejandro on 08/09/2017.
@@ -43,7 +44,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS TABLE_NAME");
+        onCreate(db);
     }
 
     private boolean insertColorStructureHist(String imageName, int[] hist) {
@@ -142,9 +144,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    private static String strSeparator = "__,__";
+    public void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String clearDBQuery ;
+        clearDBQuery = "DELETE FROM "+ SINGLE_COLOR_TABLE_NAME;
+        db.execSQL(clearDBQuery);
+        clearDBQuery = "DELETE FROM "+ STRUCTURE_COLOR_TABLE_NAME;
+        db.execSQL(clearDBQuery);
+    }
 
-    private static String convertArrayToString(int[] arrayInt) {
+    private String strSeparator = "__,__";
+
+    private String convertArrayToString(int[] arrayInt) {
 
         String string = "";
         for (int i = 0; i < arrayInt.length; i++) {
@@ -159,7 +170,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return string;
     }
 
-    private static int[] convertStringToArray(String str) {
+    private int[] convertStringToArray(String str) {
         String[] arr = str.split(strSeparator);
 
         int[] integerArray = new int[arr.length];
