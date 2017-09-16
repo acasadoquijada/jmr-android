@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.jmr_android.DialogPreference.CalculateBDDialogPreference;
 import com.jmr_android.DialogPreference.DeleteBDDialogPreference;
+import com.jmr_android.fragment.AditionalFragment;
 import com.jmr_android.fragment.ConsultFragment;
 import com.example.alejandro.jmr_android.R;
 import com.jmr_android.fragment.SettingsFragment;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigation bottomNavigation;
     private ConsultFragment consultFragment;
     private SettingsFragment settingsFragment;
+    private AditionalFragment aditionalFragment;
     public static Activity act;
 
     @Override
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         consultFragment = ConsultFragment.newInstance();
 
         settingsFragment = new SettingsFragment();
+
+        aditionalFragment = new AditionalFragment();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -59,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
 
                         transaction.replace(R.id.main_fragment, settingsFragment, "A");
                         transaction.addToBackStack("b");
+                        transaction.commit();
+                        break;
+
+                    case 2:
+
+                        transaction.replace(R.id.main_fragment, aditionalFragment, "C");
+                        transaction.addToBackStack("c");
                         transaction.commit();
                         break;
 

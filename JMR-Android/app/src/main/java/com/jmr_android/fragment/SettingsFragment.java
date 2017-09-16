@@ -43,10 +43,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString("imagesNumber", "50");
-
-        editor.apply();
-
     }
 
 

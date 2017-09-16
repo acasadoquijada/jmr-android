@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Java Multimedia Retrieval Android">
+
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Desarrollador"
+            android:summary="Alejandro Casado Quijada"
+            />
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="Licencia"
+            android:title="Licencia"
+            android:summary="GNU General Public License v3.0"
+            />
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Versión"
+            android:summary="1.0"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="FloatingActionButton">
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Desarrollador"
+            android:summary="Clans"
+            />
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Licencia"
+            android:summary="Apache License, Version 2.0"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Material-BottomNavigation">
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Desarrollador"
+            android:summary="sephiroth74"
+            />
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Licencia"
+            android:summary="MIT License (MIT)"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Material-BottomNavigation">
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Desarrollador"
+            android:summary="bumptech"
+            />
+        <com.jmr_android.DialogPreference.LicensesPreference
+            android:key="deleteDB"
+            android:title="Licencia"
+            android:summary="BSD, part MIT and Apache 2.0."
+            />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
