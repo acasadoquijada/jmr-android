@@ -50,12 +50,6 @@ public class AditionalFragment extends PreferenceFragmentCompat
 
         }
 
-        /*
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("enable_background", false);
-        editor.putString("server_address", "server1.com");
-        editor.apply();
-*/
     }
 
     @Override

@@ -1,28 +1,18 @@
 package com.jmr_android.fragment;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.alejandro.jmr_android.R;
-import com.jmr_android.DialogPreference.CustomDialogPreference;
 import com.jmr_android.activity.MainActivity;
 import com.takisoft.fix.support.v7.preference.EditTextPreference;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
-import com.takisoft.fix.support.v7.preference.SwitchPreferenceCompat;
-
-import android.support.v14.preference.SwitchPreference;
 
 /**
  * Created by alejandro on 03/09/2017.
@@ -40,9 +30,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-        SharedPreferences.Editor editor = prefs.edit();
-
     }
 
 

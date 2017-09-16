@@ -32,7 +32,6 @@ public abstract class CustomDialogPreference extends DialogPreference {
         super(context);
     }
 
-    protected void onClick() {
+    protected void onClick() {}
 
-    }
 }
