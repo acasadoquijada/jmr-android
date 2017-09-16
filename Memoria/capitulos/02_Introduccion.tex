@@ -1,22 +1,23 @@
-\chapter{Resumen}
-\label{cap:resumen}
+\chapter{Introducción}
+\label{cap:introduccion}
 
 \section{Contextualización}
 
-Debido al avance de la tecnologı́a, cada vez disponemos de más dispositivos con lavcapacidad de capturar imágenes. Esto ha provocado un importante incremento en las bases de datos de imágenes, lo que a su vez ha propiciado la aparición de metodologı́as para solventar el problema de la manipulación, gestión y recuperación de dicha información. En este caso cuando hablamos de metodologı́as nos referimos a los sistemas de recuperación de información, basados fundamentalmente en descriptores de bajo nivel (color, textura, etc.) obtenidos directamente a partir de la imagen. Estos sistemas se denominan CBIR.\\
+Debido al avance de la tecnologı́a, cada vez disponemos de más dispositivos con la capacidad de capturar imágenes. Esto ha provocado un importante incremento en las bases de datos de imágenes, lo que a su vez ha propiciado la aparición de metodologı́as para solventar el problema de la manipulación, gestión y recuperación de dicha información. En este caso cuando hablamos de metodologı́as nos referimos a los sistemas de recuperación de información, basados fundamentalmente en descriptores de bajo nivel (color, textura, etc.) obtenidos directamente a partir de la imagen. Estos sistemas se denominan CBIR.\\
 
 La funcionalidad de estos sistemas es la siguiente:\\
 
 Partimos de una imagen, denominada consultada, sobre la que queremos obtener imágenes similares, consideradas resultados. Para ello le proporcionamos al sistema dicha imagen consulta y una serie de criterios, descriptores, para que se realice la consulta. Una vez realizada el sistema nos presenta las imágenes resultado, junto con información sobre ellas, como por ejemplo "como de parecidas" son respecto a la original. Esto suele realizarse con una medida numérica entre 0 y 1.\\
 
+Los descriptores que se van a implementar se basan en el color. Imaginemos que realizamos dos fotos a una persona, en cada foto el color de la camiseta de la persona y del fondo es diferente, al realizar una consulta, se daría el caso de que los descriptores nos dijeran que ambas imágenes no son muy parecidas, ya que se basan en el color y no en formas de la imagen. 
 
 \section{Fundamentos}
 
-Este trabajo se basa en el sistema de recuperación de imágenes llamado Java Multimedia Retrival, JMR, el cual se encuentra implementado en Java. Este sistema nos permite realizar consultas usando varios descriptores, incluso varios al mismo tiempo, lo cual es muy interesante, ya que cuenta con métodos de visualización que nos permiten comprobar tantos descriptores como queramos a la vez. Con otros métodos los resultados se calcularían utilizando la media de cada uno de los descriptores.\\
+Este trabajo se basa en el sistema de recuperación de imágenes llamado \textit{Java Multimedia Retrival}, \textit{JMR}, el cual se encuentra implementado en Java. Este sistema nos permite realizar consultas usando varios descriptores, incluso varios al mismo tiempo, lo cual es muy interesante, ya que cuenta con métodos de visualización que nos permiten comprobar tantos descriptores como queramos a la vez. Con otros métodos los resultados se calcularían utilizando la media de cada uno de los descriptores.\\
 
-Por lo que este CBIR ha sido de gran utilidad a la hora de realizar el proyecto, ya que ha proporcionado información como sobre realizar cálculos con los descriptores, por ejemplo, aunque como es natural, todo se ha debido de reimplementar para que funcione correctamente y siga una lógica concreta.\\
+Por lo que este CBIR ha sido de gran utilidad a la hora de realizar el proyecto, ya que ha proporcionado información como sobre realizar cálculos con los descriptores, por ejemplo. Aunque como es natural, todo se ha debido de implementar para que funcione correctamente y siga una lógica concreta.\\
 
-
+Al partir de un \textit{CBIR} concreto, no se ha realizado un estudio del arte profundo sobre ellos. Si se ha realizado un estudio del arte de los \textit{CBIR} en plataformas móviles, concretamente \textit{Android}, del cual podemos concluir que es un campo que no ha sido muy trabajado.
 
 
 

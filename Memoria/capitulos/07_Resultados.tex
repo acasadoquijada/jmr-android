@@ -12,6 +12,19 @@ El siguiente paso fue redimensionar las imágenes a un tamaño concreto, se come
 
 Con los tamaños 64x64 y 32x32, este último es el definitivo, se obtuvieron unos buenos tiempos de ejecución y unos buenos resultados, aunque se decidió usar 32x32 ya que el descriptor MPEG7, realiza una gran cantidad de operaciones con el histograma de la imagen, por lo que ese tamaño se adapta mejor a nuestras necesidades. Se probaron estos dos últimos tamaños, ya que en una asignatura de este máster se tuvo que trabajar con imágenes, y dichos tamaños, son los que mejores resultados nos proporcionaron.\\
 
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Tamaño/nº imágenes} & \textbf{10} & \textbf{100} & \textbf{500} & \textbf{1000} & \textbf{2500} & \textbf{5000} \\ \hline
+\textbf{200x200}            & 3s          & 14s          & 1m 2s        & 2m 21s        & 6 m 20s       & 13m 4s        \\ \hline
+\textbf{64x64}              & 2s          & 5s           & 19s          & 46s           & 2m 27s        & 5m 8s         \\ \hline
+\textbf{32x32}              & 1s          & 4s           & 14s          & 37s           & 2m 5s         & 4m 29s        \\ \hline
+\end{tabular}
+\label{Tiempos SingleColorDescriptor}
+\caption{Tiempos SingleColorDescriptor}
+\end{table}
+
 \section{Consultas}
 
 Una vez discutidos los tiempos y tamaños, es hora de comprobar que los resultados de las consultas son los esperados. Para ello vamos a utilizar dos bases de imágenes:\\
@@ -45,18 +58,18 @@ Como es natural, también se han realizado las pruebas con imágenes propias de 
 
 Este descriptor se basa en el cálculo del color medio de la imagen encontrándose esta, en un espacio de color RGB. Por lo que las imágenes con colores más parecidos aparecerán juntas.
 
-Ahora vamos a comentar una consulta utilizando este descriptor y la VisTex:
+Ahora vamos a comentar una consulta utilizando este descriptor y VisTex:
 
 \begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
 \centering
-\includegraphics[scale=0.4]{imagenes/SingleColorresultado1.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\includegraphics[scale=0.15]{imagenes/SingleColorresultado1.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
 \label{SingleColorresultado1.png}
 \caption{Resultado consulta SingleColorDescriptor 1 }
 \end{figure}
 
 \begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
 \centering
-\includegraphics[scale=0.4]{imagenes/SingleColorresultado2.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\includegraphics[scale=0.15]{imagenes/SingleColorresultado2.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
 \label{SingleColorresultado2.png}
 \caption{Resultado consulta SingleColorDescriptor 2 }
 \end{figure}
@@ -70,19 +83,19 @@ El descriptor MPEG7ColorStructure se basa en el cálculo del histograma empleand
 
 \begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
 \centering
-\includegraphics[scale=0.4]{imagenes/mpegResultado1.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\includegraphics[scale=0.15]{imagenes/mpegResultado1.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
 \label{mpegResultado1.png}
 \caption{Resultado consulta SingleColorDescriptor 1 }
 \end{figure}
 
 \begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
 \centering
-\includegraphics[scale=0.4]{imagenes/mpegResultado2.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\includegraphics[scale=0.15]{imagenes/mpegResultado2.png}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
 \label{mpegResultado1.png}
 \caption{Resultado consulta SingleColorDescriptor 2 }
 \end{figure}
 
-Se puede ver como este descriptor obtiene mejores resultados. Las primeras imágenes resultado son mas uniformes, mientrás que en el caso anterior, habia un mayor número de diferencias.
+Se puede ver como este descriptor obtiene mejores resultados. Las primeras imágenes resultado son más uniformes, mientras que en el caso anterior, habia un mayor número de diferencias. Y por otro lado, como se agrupan mejor las imágenes menos parecidas.
 
 
 

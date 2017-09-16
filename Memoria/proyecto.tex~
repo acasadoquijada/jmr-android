@@ -2,7 +2,7 @@
 %\documentclass[a4paper,twoside,11pt,titlepage]{book}
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
-\usepackage[spanish,es-tabla]{babel}
+\usepackage[spanish]{babel}
 
 % \usepackage[style=list, number=none]{glossary} %
 %\usepackage{titlesec}
@@ -55,14 +55,14 @@ Telecomunicación\xspace}
 \newcommand{\myLocation}{Granada\xspace}
 \newcommand{\myTime}{\today\xspace}
 \newcommand{\myVersion}{Version 0.1\xspace}
-\renewcommand{\chaptername}{Capítulo}
+
 
 \hypersetup{
 pdfauthor = {\myName \myEmail},
 pdftitle = {\myTitle},
 pdfsubject = {\myTitle},
 pdfkeywords = {image visualization, java 3D, image retrival, 3d visualization},
-pdfcreator = {LaTeX con el paquete gedit},
+pdfcreator = {LaTeX con el paquete Texmaker},
 pdfproducer = {pdflatex}
 }
 
@@ -184,50 +184,42 @@ pdfproducer = {pdflatex}
 \raggedbottom
 \begin{document}
 \input{portada/portada}
+\input{prefacios/prefacio}
 %\frontmatter
-\renewcommand\contentsname{Contenido}
 \tableofcontents
-
-\renewcommand\listfigurename{Lista de Figuras}
 \listoffigures
-
-\renewcommand\listtablename{Lista de Tablas}
-\listoftables
-
-
 %\listoftables
 
 %
 %\mainmatter
 %\setlength{\parskip}{5pt}
 
-\input{capitulos/01_Resumen}
+\input{capitulos/01_Introduccion}
 %
-\input{capitulos/02_Introduccion}
+\input{capitulos/02_EspecificacionRequisitos}
 %
-\input{capitulos/03_Objetivos}
+\input{capitulos/03_Planificacion}
 %
-\input{capitulos/04_Planificacion}
+\input{capitulos/04_Analisis}
 %
-\input{capitulos/05_Metodologia}
+\input{capitulos/05_Diseno}
 %
-\input{capitulos/06_Desarrollo}
+\input{capitulos/06_Implementacion}
 %
-\input{capitulos/07_Resultados}
+\input{capitulos/07_Pruebas}
 %
-\input{capitulos/08_Conclusiones}
+\input{capitulos/08_Conclusiones_y_trabajos_futuros}
 %
 %%\chapter{Conclusiones y Trabajos Futuros}
 %
 %
 \nocite{*}
 \bibliography{bibliografia/bibliografia}\addcontentsline{toc}{chapter}{Bibliografía}
-\lhead{\textsc{Bibliograf\'ia}} % Change the page header to say "Bibliografía"
 \bibliographystyle{plain}
 %
 \appendix
 \input{apendices/manual_usuario/manual_usuario}
-%\input{apendices/licencia/licencia}
+\input{apendices/licencia/licencia}
 %%\input{apendices/paper/paper}
 %\input{glosario/entradas_glosario}
 % \addcontentsline{toc}{chapter}{Glosario}
