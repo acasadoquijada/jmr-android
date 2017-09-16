@@ -22,29 +22,35 @@
     <PreferenceCategory
         android:title="Imágenes">
 
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="Todas las disponibles"
-            android:summary="Las consultas se realizarán usando todas las imágenes que se
-            encuentren en el teléfono"
-            android:defaultValue="true"/>
+        <SwitchPreference
+            android:defaultValue="true"
+            android:clickable="true"
+            android:key="switch_preference_1"
+            android:summary="Las consultas se realizarán usando todas las imágenes"
+            android:title="Todas las disponibles" />
 
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="Número concreto"
-            android:summary="Establece un número concreto de imágenes sobre las que consultar"
-            android:defaultValue="false"/>
+        <EditTextPreference
+            android:key="images"
+            android:title="Número imagenes"
+            android:summary="Imagenes a consultar: 100"
+            android:numeric="integer" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="Base de datos">
 
-        <CheckBoxPreference
-            android:key="checkbox_preference"
+        <com.jmr_android.DialogPreference.DeleteBDDialogPreference
+            android:key="deleteDB"
             android:title="Eliminar base datos"
-            android:summary="Basado en el color medio de la imagen"
-            android:defaultValue="true"/>
+            android:summary="Elimina la base de datos"
+            />
+
+        <com.jmr_android.DialogPreference.CalculateBDDialogPreference
+            android:key="deleteDB"
+            android:title="Calcular base de datos"
+            android:summary="Mejora tiempo consultas"
+            />
 
     </PreferenceCategory>
 

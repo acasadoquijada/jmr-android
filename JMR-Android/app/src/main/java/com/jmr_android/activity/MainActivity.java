@@ -1,5 +1,6 @@
 package com.jmr_android.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.jmr_android.DialogPreference.CalculateBDDialogPreference;
+import com.jmr_android.DialogPreference.DeleteBDDialogPreference;
 import com.jmr_android.fragment.ConsultFragment;
 import com.example.alejandro.jmr_android.R;
 import com.jmr_android.fragment.SettingsFragment;
@@ -18,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigation bottomNavigation;
     private ConsultFragment consultFragment;
     private SettingsFragment settingsFragment;
+    public static Activity act;
+
+    private CalculateBDDialogPreference calculateBDDialogPreference;
+    private DeleteBDDialogPreference deleteBDDialogPreference;
 
     private boolean isConsultFragment;
 
@@ -27,9 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        consultFragment = ConsultFragment.newInstance();
+        act = this;
 
-        isConsultFragment = true;
+        calculateBDDialogPreference = new CalculateBDDialogPreference
+                (this.getApplicationContext(),null);
+
+        consultFragment = ConsultFragment.newInstance();
 
         settingsFragment = new SettingsFragment();
 
@@ -46,29 +56,19 @@ public class MainActivity extends AppCompatActivity {
                 switch (i1) {
 
                     case 0:
-                        Log.d("ESTOY", "1");
-
                         transaction.replace(R.id.main_fragment, consultFragment, "a");
                         transaction.addToBackStack("a");
                         transaction.commit();
 
-                        if (isConsultFragment) {
-                            Log.d("ESTOY", "CAL");
-                        }
-                        isConsultFragment = true;
                         break;
 
                     case 1:
-                        Log.d("ESTOY", "2");
 
                         transaction.replace(R.id.main_fragment, settingsFragment, "A");
                         transaction.addToBackStack("b");
                         transaction.commit();
                         isConsultFragment = false;
                         break;
-                      /*  transaction.replace(R.id.main_fragment, settingFragment, "b");
-
-                        break;*/
 
                 }
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 // Do something
 
                 if (i1 == 0) {
-                    consultFragment.calculateDescriptor();
+                    consultFragment.consult();
                 }
             }
         });
@@ -97,16 +97,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setActiveDescriptor(int descriptor) {
-
-        if (descriptor == ConsultFragment.MPEG7_COLOR_STRUCTURE ||
-                descriptor == ConsultFragment.SINGLE_COLOR_DESCRIPTOR) {
-
-            consultFragment.setActiveDescriptor(descriptor);
-        } else {
-            Log.e("Descriptor", "descriptor erroneo");
-        }
+    public void setActiveDescriptor(int descriptor){
+        consultFragment.setActiveDescriptor(descriptor);
     }
 
+    public void setImageConsultNumber(int number){
+        consultFragment.setImageConsultNumber(number);
+    }
+
+    public void setAllImageConsult(){
+        consultFragment.setAllImageConsult();
+    }
+
+    public void deleteDataBase(){
+        consultFragment.deleteDataBase();
+    }
+
+    public void calculateDataBase(){
+        consultFragment.calculateDataBase();
+    }
 
 }
