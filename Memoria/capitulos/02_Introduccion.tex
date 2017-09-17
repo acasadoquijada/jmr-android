@@ -118,13 +118,42 @@ Se va hablar durante esta memoria sobre el espacio de color, por lo que es neces
 
 Por espacio de color nos referimos a un sistema de interpretación de color, una manera específica estructurar los colores de una imagen o vídeo. También es necesario hablar sobre los modelos de color, que se tratan de modelos matemáticos abstractos que describen la forma en la que cual los colores pueden ser representados como tuplas de números, normalmente como tres o cuatro valores o componentes de color, un ejemplo de esto sería RGB, en el que un color se descompone en tres valores, el valor de rojo, verde y azul.\\
 
-pantallazo RGB
 
-Otro ejemplo de espacio de color sería el \textit{HMMD}. Se trata de un espacio de color basado en \textit{hue-min-max-difference}, matiz-mínimo-máximo-diferencia soportado en MPEG-7. El matiz, \textit{hue} se define cono en el caso del espacio de color \textit{HSV}, mientras que el máximo y mínimo son el máximo y mínimo de los valores RGB. Para describir el espacio HMMD, solo se necesitan 3 de los 4 componentes, debido a que la intensidad
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.7]{imagenes/rgb.jpeg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{rgb.jpeg}
+\caption{Modelo de color RGB}
+\end{figure}
 
+Otro ejemplo de espacio de color sería el \textit{HMMD}. Este espacio de color (Hue-Max-Min-Diff), es cercano a un espacio de color perceptualmente uniforme. Los nombres componentes, correspondientes a los distintos nombres, se pueden calcular a partir de RGB siguiente las siguientes transformaciones:
 
+\begin{itemize}
+\item \textbf{Max}: máximo(R,G,B)
+\item \textbf{Min}: mínimo(R,G,B)
+\item \textbf{Diff}: Max-min
+\end{itemize}
 
-Pantallazo HMMD
+Por otro lado, incluso se puede definir otro componente, llamado \texbf{Sum} = (Max+Min)/2.\\
+
+En total habría una cantidad de 5 componentes en este espacio de color. Sin embargo, un cojunto de 3 elementos, {H,Max,Min} o {H,Diff,Sum}, es suficiente para para formar este espacio de color y especificar un punto de color.\\
+
+\textit{Hue}, tiene la misma propiedad que su equivalente en el espacio de color HSV. \text{Hue} se mueve en el rango [0º, 360º]. \textit{Max} se mueve en el rango [0,1] y especifica cuanto color negro se encuentra presente, dando la sensación de sombra u oscuridad. \textit{Min}, rango [0,1], especifica cuanto color blanco se encuentra presente, dando la sensación de blanqueado. \textit{Diff}, rango [0,1], especifica como de cercano es un color a los colores puros, dando la sensación de tono o colorido. Finalmente, \textit{Sum}, especifica el brillo del color.
+ 
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.7]{imagenes/hmmd1.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{hmmd1.jpg}
+\caption{Modelo de color HMMD}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.7]{imagenes/hmmd2.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{hmmd2.jpg}
+\caption{Cáculo Hue HMMD}
+\end{figure}
+
 
 Para este proyecto van a ser implementados una serie de descriptores. Estos descriptores se corresponden al tipo información general, previamente comentado, concretamente sobre el color. Estos son:
 
@@ -138,14 +167,10 @@ Para este proyecto van a ser implementados una serie de descriptores. Estos desc
 
 \subsection{Single Color Descriptor}
 
-Este descriptor de color se basa en el color medio de la imagen. Para calcularlo recorre una imágen pixel a pixel
+Este descriptor de color se basa en el color medio de la imagen. Para calcularlo recorre una imagen en el espacio de color RGB pixel a pixel, obteniendo sus valores R, G y B. Cuando termina de recorrer todos los píxeles, calcula el color medio.
 
+\subsection{MPEG7ColorStructure}
 
-Este trabajo se basa en el sistema de recuperación de imágenes llamado \textit{Java Multimedia Retrival}, \textit{JMR}, el cual se encuentra implementado en Java. Este sistema nos permite realizar consultas usando varios descriptores, incluso varios al mismo tiempo, lo cual es muy interesante, ya que cuenta con métodos de visualización que nos permiten comprobar tantos descriptores como queramos a la vez. Con otros métodos los resultados se calcularían utilizando la media de cada uno de los descriptores.\\
-
-Por lo que este CBIR ha sido de gran utilidad a la hora de realizar el proyecto, ya que ha proporcionado información como sobre realizar cálculos con los descriptores, por ejemplo. Aunque como es natural, todo se ha debido de implementar para que funcione correctamente y siga una lógica concreta.\\
-
-Al partir de un \textit{CBIR} concreto, no se ha realizado un estudio del arte profundo sobre ellos. Si se ha realizado un estudio del arte de los \textit{CBIR} en plataformas móviles, concretamente \textit{Android}, del cual podemos concluir que es un campo que no ha sido muy trabajado.
 
 
 
