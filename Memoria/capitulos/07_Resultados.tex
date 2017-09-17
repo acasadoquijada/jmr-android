@@ -8,9 +8,12 @@ También hay que tener en cuenta que estamos trabajando con imágenes, por lo qu
 
 En una serie de pruebas iniciales, el tamaño de las imágenes no se tuvo en cuenta, por lo que incluso con el descriptor prototipo, no realizaba níngún tipo de cálculo, los tiempos de consulta eran demasiado elevados, a pesar de usar un número pequeño de imágenes.\\
 
-El siguiente paso fue redimensionar las imágenes a un tamaño concreto, se comenzó con 200x200. Con este tamaño se redujo el tiempo de cómputo, y los resultados comenzaban a ser prometedores. Pero se comprobó que el tiempo de cómputo crecía demasiado con el número de imágenes, por lo que se descartó este tamaño.\\
+El siguiente paso fue redimensionar las imágenes a un tamaño concreto, se comenzó con 200x200. Con este tamaño se redujo el tiempo de cómputo, y los resultados comenzaban a ser prometedores. Pero se comprobó que dicho tiempo crecía demasiado con el número de imágenes, por lo que se descartó este tamaño.\\
 
-Con los tamaños 64x64 y 32x32, este último es el definitivo, se obtuvieron unos buenos tiempos de ejecución y unos buenos resultados, aunque se decidió usar 32x32 ya que el descriptor MPEG7, realiza una gran cantidad de operaciones con el histograma de la imagen, por lo que ese tamaño se adapta mejor a nuestras necesidades. Se probaron estos dos últimos tamaños, ya que en una asignatura de este máster se tuvo que trabajar con imágenes, y dichos tamaños, son los que mejores resultados nos proporcionaron.\\
+Con los tamaños 64x64 y 32x32, este último es el definitivo, se obtuvieron unos buenos tiempos de ejecución y unos buenos resultados, aunque se decidió usar 32x32 ya que el descriptor MPEG7 realiza una gran cantidad de operaciones con el histograma de la imagen, por lo que ese tamaño se adapta mejor a nuestras necesidades. Se probaron estos dos últimos tamaños, ya que en una asignatura de este máster se tuvo que trabajar con imágenes, y dichos tamaños, son los que mejores resultados nos proporcionaron.\\
+
+A continuación se van a presentar una serie de tablas con tiempos para distintos tamaño y número de imágenes que justifican lo que acaba de ser comentado.\\
+
 
 \begin{table}[H]
 \centering
@@ -22,8 +25,50 @@ Con los tamaños 64x64 y 32x32, este último es el definitivo, se obtuvieron uno
 \textbf{32x32}              & 1s          & 4s           & 14s          & 37s           & 2m 5s         & 4m 29s        \\ \hline
 \end{tabular}
 \label{Tiempos SingleColorDescriptor}
-\caption{Tiempos SingleColorDescriptor}
+\caption{Tiempos SingleColorDescriptor sin base de datos}
 \end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Tamaño/nº imágenes} & \textbf{10} & \textbf{100} & \textbf{500} & \textbf{1000} & \textbf{2500} & \textbf{5000} \\ \hline
+\textbf{200x200}            & 1s          & 4s           & 6s           & 16s           & 53s           & 1m 53s        \\ \hline
+\textbf{64x64}              & 1s          & 4s           & 6s           & 16s           & 52s           & 1m 51s        \\ \hline
+\textbf{32x32}              & 1s          & 4s           & 6s           & 15s           & 50s           & 1m 51s        \\ \hline
+\end{tabular}
+\label{Tiempos SingleColorDescriptor}
+\caption{Tiempos SingleColorDescriptor con base de datos}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Tamaño/nº imágenes} & \textbf{10} & \textbf{100} & \textbf{500} & \textbf{1000} & \textbf{2500} & \textbf{5000} \\ \hline
+\textbf{200x200}            & 13s         & 1m 58s       & 6m 2s        & 9m 21s        & -             & -             \\ \hline
+\textbf{64x64}              & 3s          & 19s          & 1m 5s        & 2m 17s        & 6m 9s         & 12m 32s       \\ \hline
+\textbf{32x32}              & 2s          & 12s          & 30s          & 43s           & 2m 58s        & 6m 6s         \\ \hline
+\end{tabular}
+\caption{Tiempos MPEG7ColorStructure sin base de datos}
+\label{my-label}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Tamaño/nº imágenes} & \textbf{10} & \textbf{100} & \textbf{500} & \textbf{1000} & \textbf{2500} & \textbf{5000} \\ \hline
+\textbf{200x200}            & 1           & 5s           & 10s          & 20s           & -             & -             \\ \hline
+\textbf{64x64}              & 1s          & 5s           & 9s           & 20s           & 1m 3s         & 2m 12s        \\ \hline
+\textbf{32x32}              & 1s          & 5s           & 8s           & 20s           & 1m 1s         & 2m 8s         \\ \hline
+\end{tabular}
+\caption{Tiempos MPEG7ColorStructure con base de datos}
+\label{my-label}
+\end{table}
+
+Vemos como el tiempo de consulta en ambos descriptores es idéntico cuando se dispone de los datos previamente calculados en la base de datos. Esto es lógico, ya que en este caso se consulta en la base de datos si el valor del descriptor esta calculado para cada imagen y se recupera de ahí.
+
 
 \section{Consultas}
 
