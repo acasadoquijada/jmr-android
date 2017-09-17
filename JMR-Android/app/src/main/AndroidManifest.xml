@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/ic_launcher2"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name="com.jmr_android.activity.MainActivity">
+        <activity android:name="com.jmr_android.activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

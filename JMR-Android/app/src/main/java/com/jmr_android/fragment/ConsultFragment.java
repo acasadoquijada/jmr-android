@@ -258,6 +258,10 @@ public class ConsultFragment extends Fragment {
 
         galleryImages.addImage(path);
 
+        getContext().sendBroadcast(new Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.parse("file://"+path)));
+
         addConsultImage(path);
     }
 
