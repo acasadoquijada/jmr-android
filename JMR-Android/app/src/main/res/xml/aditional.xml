@@ -20,43 +20,16 @@
             />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="FloatingActionButton">
+    <PreferenceCategory android:title="Información adicional">
         <com.jmr_android.preference.LicensesPreference
-            android:key="fabDeveloper"
-            android:title="Desarrollador"
-            android:summary="Dmytro Tarianyk"
+            android:key="descriptorInfo"
+            android:title="Descriptores"
+            android:summary="Los implementados se basan en el color"
             />
         <com.jmr_android.preference.LicensesPreference
-            android:key="fabLicense"
-            android:title="Licencia"
-            android:summary="Apache License, Version 2.0"
-            />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Material-BottomNavigation">
-        <com.jmr_android.preference.LicensesPreference
-            android:key="bottomDeveloper"
-            android:title="Desarrollador"
-            android:summary="Alessandro Crugnola"
-            />
-        <com.jmr_android.preference.LicensesPreference
-            android:key="bottomLicense"
-            android:title="Licencia"
-            android:summary="MIT License (MIT)"
-            />
-    </PreferenceCategory>
-
-
-    <PreferenceCategory android:title="Glide">
-        <com.jmr_android.preference.LicensesPreference
-            android:key="glideDeveloper"
-            android:title="Desarrollador"
-            android:summary="Bump Technologies"
-            />
-        <com.jmr_android.preference.LicensesPreference
-            android:key="glideLicense"
-            android:title="Licencia"
-            android:summary="BSD, part MIT and Apache 2.0."
+            android:key="CBIRInfo"
+            android:title="Sistema de recuperación de información"
+            android:summary="Consulta de imágenes mediante ejemplo"
             />
     </PreferenceCategory>
 

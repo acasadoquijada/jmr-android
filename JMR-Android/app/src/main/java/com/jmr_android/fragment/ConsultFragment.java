@@ -610,7 +610,7 @@ public class ConsultFragment extends Fragment {
 
         Log.d("BD", "Calculando BD");
         for(i = 0; i < imageNumberConsult; i++){
-
+            Log.d("BD", "Imagen " + Integer.toString(i));
             Bitmap img = galleryImages.getImagen(i);
             String path = galleryImages.getImageURI(i);
             int values[];

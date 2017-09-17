@@ -17,7 +17,7 @@ Java_com_jmr_1android_jmr_SingleColorDescription_meanC(JNIEnv *env, jobject inst
     int height = 0;
     int x, y;
 
-    int imagesize = 32 * 32;
+    int imagesize = 200 * 200;
 
     float mean[3] = {0.0f, 0.0f, 0.0f};
 

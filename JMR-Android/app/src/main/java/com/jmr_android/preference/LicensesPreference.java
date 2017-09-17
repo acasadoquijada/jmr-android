@@ -58,50 +58,18 @@ public class LicensesPreference extends CustomDialogPreference {
                 getContext().startActivity(browserIntent);
                 break;
 
-            case "fabDeveloper":
+            case "descriptorInfo":
                 browserIntent = new Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/Clans"));
+                        Uri.parse("https://es.wikipedia.org/wiki/Descriptores_visuales#Descriptores_de_informaci.C3.B3n_general"));
 
                 getContext().startActivity(browserIntent);
                 break;
 
-            case "fabLicense":
+            case "CBIRInfo":
                 browserIntent = new Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("http://www.apache.org/licenses/LICENSE-2.0"));
-
-                getContext().startActivity(browserIntent);
-                break;
-
-            case "bottomDeveloper":
-                browserIntent = new Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/sephiroth74"));
-
-                getContext().startActivity(browserIntent);
-                break;
-
-            case "bottomLicense":
-                browserIntent = new Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://opensource.org/licenses/MIT"));
-
-                getContext().startActivity(browserIntent);
-                break;
-
-            case "glideDeveloper":
-                browserIntent = new Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/bumptech"));
-
-                getContext().startActivity(browserIntent);
-                break;
-
-            case "glideLicense":
-                browserIntent = new Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/bumptech/glide/blob/master/LICENSE"));
+                        Uri.parse("https://es.wikipedia.org/wiki/Consulta_de_im%C3%A1genes_mediante_ejemplo"));
 
                 getContext().startActivity(browserIntent);
                 break;
