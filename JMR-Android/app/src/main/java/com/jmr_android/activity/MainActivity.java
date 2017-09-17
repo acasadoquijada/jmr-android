@@ -3,14 +3,12 @@ package com.jmr_android.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
-import com.jmr_android.DialogPreference.CalculateBDDialogPreference;
-import com.jmr_android.DialogPreference.DeleteBDDialogPreference;
 import com.jmr_android.fragment.AditionalFragment;
 import com.jmr_android.fragment.ConsultFragment;
 import com.example.alejandro.jmr_android.R;
@@ -24,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private ConsultFragment consultFragment;
     private SettingsFragment settingsFragment;
     private AditionalFragment aditionalFragment;
+    private Fragment fragAux;
     public static Activity act;
 
     @Override
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             public void onMenuItemSelect(@IdRes int i, int i1, boolean b) {
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                clearBackStack();
+               // clearBackStack();
                 switch (i1) {
 
                     case 0:
@@ -72,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                         transaction.addToBackStack("c");
                         transaction.commit();
                         break;
-
                 }
 
             }
@@ -87,9 +85,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_fragment, consultFragment);
         transaction.commit();
+
     }
 
     private void clearBackStack() {

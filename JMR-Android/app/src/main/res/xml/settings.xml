@@ -42,13 +42,13 @@
     <PreferenceCategory
         android:title="Base de datos">
 
-        <com.jmr_android.DialogPreference.DeleteBDDialogPreference
+        <com.jmr_android.preference.DeleteBDDialogPreference
             android:key="deleteDB"
             android:title="Eliminar base datos"
             android:summary="Elimina la base de datos"
             />
 
-        <com.jmr_android.DialogPreference.CalculateBDDialogPreference
+        <com.jmr_android.preference.CalculateBDDialogPreference
             android:key="caculateDB"
             android:title="Calcular base de datos"
             android:summary="Mejora tiempo consultas"

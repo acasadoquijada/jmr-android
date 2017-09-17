@@ -78,6 +78,10 @@ public class ConsultFragment extends Fragment {
     private Uri mImageUri;
     private DBHelper descriptorBD;
     private ProgressDialog progress;
+    private View previousView;
+    private JMRImage previousConsultImage;
+    private RecyclerView.LayoutManager jLayoutManager;
+
 
 
     public static ConsultFragment newInstance() {
@@ -289,9 +293,8 @@ public class ConsultFragment extends Fragment {
         consultImages.add(jmrImage);
 
         consultImage = jmrImage;
-        /*
-            Ponerle la estrellita
-         */
+
+        previousConsultImage = jmrImage;
 
         consultAdapter.notifyDataSetChanged();
     }
@@ -337,12 +340,12 @@ public class ConsultFragment extends Fragment {
 
     private void initConsultImageView() {
 
-        recyclerViewConsult = (RecyclerView) ((MainActivity) getActivity()).findViewById(R.id.recycler_view2);
+        recyclerViewConsult = (RecyclerView) (getActivity()).findViewById(R.id.recycler_view2);
 
-        consultAdapter = new GalleryAdapter(((MainActivity) getActivity()).getApplicationContext(), consultImages);
+        consultAdapter = new GalleryAdapter(( getActivity()).getApplicationContext(), consultImages);
 
-        RecyclerView.LayoutManager jLayoutManager = new LinearLayoutManager(
-                ((MainActivity) getActivity()), LinearLayoutManager.HORIZONTAL, false);
+        jLayoutManager = new LinearLayoutManager(
+                (getActivity()), LinearLayoutManager.HORIZONTAL, false);
 
         recyclerViewConsult.setLayoutManager(jLayoutManager);
         recyclerViewConsult.setItemAnimator(new DefaultItemAnimator());
@@ -398,13 +401,14 @@ public class ConsultFragment extends Fragment {
     }
 
     public void consult() {
-        progress = ProgressDialog.show(getContext(), "Consulta",
-                "Realizando consulta", true);
-        CountDownLatch latch = new CountDownLatch(1);
-       Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (consultImage != null) {
+        if (consultImage != null) {
+            progress = ProgressDialog.show(getContext(), "Consulta",
+                    "Realizando consulta", true);
+            CountDownLatch latch = new CountDownLatch(1);
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
                     int tamanioGaleria = galleryImages.size();
 
                     long startTime = System.currentTimeMillis();
@@ -542,11 +546,13 @@ public class ConsultFragment extends Fragment {
                             colocarImagenesResultado();
                         }
                     });
-                }
-            }
-        });
 
-        t.start();
+                }
+            });
+
+            t.start();
+
+        }
 
     }
 

@@ -1,7 +1,6 @@
-package com.jmr_android.DialogPreference;
+package com.jmr_android.preference;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;

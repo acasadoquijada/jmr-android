@@ -1,14 +1,12 @@
-package com.jmr_android.DialogPreference;
+package com.jmr_android.preference;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.alejandro.jmr_android.R;
 import com.jmr_android.activity.MainActivity;
 
 /**
