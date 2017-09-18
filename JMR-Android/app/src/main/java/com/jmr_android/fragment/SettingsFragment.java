@@ -35,7 +35,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-       // setPreferencesFromResource(R.xml.settings, rootKey);
     }
 
     @Override
@@ -96,7 +95,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
                 String text = editTextPreferenceImages.getText();
 
-                /* Comprobar si son mas que size de gallery(); */
                 editTextPreferenceImages.setSummary("Imágenes a consultar: " + text);
                 previousImageNumber = Integer.valueOf(text);
                 ((MainActivity) getActivity()).setImageConsultNumber(Integer.valueOf(text));
@@ -104,7 +102,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 switchPreferenceCompatrence = (SwitchPreference)
                         findPreference("switchAllImages");
 
-                if(switchPreferenceCompatrence.isChecked()){
+                if (switchPreferenceCompatrence.isChecked()) {
                     switchPreferenceCompatrence.setChecked(false);
                 }
 
@@ -114,13 +112,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 ((MainActivity) getActivity()).deleteDataBase();
                 break;
 
-
             case "switchAllImages":
 
                 switchPreferenceCompatrence = (SwitchPreference)
                         findPreference(key);
 
-                if(switchPreferenceCompatrence.isChecked()){
+                if (switchPreferenceCompatrence.isChecked()) {
                     ((MainActivity) getActivity()).setAllImageConsult();
 
                     editTextPreferenceImages = (EditTextPreference)
@@ -129,9 +126,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     editTextPreferenceImages.setSummary("Imágenes a consultar: -");
 
                     ((MainActivity) getActivity()).setAllImageConsult();
-                }
-
-                else{
+                } else {
 
                     editTextPreferenceImages.setSummary("Imágenes a consultar: " +
                             Integer.toString(previousImageNumber));
@@ -140,13 +135,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
                 break;
         }
-
-        /*
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("enable_background", false);
-        editor.putString("server_address", "server1.com");
-        editor.apply();
-*/
     }
 
     @Override

@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private ConsultFragment consultFragment;
     private SettingsFragment settingsFragment;
     private AditionalFragment aditionalFragment;
-    private Fragment fragAux;
     public static Activity act;
 
     @Override
@@ -32,14 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
         act = this;
 
-
         consultFragment = ConsultFragment.newInstance();
 
         settingsFragment = new SettingsFragment();
 
         aditionalFragment = new AditionalFragment();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
 
         bottomNavigation = (BottomNavigation) findViewById(R.id.BottomNavigation);
 
@@ -48,9 +44,7 @@ public class MainActivity extends AppCompatActivity {
             public void onMenuItemSelect(@IdRes int i, int i1, boolean b) {
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-               // clearBackStack();
                 switch (i1) {
-
                     case 0:
                         transaction.replace(R.id.main_fragment, consultFragment, "a");
                         transaction.addToBackStack("a");
@@ -66,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case 2:
-
                         transaction.replace(R.id.main_fragment, aditionalFragment, "C");
                         transaction.addToBackStack("c");
                         transaction.commit();
@@ -77,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onMenuItemReselect(@IdRes int i, int i1, boolean b) {
-                // Do something
-
                 if (i1 == 0) {
                     consultFragment.consult();
                 }
@@ -90,14 +81,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.main_fragment, consultFragment);
         transaction.commit();
 
-    }
-
-    private void clearBackStack() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        while (fragmentManager.getBackStackEntryCount() != 0) {
-            Log.d("LIMMPIO", "LIMPIO");
-            fragmentManager.popBackStackImmediate();
-        }
     }
 
     public void setActiveDescriptor(int descriptor){

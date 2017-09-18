@@ -9,21 +9,21 @@ import android.util.AttributeSet;
  * Created by alejandro on 16/09/2017.
  */
 
-public class LicensesPreference extends CustomDialogPreference {
-    public LicensesPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+public class AditionalPreference extends CustomDialogPreference {
+    public AditionalPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public LicensesPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AditionalPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public LicensesPreference(Context context, AttributeSet attrs) {
+    public AditionalPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
     }
 
-    public LicensesPreference(Context context) {
+    public AditionalPreference(Context context) {
         super(context);
     }
 

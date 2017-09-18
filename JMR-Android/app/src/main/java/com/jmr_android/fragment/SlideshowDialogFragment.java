@@ -1,9 +1,5 @@
 package com.jmr_android.fragment;
 
-/**
- * Created by alejandro on 02/09/2017.
- */
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;

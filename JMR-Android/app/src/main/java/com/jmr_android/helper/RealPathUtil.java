@@ -7,10 +7,6 @@ import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
-/**
- * Created by alejandro on 04/09/2017.
- */
-
 public class RealPathUtil {
     public static String getRealPathFromURI_API19(Context context, Uri uri) {
         String filePath = "";

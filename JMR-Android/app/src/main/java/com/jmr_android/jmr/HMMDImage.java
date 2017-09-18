@@ -72,8 +72,6 @@ public class HMMDImage {
         }
     }
 
-    public native float[] fromRGBC(float[] rgbVec);
-
     private float[] fromRGB(float[] rgbVec) {
 
         float[] hmmdVec = new float[4];

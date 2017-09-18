@@ -3,17 +3,17 @@
 
     <PreferenceCategory android:title="Java Multimedia Retrieval Android">
 
-        <com.jmr_android.preference.LicensesPreference
+        <com.jmr_android.preference.AditionalPreference
             android:key="JMRADeveloper"
             android:title="Desarrollador"
             android:summary="Alejandro Casado Quijada"
             />
-        <com.jmr_android.preference.LicensesPreference
+        <com.jmr_android.preference.AditionalPreference
             android:key="JMRALicense"
             android:title="Licencia"
             android:summary="GNU General Public License v3.0"
             />
-        <com.jmr_android.preference.LicensesPreference
+        <com.jmr_android.preference.AditionalPreference
             android:key="JMRAVersion"
             android:title="Versión"
             android:summary="1.0"
@@ -21,12 +21,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Información adicional">
-        <com.jmr_android.preference.LicensesPreference
+        <com.jmr_android.preference.AditionalPreference
             android:key="descriptorInfo"
             android:title="Descriptores"
             android:summary="Los implementados se basan en el color"
             />
-        <com.jmr_android.preference.LicensesPreference
+        <com.jmr_android.preference.AditionalPreference
             android:key="CBIRInfo"
             android:title="Sistema de recuperación de información"
             android:summary="Consulta de imágenes mediante ejemplo"
