@@ -1,0 +1,39 @@
+\chapter{Resumen}
+\label{cap:resumen}
+
+Este proyecto busca permitir al usuario realizar consultar a un sistema de recuperación de imágenes, visualizando las imágenes resultantes de dichas consultas de una manera atractiva, interactiva y amigable. En esta ocasión dicho sistema ha sido desarrollado para plataformas móviles, concretamente \textit{Android}.\\
+
+Cuando hablamos de un sistema de recuperación de información, \textit{CBIR}, nos referimos a los sistemas basados fundamentalmente en descriptores de bajo nivel (color, textura, etc.) obtenidos directamente a partir de la imagen. En ellos la idea es, mediante una imagen consulta, comprobar como de parecidas son el resto, imágenes resultado, y presentar los resultados\\
+
+Al tratarse de una plataforma móvil hay que tener muy en cuenta los recursos que va a requerir dicho sistema, por lo que hay que esta especialmente atentos a ellos, ya que si el sistema necesita demasiados recursos puede funcionar incorrectamente y provocar incluso malfunciomaniento del propio teléfono.\\
+
+Se busca interactividad por parte del usuario, por ello será capaz de moverse a través de las imágenes, tanto consulta como resultado, realizando movimientos de \textit{scroll}. A su vez, se ha añadido mecanismos de ayuda, para que el usuario sepa en cada momento en que lugar se encuentra, ya que el resultado de una consulta puede ser de cientos de imágenes. Por otro lado, será capaz de modificar ciertos parámetros, como descriptor asociado, número de imágenes, para adecuar el uso del sistema a su experiencia deseada.\\
+
+Todo lo descrito se va a desarrollar a partir de un CBIR concreto, Java Multimedia Retrieval©.\\ 
+
+Para realizar la planificación se realizaron una serie de reuniones iniciales con mi tutor en las cuales se acordaron los objetivos y elementos que debía de tener este proyecto. Estos objetivos se dividieron entre una serie de semanas. Pero en todo momento sabía lo que debía de realizar. Por lo que cada pocas semanas realizábamos reuniones para comprobar si dichos objetivos acordados y planificados se cumplían, a su vez discutíamos detalles secundarios del proyecto, como leves mejoras en la interfaz.\\
+
+Para llevar a cabo la planificación se ha usado la herramienta conocida como diagramas de Gantt, en el que se especifican los objetivos a cumplir en un periodo concreto de tiempo. Este diagrama se detallará más adelante en su correspondiente sección.\\
+
+Para la realización de este proyecto se partía de una situación que podría considerarse prácticamente desde 0, debido a que no hay muchos proyectos relacionados. También hay que tener en mente el problema de lidiar con una plataforma móvil, ya que sus recursos son limitados y no tan potentes como los de un computador. A su vez, hay que cuidar el tiempo de ejecución de las consultas, pues si es demasiado elevado, provocaría que el usuario dejara de usar la aplicación.\\
+
+Teniendo en cuenta lo descrito anteriormente, el resultado del proyecto ha sido satisfactorio. La aplicación resultante nos permite realizar consultas sobre las imágenes del teléfono, pudiendo elegir la imagen consulta desde la galería o desde la cámara del propio teléfono. Los tiempos de cálculo de consulta son más que aceptables, teniendo en cuenta que tras un primera consulta, se almacenan los resultados en una pequeña base datos, esto se detallará detalladamente más adelante. Por otro lado, el usuario puede editar ciertos parámetros de la consulta, lo que hace que la aplicación sea ajustable a las necesidades del usuario en cualquier momento.\\
+
+Mencionar brevemente, que las conclusiones del trabajado han sido satisfactorias. El proyecto se ha llevado a cabo correctamente, cumpliendo todos los objetivos establecidos, se ha cubierto un hueco de mercado que estaba prácticamente vacío, los \textit{CBIR} para \textit{Android}, son puramente académicos y sus interfaces son demasiado simples.\\
+
+A su vez, se especifican dos posibles trabajos futuros:
+
+\begin{itemize}
+
+\item Trabajar con código nativo usando \textit{Android ndk}
+
+\item Mostrar estadísticas apoyándose en conjuntos difusos.
+
+\end{itemize}
+
+
+Esta memoria se encuentra bajo la licencia \textbf{Creative Commons Attribution-NonCommercial 4.0 International}, mientras que el código del proyecto se encuentra con licencia \textbf{GNU General Public License v3.0}\\
+
+Todo el código así como una copia de esta memoria se puede encontrar en el repositorio del proyecto. \textbf{https://github.com/acasadoquijada/jmr-android}
+
+
