@@ -25,10 +25,6 @@ import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 public class AditionalFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Preference myPref = (Preference) findPreference("myKey");
-    private ListPreference mListPreference;
-    private int previousImageNumber = 200;
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,15 +36,10 @@ public class AditionalFragment extends PreferenceFragmentCompat
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-        // setPreferencesFromResource(R.xml.settings, rootKey);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        switch (key) {
-
-        }
 
     }
 

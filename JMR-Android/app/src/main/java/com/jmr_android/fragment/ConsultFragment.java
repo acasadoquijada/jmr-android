@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.jmr_android.activity.MainActivity;
 import com.jmr_android.adapter.GalleryAdapter;
@@ -78,11 +77,7 @@ public class ConsultFragment extends Fragment {
     private Uri mImageUri;
     private DBHelper descriptorBD;
     private ProgressDialog progress;
-    private View previousView;
-    private JMRImage previousConsultImage;
     private RecyclerView.LayoutManager jLayoutManager;
-
-
 
     public static ConsultFragment newInstance() {
         ConsultFragment fragment = new ConsultFragment();
@@ -265,7 +260,7 @@ public class ConsultFragment extends Fragment {
         addConsultImage(path);
     }
 
-    private void colocarImagenesResultado() {
+    private void setConsultImages() {
 
         Log.d("COLOCANDO", "RESULTADOS");
 
@@ -297,8 +292,6 @@ public class ConsultFragment extends Fragment {
         consultImages.add(jmrImage);
 
         consultImage = jmrImage;
-
-        previousConsultImage = jmrImage;
 
         consultAdapter.notifyDataSetChanged();
     }
@@ -547,7 +540,7 @@ public class ConsultFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            colocarImagenesResultado();
+                            setConsultImages();
                         }
                     });
 

@@ -9,8 +9,6 @@ public class JMRImage implements Serializable {
     private String name;
     private String path;
     private String distance;
-    private int index;
-    private boolean pressed;
 
     public JMRImage() {
 
@@ -40,22 +38,6 @@ public class JMRImage implements Serializable {
 
     public void setDistance(String distance) {
         this.distance = distance;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public boolean getPressed() {
-        return pressed;
-    }
-
-    public void setPressed(boolean pressed) {
-        this.pressed = pressed;
     }
 
     public void setName(String name) {

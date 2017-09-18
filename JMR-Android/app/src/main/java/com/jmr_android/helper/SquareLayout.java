@@ -1,9 +1,5 @@
 package com.jmr_android.helper;
 
-/**
- * Created by alejandro on 28/08/2017.
- */
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;

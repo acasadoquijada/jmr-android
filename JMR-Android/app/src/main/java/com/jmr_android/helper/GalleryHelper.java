@@ -90,10 +90,6 @@ public class GalleryHelper {
         }
     }
 
-    public ArrayList<String> getAllImagesURI() {
-        return images;
-    }
-
     private void getGalleryImages() {
         Uri uri;
         Cursor cursor;

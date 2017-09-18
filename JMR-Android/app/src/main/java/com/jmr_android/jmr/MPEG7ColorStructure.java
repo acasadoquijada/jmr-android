@@ -114,17 +114,6 @@ public class MPEG7ColorStructure implements MediaDescriptor{
         this.histo = reQuantization(histo);
     }
 
-    /*  private native byte[][] quantHMMDImageC(
-              float[][][] imSrc,
-              float[][][] quantizationTable ,
-              int offset,
-              int height,
-              int width,
-              int hue,
-              int max,
-              int min,
-              int diff);
-  */
     private byte[][] quantHMMDImage(HMMDImage imSrc) {
         //Source image variable
         int wImg = imSrc.getWidth();
@@ -162,7 +151,6 @@ public class MPEG7ColorStructure implements MediaDescriptor{
         }
         return imDst;
     }
-
 
     public void init(Bitmap image) {
         init(image, DEFAULT_NUM_LEVELS);

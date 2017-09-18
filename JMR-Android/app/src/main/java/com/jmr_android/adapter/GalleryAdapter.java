@@ -1,9 +1,5 @@
 package com.jmr_android.adapter;
 
-/**
- * Created by alejandro on 28/08/2017.
- */
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

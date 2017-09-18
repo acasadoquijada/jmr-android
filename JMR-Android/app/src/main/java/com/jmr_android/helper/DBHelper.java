@@ -20,7 +20,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String SINGLE_COLOR_TABLE_NAME = "SingleColorDescription";
     public static final String STRUCTURE_COLOR_TABLE_NAME = "MPEG7ColorStructure";
     public static final String IMAGE_PATH = "imagePath";
-    public static final String VALUE = "value";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);

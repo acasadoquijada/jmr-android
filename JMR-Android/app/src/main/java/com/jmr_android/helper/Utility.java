@@ -11,10 +11,6 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-/**
- * Created by alejandro on 04/09/2017.
- */
-
 public class Utility {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 245;
