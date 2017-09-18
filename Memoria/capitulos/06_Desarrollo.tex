@@ -118,223 +118,6 @@ Otro de los aspectos que nos interesan es el tiempo de cómputo y el consumo de 
 
 Tras realizar un estudio del estado del arte de los CBIR en Android podemos llegar a la conclusión de que se tratan de sistemas que han sido poco explotados en dicha plataforma, y lo más importante, el usuario medio no conoce de su existencia, por lo que este proyecto cubre un espacio de mercado que se encuentra desocupado.\\
 
-\section{Proceso de ingeniería de software}
-
-Para garantizar un correcto desarrollo del proyecto, se han llevado a cabo el siguiente proceso de ingeniería de software que se va a detallar a continuación
-
-\subsection{Historias de usuario}
-
-Cuando nos referimos a historias de usuario, nos refererimos a la representación de un requisito software que se encuentra escrito en varias frases cortas, utilizando el lenguaje común del usuario. Esto facilita la comprensión y realización de los requisitos de un proyecto.\\
-
-En este caso se apoyan fuertemente en los objetivos que se establecieron al comienzo de la memoría.\\
-
-A continuación vamos a comentar las historias de usuario correspondientes a este proyecto.
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			1 & \multicolumn{2}{c}{Interacción con la interfaz} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra mover con libertad por los distintos menús diponibles en la interfaz.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{consulta} se muestra la interfaz asociada.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en el action button, este se despliega mostrando dos opciones, cámara y galería.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{ajustes} se muestra la interfaz asociada.} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{adicional} se muestra la interfaz asociada.} \\ 
-			\hline
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Interacción con la interfaz}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			2 & \multicolumn{2}{c}{Cargar imagen cámara} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra mover cargar la imagen consulta utilizando la cámara del dispositivo.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{cámara} del \textit{floating button}, se lanza la actividad cámara, pudiendo elegir la delantera o trasera en caso de que se diponga de ellas.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al tomar una fotografía esta se añade a la sección de imágenes consulta.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con esta nueva imagen.} \\ \hline
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Cargar imagen consulta cámara}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			3 & \multicolumn{2}{c}{Cargar imagen galería} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra mover cargar la imagen consulta utilizando la galería del dispositivo.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar el item \textbf{galería} del \textit{floating button}, se lanza la galería.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al tomar seleccionar una imagen, esta se añade a la sección de imágenes consulta.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con esta nueva imagen.} \\ \hline
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Cargar imagen consulta galería}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			4 & \multicolumn{2}{c}{Realizar consulta} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra mover realizar una consulta usando una de las fotos consulta.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar durante unos segundos sobre una imagen esta se establece como la imagen consulta.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que solo una imagen puede ser seleccionada para su consulta al mismo tiempo.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con esta imagen seleccionada.} \\ \hline
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Realizar consulta}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			5 & \multicolumn{2}{c}{Cambiar de descriptor} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra cambiar el descriptor que se emplea durante las consultas.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre el descriptor deseado este queda maracado como activo.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que solo un descriptor puede ser seleccionado.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en al pulsar en el item \textbf{consultar}, se realiza la consulta con este descriptor seleccionado.} \\ \hline
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Cambiar descriptor}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			6 & \multicolumn{2}{c}{Eliminar base de datos} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra eliminar la base de datos.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre la opción \textit{Eliminar BD} se lanza un desplegable para realizar la acción.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar en aceptar, se notifica de que la BD ha sido eliminada.} \\
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Eliminar base de datos}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			7 & \multicolumn{2}{c}{Calcular base de datos} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra precalcular la base de datos para agilizar consultas.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre la opción \textit{Calcular BD} se lanza un diálogo sobre el proceso.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al realizar una consulta, el tiempo es menor que si no hubiese base de datos.} \\
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Calcular base de datos}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			8 & \multicolumn{2}{c}{Elegir número de imágenes} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra elegir el número de imágenes que serán consultadas.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre la opción \textit{Elegir número de imagenes} se lanza un desplegable permitiendonos elegir el número.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que el número de las imágenes resultado se corresponde con el establecido previamente.} \\
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Elegir número de imágenes}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			9 & \multicolumn{2}{c}{Interactuar con las imágenes consulta} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra interactuar con las imágenes consulta.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que se puede realizar movimiento scroll de derecha a izquierda y viceversa sobre las imágenes consulta, siempre que haya las suficientes.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre una, esta se muestra a pantalla completa indicándonos la posición que ocupa respecto a las demás.} \\
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Interactuar con las imágenes consulta }
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\begin{table}[H]
-	\begin{center}
-		\begin{tabular} {l|c|l}
-			\hline
-			10 & \multicolumn{2}{c}{Interactuar con las imágenes resultado} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Descripción} \\ \hline
-			\multicolumn{3}{p{12cm}}{Se podra interactuar con las imágenes resultado.} \\ \noalign{\hrule height 1pt}
-			\multicolumn{3}{l}{Pruebas de aceptación} \\ \hline
-			\multicolumn{3}{p{12cm}}{ - Comprobar que se puede realizar movimiento scroll hacia arriba, hacia abajo y viceversa sobre las imágenes resultado, siempre que haya las suficientes.} \\
-			\multicolumn{3}{p{12cm}}{ - Comprobar que al pulsar sobre una, esta se muestra a pantalla completa indicándonos la posición que ocupa respecto a las demás, y la distancia respecto a la imagen consulta.} \\
-		\end{tabular}
-	\end{center}
-	\caption{Historia de usuario - Interactuar con las imágenes consulta}
-	\label{tab:interaccion-interfaz}
-\end{table}
-
-\subsection{Diagramas de clases}
-
-\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
-\centering
-\includegraphics[scale=0.6]{imagenes/diagrama1.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
-\label{diagrama1}
-\caption{Diagrama clase paquete Activity}
-\end{figure}
-
-\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
-\centering
-\includegraphics[scale=0.6]{imagenes/diagrama2.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
-\label{diagrama2}
-\caption{Diagrama clase paquete Adapter}
-\end{figure}
-
-\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
-\centering
-\includegraphics[scale=0.6]{imagenes/diagrama3.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
-\label{diagrama3}
-\caption{Diagrama clase paquete Fragment}
-\end{figure}
-
-\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
-\centering
-\includegraphics[scale=0.6]{imagenes/diagrama4.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
-\label{diagrama4}
-\caption{Diagrama clase paquete Helper}
-\end{figure}
-
-\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
-\centering
-\includegraphics[scale=0.6]{imagenes/diagrama5.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
-\label{diagrama5}
-\caption{Diagrama clase paquete JMR}
-\end{figure}
-
-
 \section{Proceso de desarrollo}
 
 En esta sección vamos a detallar los distintos elementos que componen el proyecto con un nivel de detalle suficiente para dar una visión global del proyecto y entender cada uno de sus componentes.\\
@@ -379,6 +162,46 @@ En este paquete se encuentran una serie de clases que representan los elementos 
 \subsection{Clases}
 
 Una vez que se ha terminado de hablar de los paquetes, es hora de hablar de cada clase individualmente. Al igual que en el caso anterior, lo haremos con cierto nivel de detalle, sin entrar en cuestiones demasiado técnicas.\\
+
+Comenzaremos mostrando los diagramas de clases individuales de cada proyecto, para una mejor compresión de las clases.\\
+
+\subsection{Diagramas de clases}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama1.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama1}
+\caption{Diagrama clase paquete Activity}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama2.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama2}
+\caption{Diagrama clase paquete Adapter}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama3.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama3}
+\caption{Diagrama clase paquete Fragment}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama4.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama4}
+\caption{Diagrama clase paquete Helper}
+\end{figure}
+
+\begin{figure}[H] %con el [H] le obligamos a situar aquí la figura
+\centering
+\includegraphics[scale=0.6]{imagenes/diagrama5.jpg}  %el parámetro scale permite agrandar o achicar la imagen. En el nombre de archivo puede especificar directorios
+\label{diagrama5}
+\caption{Diagrama clase paquete JMR}
+\end{figure}
+
 
 \subsubsection{MainActivity}
 

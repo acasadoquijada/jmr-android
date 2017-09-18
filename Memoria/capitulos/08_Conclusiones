@@ -24,8 +24,4 @@ Otro trabajo que se pensó en la inclusión de un apartado sobre estadísticas. 
 
 Para ello se agruparían las imágenes en varios conjuntos, siendo estos: muy parecida, parecida, no parecida, nada parecida. Estos cojuntos, serían conjuntos difusos, por lo que tendríamos que trabajar también con lógica difusa para establecer el parentesco de las imágenes.\\
 
-Por otro lado, se podría aumentar el número de ajustes a modificar por el usuario, como por ejemplo el tamaño de la imagen a la hora de realizar una consulta. Esto supondría un aumento de la precisión de la consulta, a coste de un mayor tiempo de cómputo, por lo que también habria que proporcionar una guía al usuario sobre como escoger el tamaño apropiado para las imágenes.
-
-
-
-
+Por otro lado, se podría aumentar el número de ajustes a modificar por el usuario, como por ejemplo el tamaño de la imagen a la hora de realizar una consulta. Esto supondría un aumento de la precisión de la consulta, a coste de un mayor tiempo de cómputo, por lo que también habria que proporcionar una guía al usuario sobre como escoger el tamaño apropiado para las imágenes.\\
