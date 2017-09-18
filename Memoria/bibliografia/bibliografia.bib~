@@ -1,0 +1,145 @@
+@misc{1,
+  author = {Oracle},
+  title = {{Javadoc Java 3D}},
+  howpublished = "\url{http://download.java.net/media/java3d/javadoc/1.5.2/allclasses-noframe.html}",
+}
+
+@misc{2,
+  author = {Greg Hopkins},
+  title = {{The Joy of Java 3D}},
+  howpublished = "\url{http://www.java3d.org/introduction.html}",
+}
+
+@misc{3,
+  author = {Ismael H. F. Santos},
+  title = {{Setting geometry appearances}},
+  howpublished = "\url{http://webserver2.tecgraf.puc-rio.br/~ismael/Cursos/Cidade_CG/labs/Java3D/Java3D_onlinebook_selman/Htmls/3DJava_Ch09.htm#9-1}",
+}
+
+@misc{4,
+  author = {Dennis J Bouvier},
+  title = {{Getting Started with the Java 3D API - Chapter 4 Interaction}},
+  howpublished = "\url{http://www.cs.stir.ac.uk/courses/CSC9N6/Java3D/Tutorial/j3d_tutorial_ch4.pdf}",
+}
+
+@misc{5,
+  author = {Henry A. Sowizral David R. Nadeau},
+  title = {{An Introduction to Programming AR and VR Applications in Java3D}},
+  howpublished = "\url{http://viz.aset.psu.edu/jack/java3d/java3d.htm}",
+}
+
+@misc{6,
+  author = {Sun Microsystems},
+  title = {{ShadowApp creates a single plane}},
+  howpublished = "\url{http://www.java2s.com/Code/Java/3D/ShadowAppcreatesasingleplane.htm}",
+}
+
+@misc{7,
+  author = {BrainC from markmail.org},
+  title = {{MouseOver - ToolTip for Shape3D}},
+  howpublished = "\url{http://markmail.org/message/bddcbgkfpnc6uen3#query:+page:1+mid:de5o6ppps3fv6dmp+state:results}",
+}
+
+@misc{8,
+  author = {Madebyoliver de flaticon.com},
+  title = {{Icono espiral}},
+  howpublished = "\url{http://www.flaticon.com/free-icon/spiral_137099}",
+}
+
+@misc{9,
+  author = {Freepik de flaticon.com},
+  title = {{Icono n-caminos}},
+  howpublished = "\url{http://www.flaticon.com/free-icon/directions_169295#term=road&page=3&position=47}",
+}
+
+@misc{10,
+  author = {Madebyoliver de flaticon.com},
+  title = {{Icono ecuaciones cartesianas 3D}},
+  howpublished = "\url{http://www.flaticon.com/free-icon/coordinates_136810#term=coordinate&page=1&position=2}",
+}
+
+@misc{11,
+  author = {QCAD},
+  title = {{Icono ecuaciones polares 2D}},
+  howpublished = "\url{http://www.qcad.org/doc/qcad/3.1.0/reference/en/scripts/Snap/SnapCoordinatePolar/doc/SnapCoordinatePolar_en.html}",
+}
+
+@misc{12,
+  author = {Sukirgenk},
+  title = {{Icono ecuaciones polares 3D}},
+  howpublished = "\url{http://sukirgenk.dvrlists.com/3d-cartesian-coordinate-system.html}",
+}
+
+@misc{13,
+  author = {Aouache Mustapha  Aini Hussain  Salina Abdul Samad  Mohd Asyraf Zulkifley  Wan Mimi Diyana Wan Zaki and Hamzaini Abdul Hamid},
+  title = {{Design and development of a content-based medical image retrieval system for spine vertebrae irregularity}},
+  howpublished = "\url{http://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-14-6}",
+}
+
+@misc{14,
+  author = {László Kozma Arto Klami and Samuel Kaski},
+  title = {{GaZIR: Gaze-based Zooming Interface for Image Retrieval}},
+  howpublished = "\url{http://www.lkozma.net/mlmi09gazir.pdf}",
+}
+
+@misc{15,
+  author = {Chaoli Wang John P. Reese Huan Zhang Jun Tao Yi Gu Jun Ma and Robert J. Nemiroff},
+  title = {{Similarity-Based Visualization of Large Image Collections}},
+  howpublished = "\url{http://www3.nd.edu/~cwang11/research/iv15-imap.pdf}",
+}
+
+@misc{16,
+  author = {Trystan G. Upstill Rajehndra Na-gappan and Nick Craswellb},
+  title = {{Visual Clustering of Image Search Results}},
+  howpublished = "\url{http://es.csiro.au/pubs/upstill_spie01.pdf}",
+}
+
+@misc{17,
+  author = {E.T.S.I.I.T},
+  title = {{Apuntes de fundamentos de ingeniería del software de la E.T.S.I.I.T. de la Universidad de Granada}},
+}
+
+@misc{18,
+  author = {Francisco Velasco Anguita Francisco Javier Melero Rus},
+  title = {{Apuntes de Sistemas Gráficos de la E.T.S.I.I.T. de la Universidad de Granada}},
+}
+
+@misc{19,
+  author = {Oracle},
+  title = {{Java 3D API}},
+  howpublished = "\url{http://www.oracle.com/technetwork/articles/javase/index-jsp-138252.html}",
+}
+
+@misc{20,
+  author = {Oracle Corporation},
+  title = {{Netbeans}},
+  howpublished = "\url{https://netbeans.org/}",
+}
+
+
+@misc{21,
+  author = {Free Software Foundation},
+  title = {{Licencia gpl-3.0}},
+  howpublished = "\url{https://www.gnu.org/licenses/gpl-3.0.html}",
+}
+
+@misc{22,
+  author = {Oracle Corporation},
+  title = {{Instalación Java 3D}},
+  howpublished = "\url{http://download.java.net/media/java3d/builds/release/1.5.2/README-download.html}",
+}
+
+@misc{23,
+  author = {Tom's Planner N.V.},
+  title = {{Toms planner software de planificación}},
+  howpublished = "\url{https://www.tomsplanner.es/}",
+}
+
+@misc{24,
+  author = {Sevarac},
+  title = {{Toms planner software de planificación}},
+  howpublished = "\url{http://plugins.netbeans.org/plugin/55435/easyuml}",
+}
+
+
+
